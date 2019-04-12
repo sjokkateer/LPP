@@ -8,7 +8,7 @@ namespace LogicAndSetTheoryApplication
 {
     class Disjunction : BinaryConnective
     {
-        public Disjunction() : base('∨')
+        public Disjunction() : base('|')
         { }
     }
 }

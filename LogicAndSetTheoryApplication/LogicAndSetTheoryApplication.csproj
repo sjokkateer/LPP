@@ -50,6 +50,7 @@
     <Compile Include="BinaryConnective.cs" />
     <Compile Include="Conjunction.cs" />
     <Compile Include="Disjunction.cs" />
+    <Compile Include="Grapher.cs" />
     <Compile Include="Implication.cs" />
     <Compile Include="LogicForm.cs">
       <SubType>Form</SubType>

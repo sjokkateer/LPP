@@ -8,7 +8,7 @@ namespace LogicAndSetTheoryApplication
 {
     class Implication : BinaryConnective
     {
-        public Implication() : base('⇒')
+        public Implication() : base('>')
         { }
     }
 }

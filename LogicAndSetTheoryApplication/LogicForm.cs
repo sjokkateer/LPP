@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace LogicAndSetTheoryApplication
         private Symbol propositionRoot;
         private Parser propositionParser;
 
+        private const string PATHTOPHOTO = "";
+
         public LogicForm()
         {
             InitializeComponent();
@@ -27,6 +30,14 @@ namespace LogicAndSetTheoryApplication
             propositionRoot = propositionParser.Parse();
 
             propositionResultLb.Text = propositionRoot.ToString();
+            CreateGraphOfExpression(propositionRoot, "Proposition");
+        }
+
+        private void CreateGraphOfExpression(Symbol propositionRoot, string dotFileName)
+        {
+            Grapher.CreateGraphOfFunction(propositionRoot, dotFileName);
+            string windowsPath = Environment.GetEnvironmentVariable("windir");
+            Process.Start($@"{windowsPath}\system32\mspaint.exe", $"{dotFileName}.png");
         }
     }
 }
