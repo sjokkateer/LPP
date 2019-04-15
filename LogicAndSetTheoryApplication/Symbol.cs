@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Symbol
+    class Symbol : IEquatable<Symbol>, IComparable<Symbol>
     {
         public int NodeNumber { get; set; }
 
@@ -17,6 +17,11 @@ namespace LogicAndSetTheoryApplication
             Data = data;
         }
 
+        public virtual List<Symbol> GetVariables()
+        {
+            return new List<Symbol>() { this };
+        }
+
         public override string ToString()
         {
             return Data.ToString();
@@ -25,6 +30,62 @@ namespace LogicAndSetTheoryApplication
         public virtual string NodeLabel()
         {
             return $"\tnode{NodeNumber} [ label = \"{Data}\" ]\n";
+        }
+
+        public bool Equals(Symbol other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (GetType() != other.GetType())
+            {
+                return false;
+            }
+
+            return (char)Data == (char)other.Data;
+        }
+
+        public static bool operator== (Symbol s1, Symbol s2)
+        {
+            if (ReferenceEquals(s1, null))
+            {
+                if (ReferenceEquals(s2, null))
+                {
+                    return true;
+                }
+            }
+            return s1.Equals(s2);
+        }
+
+        public static bool operator !=(Symbol s1, Symbol s2)
+        {
+            return !(s1 == s2);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>
+        /// Returns the hashcode of Data (Data is of character type)
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return Data.GetHashCode();
+        }
+
+        public int CompareTo(Symbol other)
+        {
+            char ownVariable = (char)Data;
+            char otherVariable = (char)other.Data;
+
+            return ownVariable.CompareTo(otherVariable);
         }
     }
 }

@@ -31,6 +31,8 @@
             this.propositionTbx = new System.Windows.Forms.TextBox();
             this.parseBtn = new System.Windows.Forms.Button();
             this.propositionResultLb = new System.Windows.Forms.Label();
+            this.uniqueVariablesLb = new System.Windows.Forms.Label();
+            this.viewTreeBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // propositionTbx
@@ -59,11 +61,32 @@
             this.propositionResultLb.TabIndex = 2;
             this.propositionResultLb.Text = "label1";
             // 
+            // uniqueVariablesLb
+            // 
+            this.uniqueVariablesLb.AutoSize = true;
+            this.uniqueVariablesLb.Location = new System.Drawing.Point(22, 77);
+            this.uniqueVariablesLb.Name = "uniqueVariablesLb";
+            this.uniqueVariablesLb.Size = new System.Drawing.Size(90, 13);
+            this.uniqueVariablesLb.TabIndex = 3;
+            this.uniqueVariablesLb.Text = "Unique Variables:";
+            // 
+            // viewTreeBtn
+            // 
+            this.viewTreeBtn.Location = new System.Drawing.Point(452, 12);
+            this.viewTreeBtn.Name = "viewTreeBtn";
+            this.viewTreeBtn.Size = new System.Drawing.Size(75, 23);
+            this.viewTreeBtn.TabIndex = 4;
+            this.viewTreeBtn.Text = "View Tree";
+            this.viewTreeBtn.UseVisualStyleBackColor = true;
+            this.viewTreeBtn.Click += new System.EventHandler(this.viewTreeBtn_Click);
+            // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.viewTreeBtn);
+            this.Controls.Add(this.uniqueVariablesLb);
             this.Controls.Add(this.propositionResultLb);
             this.Controls.Add(this.parseBtn);
             this.Controls.Add(this.propositionTbx);
@@ -79,6 +102,8 @@
         private System.Windows.Forms.TextBox propositionTbx;
         private System.Windows.Forms.Button parseBtn;
         private System.Windows.Forms.Label propositionResultLb;
+        private System.Windows.Forms.Label uniqueVariablesLb;
+        private System.Windows.Forms.Button viewTreeBtn;
     }
 }
 

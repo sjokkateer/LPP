@@ -15,6 +15,11 @@ namespace LogicAndSetTheoryApplication
             LeftSuccessor = null;
         }
 
+        public override List<Symbol> GetVariables()
+        {
+            return LeftSuccessor.GetVariables().Distinct().ToList();
+        }
+
         public override string ToString()
         {
             string result = Convert.ToString(Data);
