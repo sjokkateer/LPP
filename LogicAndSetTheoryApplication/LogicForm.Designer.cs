@@ -30,9 +30,10 @@
         {
             this.propositionTbx = new System.Windows.Forms.TextBox();
             this.parseBtn = new System.Windows.Forms.Button();
-            this.propositionResultLb = new System.Windows.Forms.Label();
+            this.infixTbxLb = new System.Windows.Forms.Label();
             this.uniqueVariablesLb = new System.Windows.Forms.Label();
             this.viewTreeBtn = new System.Windows.Forms.Button();
+            this.infixTbx = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // propositionTbx
@@ -52,19 +53,19 @@
             this.parseBtn.UseVisualStyleBackColor = true;
             this.parseBtn.Click += new System.EventHandler(this.parseBtn_Click);
             // 
-            // propositionResultLb
+            // infixTbxLb
             // 
-            this.propositionResultLb.AutoSize = true;
-            this.propositionResultLb.Location = new System.Drawing.Point(22, 53);
-            this.propositionResultLb.Name = "propositionResultLb";
-            this.propositionResultLb.Size = new System.Drawing.Size(35, 13);
-            this.propositionResultLb.TabIndex = 2;
-            this.propositionResultLb.Text = "label1";
+            this.infixTbxLb.AutoSize = true;
+            this.infixTbxLb.Location = new System.Drawing.Point(12, 41);
+            this.infixTbxLb.Name = "infixTbxLb";
+            this.infixTbxLb.Size = new System.Drawing.Size(85, 13);
+            this.infixTbxLb.TabIndex = 2;
+            this.infixTbxLb.Text = "Expression infix: ";
             // 
             // uniqueVariablesLb
             // 
             this.uniqueVariablesLb.AutoSize = true;
-            this.uniqueVariablesLb.Location = new System.Drawing.Point(22, 77);
+            this.uniqueVariablesLb.Location = new System.Drawing.Point(12, 71);
             this.uniqueVariablesLb.Name = "uniqueVariablesLb";
             this.uniqueVariablesLb.Size = new System.Drawing.Size(90, 13);
             this.uniqueVariablesLb.TabIndex = 3;
@@ -80,14 +81,22 @@
             this.viewTreeBtn.UseVisualStyleBackColor = true;
             this.viewTreeBtn.Click += new System.EventHandler(this.viewTreeBtn_Click);
             // 
+            // infixTbx
+            // 
+            this.infixTbx.Location = new System.Drawing.Point(99, 38);
+            this.infixTbx.Name = "infixTbx";
+            this.infixTbx.Size = new System.Drawing.Size(347, 20);
+            this.infixTbx.TabIndex = 5;
+            // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.infixTbx);
             this.Controls.Add(this.viewTreeBtn);
             this.Controls.Add(this.uniqueVariablesLb);
-            this.Controls.Add(this.propositionResultLb);
+            this.Controls.Add(this.infixTbxLb);
             this.Controls.Add(this.parseBtn);
             this.Controls.Add(this.propositionTbx);
             this.Name = "LogicForm";
@@ -101,9 +110,10 @@
 
         private System.Windows.Forms.TextBox propositionTbx;
         private System.Windows.Forms.Button parseBtn;
-        private System.Windows.Forms.Label propositionResultLb;
+        private System.Windows.Forms.Label infixTbxLb;
         private System.Windows.Forms.Label uniqueVariablesLb;
         private System.Windows.Forms.Button viewTreeBtn;
+        private System.Windows.Forms.TextBox infixTbx;
     }
 }
 

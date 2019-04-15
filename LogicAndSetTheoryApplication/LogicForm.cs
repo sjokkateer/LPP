@@ -44,7 +44,7 @@ namespace LogicAndSetTheoryApplication
             string proposition = propositionTbx.Text;
             propositionParser = new Parser(proposition);
             propositionRoot = propositionParser.Parse();
-            propositionResultLb.Text = propositionRoot.ToString();
+            infixTbx.Text = propositionRoot.ToString();
 
             uniqueVariablesLb.Text = "Unique Variables:";
             List<Symbol> uniqueVariablesSet = propositionRoot.GetVariables();
