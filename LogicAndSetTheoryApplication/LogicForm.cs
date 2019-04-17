@@ -58,8 +58,7 @@ namespace LogicAndSetTheoryApplication
         private void CreateGraphOfExpression(Symbol propositionRoot, string dotFileName)
         {
             Grapher.CreateGraphOfFunction(propositionRoot, dotFileName);
-            string windowsPath = Environment.GetEnvironmentVariable("windir");
-            Process.Start($@"{windowsPath}\system32\mspaint.exe", $"{dotFileName}.png");
+            Process.Start($"{dotFileName}.png");
         }
 
         private void viewTreeBtn_Click(object sender, EventArgs e)
