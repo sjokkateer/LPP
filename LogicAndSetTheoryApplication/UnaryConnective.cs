@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class UnaryConnective : Symbol
+    class UnaryConnective : Proposition
     {
-        public Symbol LeftSuccessor { get; set; }
+        public Proposition LeftSuccessor { get; set; }
 
         public UnaryConnective(object data) : base(data)
         {
             LeftSuccessor = null;
         }
 
-        public override List<Symbol> GetVariables()
+        public override List<Proposition> GetVariables()
         {
             return LeftSuccessor.GetVariables().Distinct().ToList();
         }

@@ -10,5 +10,18 @@ namespace LogicAndSetTheoryApplication
     {
         public Conjunction() : base('&')
         { }
+
+        public override bool Calculate()
+        {
+            return LeftSuccessor.Calculate() && RightSuccessor.Calculate();
+        }
+
+        public override Proposition Copy()
+        {
+            Conjunction copy = new Conjunction();
+            copy.LeftSuccessor = LeftSuccessor.Copy();
+            copy.RightSuccessor = RightSuccessor.Copy();
+            return copy;
+        }
     }
 }

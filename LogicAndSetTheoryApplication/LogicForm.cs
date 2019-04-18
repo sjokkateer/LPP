@@ -13,7 +13,7 @@ namespace LogicAndSetTheoryApplication
 {
     public partial class LogicForm : Form
     {
-        private Symbol propositionRoot;
+        private Proposition propositionRoot;
         private Parser propositionParser;
 
         public LogicForm()
@@ -29,15 +29,19 @@ namespace LogicAndSetTheoryApplication
             infixTbx.Text = propositionRoot.ToString();
 
             uniqueVariablesLb.Text = "Unique Variables:";
-            List<Symbol> uniqueVariablesSet = propositionRoot.GetVariables();
+            List<Proposition> uniqueVariablesSet = propositionRoot.GetVariables();
             uniqueVariablesSet.Sort();
-            foreach (Symbol s in uniqueVariablesSet)
+            foreach (Proposition s in uniqueVariablesSet)
             {
                 uniqueVariablesLb.Text += $" {s}";
             }
+            uniqueVariablesSet[0].TruthValue = false; // A = 0
+            uniqueVariablesSet[1].TruthValue = true; // B = 1
+            uniqueVariablesSet[2].TruthValue = true; // C = 1
+            Console.WriteLine(propositionRoot.Calculate());
         }
 
-        private void CreateGraphOfExpression(Symbol propositionRoot, string dotFileName)
+        private void CreateGraphOfExpression(Proposition propositionRoot, string dotFileName)
         {
             Grapher.CreateGraphOfFunction(propositionRoot, dotFileName);
             Process.Start($"{dotFileName}.png");
@@ -47,7 +51,7 @@ namespace LogicAndSetTheoryApplication
         {
             if (propositionRoot != null)
             {
-                CreateGraphOfExpression(propositionRoot, "Proposition");
+                CreateGraphOfExpression(propositionRoot.Copy(), "Proposition");
             }
         }
     }

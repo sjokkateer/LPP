@@ -8,7 +8,7 @@ namespace LogicAndSetTheoryApplication
 {
     class BinaryConnective : UnaryConnective
     {
-        public Symbol RightSuccessor { get; set; }
+        public Proposition RightSuccessor { get; set; }
 
         public BinaryConnective(object data) : base(data)
         {
@@ -30,10 +30,10 @@ namespace LogicAndSetTheoryApplication
         /// result = { B, C, A }! All unique variables from two different sets.
         /// </summary>
         /// <returns>A list representing the set of all unique variables in the proposition formula.</returns>
-        public override List<Symbol> GetVariables()
+        public override List<Proposition> GetVariables()
         {
-            List<Symbol> leftChildVariables = LeftSuccessor.GetVariables();
-            List<Symbol> rightChildVariables = RightSuccessor.GetVariables();
+            List<Proposition> leftChildVariables = LeftSuccessor.GetVariables();
+            List<Proposition> rightChildVariables = RightSuccessor.GetVariables();
             
             // This looks daunting but it just is not, since it's documented. Right?
             return leftChildVariables.Except(rightChildVariables). // Set difference gets applied { A } \ { B }

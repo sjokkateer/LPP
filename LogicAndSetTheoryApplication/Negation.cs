@@ -10,5 +10,18 @@ namespace LogicAndSetTheoryApplication
     {
         public Negation() : base('¬')
         { }
+
+        public override bool Calculate()
+        {
+            // Return the negation of the child proposition.
+            return !(LeftSuccessor.Calculate());
+        }
+
+        public override Proposition Copy()
+        {
+            Negation copy = new Negation();
+            copy.LeftSuccessor = LeftSuccessor.Copy();
+            return copy;
+        }
     }
 }

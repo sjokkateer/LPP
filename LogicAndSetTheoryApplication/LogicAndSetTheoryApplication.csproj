@@ -62,7 +62,9 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Symbol.cs" />
+    <Compile Include="Proposition.cs" />
+    <Compile Include="TruthTable.cs" />
+    <Compile Include="TruthTableRow.cs" />
     <Compile Include="UnaryConnective.cs" />
     <EmbeddedResource Include="LogicForm.resx">
       <DependentUpon>LogicForm.cs</DependentUpon>

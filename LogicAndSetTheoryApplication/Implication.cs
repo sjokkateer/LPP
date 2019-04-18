@@ -10,5 +10,22 @@ namespace LogicAndSetTheoryApplication
     {
         public Implication() : base('>')
         { }
+
+        public override bool Calculate()
+        {
+             if (LeftSuccessor.Calculate() == true &&  (RightSuccessor.Calculate() == false))
+             {
+                return false;
+             }
+             return true;
+        }
+
+        public override Proposition Copy()
+        {
+            Implication copy = new Implication();
+            copy.LeftSuccessor = LeftSuccessor.Copy();
+            copy.RightSuccessor = RightSuccessor.Copy();
+            return copy;
+        }
     }
 }

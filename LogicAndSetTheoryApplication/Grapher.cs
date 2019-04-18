@@ -10,16 +10,16 @@ namespace LogicAndSetTheoryApplication
 {
     static class Grapher
     {
-        public static void CreateGraphOfFunction(Symbol propositionRoot, string fileName)
+        public static void CreateGraphOfFunction(Proposition propositionRoot, string fileName)
         {
             NumberOperands(propositionRoot);
             CreateGraph(fileName, propositionRoot.NodeLabel());
         }
 
-        private static void NumberOperands(Symbol expressionRoot)
+        private static void NumberOperands(Proposition expressionRoot)
         {
-            List<Symbol> queue = new List<Symbol>();
-            Symbol currentSymbol = expressionRoot;
+            List<Proposition> queue = new List<Proposition>();
+            Proposition currentSymbol = expressionRoot;
             queue.Add(currentSymbol);
 
             int nodeCounter = 1;

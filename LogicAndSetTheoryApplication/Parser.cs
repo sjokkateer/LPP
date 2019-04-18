@@ -12,21 +12,21 @@ namespace LogicAndSetTheoryApplication
         private string proposition;
 
         // New addition to keep track of the variables that have already been inserted.
-        private List<Symbol> alreadyProcessedVariables;
+        private List<Proposition> alreadyProcessedVariables;
 
         private List<char> connectives;
-        private List<Symbol> symbols;
+        private List<Proposition> symbols;
 
         public Parser(string proposition)
         {
             this.proposition = proposition;
 
             connectives = new List<char>();
-            symbols = new List<Symbol>();
-            alreadyProcessedVariables = new List<Symbol>();
+            symbols = new List<Proposition>();
+            alreadyProcessedVariables = new List<Proposition>();
         }
 
-        public Symbol Parse()
+        public Proposition Parse()
         {
             ParseHelper(proposition);
             return symbols[0];
@@ -42,24 +42,14 @@ namespace LogicAndSetTheoryApplication
                 }
                 else if (VARIABLES.Contains(s[0]))
                 {
-                    // Instead of immediately creating a new symbol,
-                    // check if the variable already occurs in a seperate 
-                    // list. If it does, use that same reference inside the expression
-                    // (at a different location) that allows for easier substitution of 
-                    // definitive values.
-                    // This way we can still get the unique variables from every subtree by a recursive call but
-                    // the references will still be the same.
-                    Symbol symbol = IsVariableInExpression(s[0]);
+                    Proposition symbol = IsVariableInExpression(s[0]);
                     if (symbol == null)
                     {
-                        // New symbol created, thus we also have to keep track of those by adding them to the list
-                        // tracking duplicate variables.
-                        symbol = new Symbol(s[0]);
+                        // New abstract variable encountered, create a new symbol.
+                        symbol = new Proposition(s[0]);
+                        // Add the symbol by reference in the list of already processed 
+                        // abstract proposition variables.
                         alreadyProcessedVariables.Add(symbol);
-                    }
-                    foreach(Symbol variable in alreadyProcessedVariables)
-                    {
-                        Console.WriteLine($"{variable}");
                     }
                     symbols.Add(symbol);
                 }
@@ -80,7 +70,7 @@ namespace LogicAndSetTheoryApplication
 
         private void CreateConnective(char connective)
         {
-            Symbol result = null;
+            Proposition result = null;
             switch (connective)
             {
                 case '~':
@@ -122,9 +112,9 @@ namespace LogicAndSetTheoryApplication
         /// </summary>
         /// <param name="variable">A character representing an abstract proposition variable</param>
         /// <returns>A symbol if there already exists a variable with that identifier</returns>
-        private Symbol IsVariableInExpression(char variable)
+        private Proposition IsVariableInExpression(char variable)
         {
-            foreach (Symbol processedVariable in alreadyProcessedVariables)
+            foreach (Proposition processedVariable in alreadyProcessedVariables)
             {
                 if ((char)processedVariable.Data == variable)
                 {
