@@ -19,24 +19,6 @@ namespace LogicAndSetTheoryApplication
         public LogicForm()
         {
             InitializeComponent();
-            // Create three variables compare and return the result of comparison.
-            Symbol a = new Symbol('A');
-            Symbol a2 = new Symbol('A');
-            Symbol b = new Symbol('B');
-            Symbol b2 = new Symbol('B');
-
-            Console.WriteLine($"Comparing a and a2: result = {a == a2}");
-            Console.WriteLine($"Comparing a and b: result = {a == b}");
-            Console.WriteLine($"Comparing b and b2: result = {b == b2}");
-
-            List<Symbol> unique = new List<Symbol>() { a, a2, b, b2 };
-            var newUnique = unique.Distinct();
-
-            Console.WriteLine();
-            foreach(var item in newUnique)
-            {
-                Console.WriteLine(item);
-            }
         }
 
         private void parseBtn_Click(object sender, EventArgs e)

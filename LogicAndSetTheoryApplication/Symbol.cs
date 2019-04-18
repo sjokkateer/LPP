@@ -8,6 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     class Symbol : IEquatable<Symbol>, IComparable<Symbol>
     {
+        // Keep a collection of the references to the variables inside the expression
+
         public int NodeNumber { get; set; }
 
         public object Data { get; }
@@ -17,6 +19,7 @@ namespace LogicAndSetTheoryApplication
             Data = data;
         }
 
+        // Probably can remove the IEquatable interface since we can compare references now.
         public virtual List<Symbol> GetVariables()
         {
             return new List<Symbol>() { this };
