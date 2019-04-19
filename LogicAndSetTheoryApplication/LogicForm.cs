@@ -15,6 +15,7 @@ namespace LogicAndSetTheoryApplication
     {
         private Proposition propositionRoot;
         private Parser propositionParser;
+        private TruthTable truthTable;
 
         public LogicForm()
         {
@@ -35,10 +36,10 @@ namespace LogicAndSetTheoryApplication
             {
                 uniqueVariablesLb.Text += $" {s}";
             }
-            uniqueVariablesSet[0].TruthValue = false; // A = 0
-            uniqueVariablesSet[1].TruthValue = true; // B = 1
-            uniqueVariablesSet[2].TruthValue = true; // C = 1
-            Console.WriteLine(propositionRoot.Calculate());
+
+            truthTable = new TruthTable(propositionRoot);
+
+            Console.WriteLine(truthTable);
         }
 
         private void CreateGraphOfExpression(Proposition propositionRoot, string dotFileName)

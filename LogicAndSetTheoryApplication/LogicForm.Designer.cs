@@ -39,18 +39,16 @@
             // 
             // propositionTbx
             // 
-            this.propositionTbx.Location = new System.Drawing.Point(198, 23);
-            this.propositionTbx.Margin = new System.Windows.Forms.Padding(6);
+            this.propositionTbx.Location = new System.Drawing.Point(99, 12);
             this.propositionTbx.Name = "propositionTbx";
-            this.propositionTbx.Size = new System.Drawing.Size(690, 31);
+            this.propositionTbx.Size = new System.Drawing.Size(347, 20);
             this.propositionTbx.TabIndex = 0;
             // 
             // parseBtn
             // 
-            this.parseBtn.Location = new System.Drawing.Point(24, 23);
-            this.parseBtn.Margin = new System.Windows.Forms.Padding(6);
+            this.parseBtn.Location = new System.Drawing.Point(12, 12);
             this.parseBtn.Name = "parseBtn";
-            this.parseBtn.Size = new System.Drawing.Size(150, 44);
+            this.parseBtn.Size = new System.Drawing.Size(75, 23);
             this.parseBtn.TabIndex = 1;
             this.parseBtn.Text = "Parse";
             this.parseBtn.UseVisualStyleBackColor = true;
@@ -59,29 +57,26 @@
             // infixTbxLb
             // 
             this.infixTbxLb.AutoSize = true;
-            this.infixTbxLb.Location = new System.Drawing.Point(24, 79);
-            this.infixTbxLb.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.infixTbxLb.Location = new System.Drawing.Point(12, 41);
             this.infixTbxLb.Name = "infixTbxLb";
-            this.infixTbxLb.Size = new System.Drawing.Size(176, 25);
+            this.infixTbxLb.Size = new System.Drawing.Size(85, 13);
             this.infixTbxLb.TabIndex = 2;
             this.infixTbxLb.Text = "Expression infix: ";
             // 
             // uniqueVariablesLb
             // 
             this.uniqueVariablesLb.AutoSize = true;
-            this.uniqueVariablesLb.Location = new System.Drawing.Point(24, 137);
-            this.uniqueVariablesLb.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.uniqueVariablesLb.Location = new System.Drawing.Point(12, 71);
             this.uniqueVariablesLb.Name = "uniqueVariablesLb";
-            this.uniqueVariablesLb.Size = new System.Drawing.Size(182, 25);
+            this.uniqueVariablesLb.Size = new System.Drawing.Size(90, 13);
             this.uniqueVariablesLb.TabIndex = 3;
             this.uniqueVariablesLb.Text = "Unique Variables:";
             // 
             // viewTreeBtn
             // 
-            this.viewTreeBtn.Location = new System.Drawing.Point(904, 23);
-            this.viewTreeBtn.Margin = new System.Windows.Forms.Padding(6);
+            this.viewTreeBtn.Location = new System.Drawing.Point(452, 12);
             this.viewTreeBtn.Name = "viewTreeBtn";
-            this.viewTreeBtn.Size = new System.Drawing.Size(150, 44);
+            this.viewTreeBtn.Size = new System.Drawing.Size(75, 23);
             this.viewTreeBtn.TabIndex = 4;
             this.viewTreeBtn.Text = "View Tree";
             this.viewTreeBtn.UseVisualStyleBackColor = true;
@@ -89,26 +84,25 @@
             // 
             // infixTbx
             // 
-            this.infixTbx.Location = new System.Drawing.Point(198, 73);
-            this.infixTbx.Margin = new System.Windows.Forms.Padding(6);
+            this.infixTbx.Location = new System.Drawing.Point(99, 38);
             this.infixTbx.Name = "infixTbx";
-            this.infixTbx.Size = new System.Drawing.Size(690, 31);
+            this.infixTbx.Size = new System.Drawing.Size(347, 20);
             this.infixTbx.TabIndex = 5;
             // 
             // truthTableLbx
             // 
             this.truthTableLbx.FormattingEnabled = true;
-            this.truthTableLbx.ItemHeight = 25;
-            this.truthTableLbx.Location = new System.Drawing.Point(24, 215);
+            this.truthTableLbx.Location = new System.Drawing.Point(12, 112);
+            this.truthTableLbx.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.truthTableLbx.Name = "truthTableLbx";
-            this.truthTableLbx.Size = new System.Drawing.Size(847, 754);
+            this.truthTableLbx.Size = new System.Drawing.Size(426, 394);
             this.truthTableLbx.TabIndex = 6;
             // 
             // LogicForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1930, 989);
+            this.ClientSize = new System.Drawing.Size(964, 525);
             this.Controls.Add(this.truthTableLbx);
             this.Controls.Add(this.infixTbx);
             this.Controls.Add(this.viewTreeBtn);
@@ -116,7 +110,6 @@
             this.Controls.Add(this.infixTbxLb);
             this.Controls.Add(this.parseBtn);
             this.Controls.Add(this.propositionTbx);
-            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "LogicForm";
             this.Text = "Logic Application";
             this.ResumeLayout(false);
