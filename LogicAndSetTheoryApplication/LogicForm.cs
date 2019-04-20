@@ -32,14 +32,33 @@ namespace LogicAndSetTheoryApplication
             uniqueVariablesLb.Text = "Unique Variables:";
             List<Proposition> uniqueVariablesSet = propositionRoot.GetVariables();
             uniqueVariablesSet.Sort();
+            uniqueVariablesTbx.Text = "";
             foreach (Proposition s in uniqueVariablesSet)
             {
-                uniqueVariablesLb.Text += $" {s}";
+                uniqueVariablesTbx.Text += $" {s}";
             }
 
             truthTable = new TruthTable(propositionRoot);
-
+            AddTruthTable();
+            hashCodeTbx.Text = truthTable.HashCode();
+            hashCodeTbx.BackColor = Color.LightGreen;
+            
             Console.WriteLine(truthTable);
+            Console.WriteLine();
+        }
+
+        private void AddTruthTable()
+        {
+            truthTableLbx.Items.Clear();
+            
+            if (truthTable != null)
+            {
+                truthTableLbx.Items.Add(truthTable.TableHeader());
+                foreach (TruthTableRow row in truthTable.Rows)
+                {
+                    truthTableLbx.Items.Add(row);
+                }
+            }
         }
 
         private void CreateGraphOfExpression(Proposition propositionRoot, string dotFileName)

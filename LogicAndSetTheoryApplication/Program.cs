@@ -17,6 +17,6 @@ namespace LogicAndSetTheoryApplication
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LogicForm());
-        }
+        } 
     }
 }

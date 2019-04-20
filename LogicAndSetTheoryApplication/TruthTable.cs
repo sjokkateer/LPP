@@ -43,11 +43,57 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        public override string ToString()
+        private string RecursiveHashCode(int value, string result = "", int numberBase = 16)
+        {
+            if (value == 0)
+            {
+                return result;
+            }
+            else
+            {
+                result = RecursiveHashCode(value / numberBase, result);
+                result += DetermineCharacter(value % numberBase);
+                return result;
+            }
+        }
+
+        private string DetermineCharacter(int value)
+        {
+            switch (value)
+            {
+                case 10:
+                    return "A";
+                case 11:
+                    return "B";
+                case 12:
+                    return "C";
+                case 13:
+                    return "D";
+                case 14:
+                    return "E";
+                case 15:
+                    return "F";
+                default:
+                    return Convert.ToString(value);
+            }
+        }
+
+        public string HashCode()
+        {
+            int sum = 0;
+            for (int i = 0; i < Rows.Count; i++)
+            {
+                // 0 or 1 * 2^i
+                // Where i is the index of the row, matching regular binary to base 10 conversion.
+                sum += Convert.ToInt32(Rows[i].Calculate()) * Convert.ToInt32(Math.Pow(2, i));
+            }
+            return RecursiveHashCode(sum);
+        }
+
+        public string TableHeader()
         {
             string result = "";
-            string variable = "";
-
+            string variable ="";
             for (int i = 0; i < propositionVariablesSet.Count; i++)
             {
                 variable = $"{propositionVariablesSet[i]}  ";
@@ -57,7 +103,12 @@ namespace LogicAndSetTheoryApplication
                 }
                 result += variable;
             }
+            return result;
+        }
 
+        public override string ToString()
+        {
+            string result = TableHeader();
             string row = "";
 
             for (int i = 0; i < Rows.Count; i++)
