@@ -10,7 +10,7 @@ namespace LogicAndSetTheoryApplication
     {
         public Proposition RightSuccessor { get; set; }
 
-        public BinaryConnective(object data) : base(data)
+        public BinaryConnective(char data) : base(data)
         {
             RightSuccessor = null;
         }

@@ -10,7 +10,7 @@ namespace LogicAndSetTheoryApplication
     {
         public Proposition LeftSuccessor { get; set; }
 
-        public UnaryConnective(object data) : base(data)
+        public UnaryConnective(char data) : base(data)
         {
             LeftSuccessor = null;
         }

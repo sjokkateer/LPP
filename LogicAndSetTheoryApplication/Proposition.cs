@@ -11,7 +11,7 @@ namespace LogicAndSetTheoryApplication
         public int NodeNumber { get; set; }
         public object Data { get; }
         public bool TruthValue { get; set; }
-        public Proposition(object data)
+        public Proposition(char data)
         {
             Data = data;
         }

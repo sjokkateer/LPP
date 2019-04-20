@@ -8,7 +8,7 @@ namespace LogicAndSetTheoryApplication
 {
     class BiImplication : BinaryConnective
     {
-        public BiImplication() : base("=")
+        public BiImplication() : base('=')
         { }
 
         public override bool Calculate()

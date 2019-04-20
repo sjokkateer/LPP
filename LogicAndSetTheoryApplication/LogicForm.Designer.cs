@@ -38,10 +38,10 @@
             this.hashCodeTbx = new System.Windows.Forms.TextBox();
             this.uniqueVariablesTbx = new System.Windows.Forms.TextBox();
             this.hashCodeLb = new System.Windows.Forms.Label();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.truthTableTab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabControl1.SuspendLayout();
+            this.simplifiedTruthTableTab = new System.Windows.Forms.TabPage();
+            this.truthTableTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -131,15 +131,15 @@
             this.hashCodeLb.TabIndex = 9;
             this.hashCodeLb.Text = "Hash:";
             // 
-            // tabControl1
+            // truthTableTab
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(12, 171);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(340, 377);
-            this.tabControl1.TabIndex = 10;
+            this.truthTableTab.Controls.Add(this.tabPage1);
+            this.truthTableTab.Controls.Add(this.simplifiedTruthTableTab);
+            this.truthTableTab.Location = new System.Drawing.Point(12, 171);
+            this.truthTableTab.Name = "truthTableTab";
+            this.truthTableTab.SelectedIndex = 0;
+            this.truthTableTab.Size = new System.Drawing.Size(340, 377);
+            this.truthTableTab.TabIndex = 10;
             // 
             // tabPage1
             // 
@@ -149,25 +149,25 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(332, 351);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Truth Table";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // simplifiedTruthTableTab
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(332, 351);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.simplifiedTruthTableTab.Location = new System.Drawing.Point(4, 22);
+            this.simplifiedTruthTableTab.Name = "simplifiedTruthTableTab";
+            this.simplifiedTruthTableTab.Padding = new System.Windows.Forms.Padding(3);
+            this.simplifiedTruthTableTab.Size = new System.Drawing.Size(332, 351);
+            this.simplifiedTruthTableTab.TabIndex = 1;
+            this.simplifiedTruthTableTab.Text = "Simplified Table";
+            this.simplifiedTruthTableTab.UseVisualStyleBackColor = true;
             // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 682);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.truthTableTab);
             this.Controls.Add(this.hashCodeLb);
             this.Controls.Add(this.uniqueVariablesTbx);
             this.Controls.Add(this.hashCodeTbx);
@@ -179,7 +179,7 @@
             this.Controls.Add(this.propositionTbx);
             this.Name = "LogicForm";
             this.Text = "Logic Application";
-            this.tabControl1.ResumeLayout(false);
+            this.truthTableTab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -198,9 +198,9 @@
         private System.Windows.Forms.TextBox hashCodeTbx;
         private System.Windows.Forms.TextBox uniqueVariablesTbx;
         private System.Windows.Forms.Label hashCodeLb;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl truthTableTab;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage simplifiedTruthTableTab;
     }
 }
 
