@@ -32,7 +32,10 @@ namespace LogicAndSetTheoryApplication
                 {
                     // add row to the table's list of rows and return back to the calling environment
                     row.Cells[index] = truthValue;
-                    Rows.Add(row.Copy()); // Is there a cleaner/better way instead of copying, I am aware the same memory reference for the row is being used otherwise and values overwritten.
+                    TruthTableRow copy = row.Copy();
+                    copy.Calculate(); // Required call to Calculate, otherwise the Result truth value can not be set :-(
+                    // With the current recursive approach, only one row is constructed inside the wrapper method.
+                    Rows.Add(copy);    
                 }
                 else
                 {
@@ -85,7 +88,7 @@ namespace LogicAndSetTheoryApplication
             {
                 // 0 or 1 * 2^i
                 // Where i is the index of the row, matching regular binary to base 10 conversion.
-                sum += Convert.ToInt32(Rows[i].Calculate()) * Convert.ToInt32(Math.Pow(2, i));
+                sum += Convert.ToInt32(Rows[i].Result) * Convert.ToInt32(Math.Pow(2, i));
             }
             return RecursiveHashCode(sum);
         }

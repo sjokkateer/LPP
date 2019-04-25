@@ -11,21 +11,29 @@ namespace LogicAndSetTheoryApplication
         private Proposition propositionRoot;
         private List<Proposition> uniqueVariables;
         public bool[] Cells { get; set; }
+        public bool Result { get; private set; }
 
-        public TruthTableRow(Proposition propositionRoot, List<Proposition> uniqueVariabels, int numberOfVariables)
+        public TruthTableRow(Proposition propositionRoot, List<Proposition> uniqueVariables, int numberOfVariables)
         {
             this.propositionRoot = propositionRoot;
-            this.uniqueVariables = uniqueVariabels;
+            this.uniqueVariables = uniqueVariables;
             Cells = new bool[numberOfVariables];
         }
 
-        public bool Calculate()
+        /// <summary>
+        /// Method will assign the stored truth value to each respective
+        /// abstract proposition variable, and then recursively calculate
+        /// the result.
+        /// 
+        /// The result is assigned to the result property.
+        /// </summary>
+        public void Calculate()
         {
             for (int i = 0; i < uniqueVariables.Count; i++)
             {
                 uniqueVariables[i].TruthValue = Cells[i];
             }
-            return propositionRoot.Calculate();
+            Result = propositionRoot.Calculate();
         }
 
         public TruthTableRow Copy()
@@ -54,7 +62,8 @@ namespace LogicAndSetTheoryApplication
                 }
                 result += cell;
             }
-            result += $"  {Convert.ToInt32(Calculate())}";
+            // Here I calculated the value of the row, to append it to the string representation of the table row object.
+            result += $"  {Convert.ToInt32(Result)}";
             return result;
         }
     }

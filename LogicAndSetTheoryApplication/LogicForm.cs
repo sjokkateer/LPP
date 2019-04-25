@@ -50,7 +50,6 @@ namespace LogicAndSetTheoryApplication
         private void AddTruthTable()
         {
             truthTableLbx.Items.Clear();
-            
             if (truthTable != null)
             {
                 truthTableLbx.Items.Add(truthTable.TableHeader());
