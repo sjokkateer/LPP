@@ -16,6 +16,7 @@ namespace LogicAndSetTheoryApplication
         {
             this.propositionRoot = propositionRoot;
             propositionVariablesSet = propositionRoot.GetVariables();
+            propositionVariablesSet.Sort();
             Rows = new List<TruthTableRow>();
             CreateTruthTableRows();
         }
