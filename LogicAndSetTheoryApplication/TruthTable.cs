@@ -19,11 +19,34 @@ namespace LogicAndSetTheoryApplication
             Rows = new List<TruthTableRow>();
             CreateTruthTableRows();
         }
+
+        public List<int> GetConvertedResultColumn()
+        {
+            List<int> resultColumn = new List<int>();
+            foreach (TruthTableRow row in Rows)
+            {
+                resultColumn.Add(Convert.ToInt32(row.Result));
+            }
+            return resultColumn;
+        }
+
+        /// <summary>
+        /// Wrapper method that makes the initial call to CreateRowsRecursively with some basic
+        /// input parameters that do not change.
+        /// </summary>
         private void CreateTruthTableRows()
         {
             CreateRowsRecursively(0, new bool[] { false, true }, new TruthTableRow(propositionRoot, propositionVariablesSet, propositionVariablesSet.Count));
         }
 
+        /// <summary>
+        /// Recursive method that evaluates a true and false value for every unique variable,
+        /// exhausting all possible permutations and creating a row copy for every such row.
+        /// This row copy is then added to the collection of rows of this truth table object.
+        /// </summary>
+        /// <param name="index">The current index, starting at 0, and evaluating until the index is equal to the number of unique variables - 1</param>
+        /// <param name="truthSet">A constant set of the two boolean values false and true</param>
+        /// <param name="row">A truth table row object that holds the combination of truth values for the abstract proposition variables.</param>
         private void CreateRowsRecursively(int index, bool[] truthSet, TruthTableRow row)
         {
             foreach (bool truthValue in truthSet)
@@ -44,53 +67,6 @@ namespace LogicAndSetTheoryApplication
                     CreateRowsRecursively(index + 1, truthSet, row);
                 }
             }
-        }
-
-        private string RecursiveHashCode(int value, string result = "", int numberBase = 16)
-        {
-            if (value == 0)
-            {
-                return result;
-            }
-            else
-            {
-                result = RecursiveHashCode(value / numberBase, result);
-                result += DetermineCharacter(value % numberBase);
-                return result;
-            }
-        }
-
-        private string DetermineCharacter(int value)
-        {
-            switch (value)
-            {
-                case 10:
-                    return "A";
-                case 11:
-                    return "B";
-                case 12:
-                    return "C";
-                case 13:
-                    return "D";
-                case 14:
-                    return "E";
-                case 15:
-                    return "F";
-                default:
-                    return Convert.ToString(value);
-            }
-        }
-
-        public string HashCode()
-        {
-            int sum = 0;
-            for (int i = 0; i < Rows.Count; i++)
-            {
-                // 0 or 1 * 2^i
-                // Where i is the index of the row, matching regular binary to base 10 conversion.
-                sum += Convert.ToInt32(Rows[i].Result) * Convert.ToInt32(Math.Pow(2, i));
-            }
-            return RecursiveHashCode(sum);
         }
 
         public string TableHeader()

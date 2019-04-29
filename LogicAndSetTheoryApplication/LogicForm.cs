@@ -16,6 +16,7 @@ namespace LogicAndSetTheoryApplication
         private Proposition propositionRoot;
         private Parser propositionParser;
         private TruthTable truthTable;
+        private HashCodeCalculator hashCalc;
 
         public LogicForm()
         {
@@ -40,11 +41,15 @@ namespace LogicAndSetTheoryApplication
 
             truthTable = new TruthTable(propositionRoot);
             AddTruthTable();
-            hashCodeTbx.Text = truthTable.HashCode();
-            hashCodeTbx.BackColor = Color.LightGreen;
-            
             Console.WriteLine(truthTable);
             Console.WriteLine();
+
+            hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
+            Console.WriteLine(hashCalc);
+            Console.WriteLine();
+
+            hashCodeTbx.Text = hashCalc.HashCode;
+            hashCodeTbx.BackColor = Color.LightGreen;
         }
 
         private void AddTruthTable()
