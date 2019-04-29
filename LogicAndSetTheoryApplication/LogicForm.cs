@@ -16,7 +16,7 @@ namespace LogicAndSetTheoryApplication
         private Proposition propositionRoot;
         private Parser propositionParser;
         private TruthTable truthTable;
-        private List<TruthTableRow> simplifiedTruthTable;
+        private TruthTable simplifiedTruthTable;
         private HashCodeCalculator hashCalc;
 
         public LogicForm()
@@ -41,12 +41,10 @@ namespace LogicAndSetTheoryApplication
             }
 
             truthTable = new TruthTable(propositionRoot);
-            AddTruthTable();
-            Console.WriteLine(truthTable);
-            Console.WriteLine();
+            AddTruthTable(truthTableLbx, truthTable);
 
             simplifiedTruthTable = truthTable.Simplify();
-            AddSimplifiedTruthTable();
+            AddTruthTable(simplifiedTruthTableLbx, simplifiedTruthTable);
 
             hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
             Console.WriteLine(hashCalc);
@@ -56,7 +54,7 @@ namespace LogicAndSetTheoryApplication
             hashCodeTbx.BackColor = Color.LightGreen;
         }
 
-        private void AddTruthTable()
+        private void AddTruthTable(ListBox truthTableLbx, TruthTable truthTable)
         {
             truthTableLbx.Items.Clear();
             if (truthTable != null)
@@ -65,19 +63,6 @@ namespace LogicAndSetTheoryApplication
                 foreach (TruthTableRow row in truthTable.Rows)
                 {
                     truthTableLbx.Items.Add(row);
-                }
-            }
-        }
-
-        private void AddSimplifiedTruthTable()
-        {
-            simplifiedTruthTableLbx.Items.Clear();
-            if (simplifiedTruthTable != null)
-            {
-                simplifiedTruthTableLbx.Items.Add(truthTable.TableHeader());
-                foreach (TruthTableRow row in simplifiedTruthTable)
-                {
-                    simplifiedTruthTableLbx.Items.Add(row);
                 }
             }
         }

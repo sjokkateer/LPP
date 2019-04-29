@@ -21,6 +21,13 @@ namespace LogicAndSetTheoryApplication
             CreateTruthTableRows();
         }
 
+        public TruthTable(Proposition propositionRoot, List<Proposition> propositionVariablesSet, List<TruthTableRow> simplifiedRows)
+        {
+            this.propositionRoot = propositionRoot;
+            this.propositionVariablesSet = propositionVariablesSet;
+            Rows = simplifiedRows;
+        }
+
         public List<int> GetConvertedResultColumn()
         {
             List<int> resultColumn = new List<int>();
@@ -70,9 +77,9 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        public List<TruthTableRow> Simplify()
+        public TruthTable Simplify()
         {
-            return SimplifyRowsRecursively(-1, Rows);
+            return new TruthTable(propositionRoot, propositionVariablesSet, SimplifyRowsRecursively(-1, Rows));
         }
 
         private List<TruthTableRow> SimplifyRowsRecursively(int rowCount, List<TruthTableRow> simplifiedRowSet)
