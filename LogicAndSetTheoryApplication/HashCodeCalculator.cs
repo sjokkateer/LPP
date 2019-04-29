@@ -31,30 +31,30 @@ namespace LogicAndSetTheoryApplication
         {
             this.convertedResultColumn = convertedResultColumn;
             HashBase = hashBase;
-            HashCode = RecursiveHashCode(0);
+            HashCode = RecursiveHashCode(1);
         }
 
         private string RecursiveHashCode(int index)
         {
             int sum = 0;
             // Continue off from index, initially index will be 0.
-            for (int i = index; i < convertedResultColumn.Count; i++)
+            for (int i = index; i <= convertedResultColumn.Count; i++)
             {
-                // Sum is equal to the resultColumn value * 2^(i % Math.Log(HashBase, 2)) since we make chunks.
-                sum += convertedResultColumn[i] * Convert.ToInt32(Math.Pow(2, i % Math.Log(HashBase, 2)));
-                if (index == convertedResultColumn.Count - 1)
+                // One index earlier since we start counting from 1.
+                sum += convertedResultColumn[i - 1] * Convert.ToInt32(Math.Pow(2, (i - 1) % Math.Log(HashBase, 2)));
+                // For example if the index = 1 and the number of columns = 1. we can determine the character and return.
+                if (i == convertedResultColumn.Count)
                 {
                     // Last binary digit, we can covert the current sum to a character and return the final char.
                     return DetermineCharacter(sum);
                 }
-                else if (i > 0 && (i + 1) % Math.Log(HashBase, 2) == 0)
+                // If index i is a multiple of 2^Log(HashBase, 2)
+                else if (i % Math.Log(HashBase, 2) == 0)
                 {
                     // Go one level deeper to obtain the last character first and then return it to the stack.
                     // To concatenate all characters to obtain the final hash code.
-                    string character = RecursiveHashCode(i + 1);
                     // Determine the current character and append it.
-                    string currentCharacter = DetermineCharacter(sum);
-                    return character + currentCharacter;
+                    return RecursiveHashCode(i + 1) + DetermineCharacter(sum);
                 }
             }
             return null;
