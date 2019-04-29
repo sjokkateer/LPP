@@ -37,7 +37,7 @@ namespace LogicAndSetTheoryApplication
         /// </summary>
         private void CreateTruthTableRows()
         {
-            CreateRowsRecursively(0, new bool[] { false, true }, new TruthTableRow(propositionRoot, propositionVariablesSet, propositionVariablesSet.Count));
+            CreateRowsRecursively(0, new char[] { '0', '1' }, new TruthTableRow(propositionRoot, propositionVariablesSet, propositionVariablesSet.Count));
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace LogicAndSetTheoryApplication
         /// <param name="index">The current index, starting at 0, and evaluating until the index is equal to the number of unique variables - 1</param>
         /// <param name="truthSet">A constant set of the two boolean values false and true</param>
         /// <param name="row">A truth table row object that holds the combination of truth values for the abstract proposition variables.</param>
-        private void CreateRowsRecursively(int index, bool[] truthSet, TruthTableRow row)
+        private void CreateRowsRecursively(int index, char[] truthSet, TruthTableRow row)
         {
-            foreach (bool truthValue in truthSet)
+            foreach (char truthValue in truthSet)
             {
                 if (index == propositionVariablesSet.Count - 1)
                 {
@@ -68,6 +68,56 @@ namespace LogicAndSetTheoryApplication
                     CreateRowsRecursively(index + 1, truthSet, row);
                 }
             }
+        }
+
+        public List<TruthTableRow> Simplify()
+        {
+            return SimplifyRowsRecursively(-1, Rows);
+        }
+
+        private List<TruthTableRow> SimplifyRowsRecursively(int rowCount, List<TruthTableRow> simplifiedRowSet)
+        {
+            if (rowCount == simplifiedRowSet.Count)
+            {
+                return simplifiedRowSet;
+            }
+            else
+            {
+                int rowCountBeforeSimplification = simplifiedRowSet.Count;
+                simplifiedRowSet = SimplifiyRowSet(simplifiedRowSet);
+                return SimplifyRowsRecursively(rowCountBeforeSimplification, simplifiedRowSet);
+            }
+        }
+
+        private List<TruthTableRow> SimplifiyRowSet(List<TruthTableRow> rowSet)
+        {
+            List<TruthTableRow> simplifiedSet = new List<TruthTableRow>();
+            for (int i = 0; i < rowSet.Count; i++)
+            {
+                for (int j = i + 1; j < rowSet.Count; j++)
+                {
+                    if (rowSet[i].Result == rowSet[j].Result)
+                    {
+                        // Try to simplify the two by a method call.
+                        // The method will return null if it was not succesfull
+                        // or a new row if it was successful.
+                        TruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
+                        if (simplifiedRow != null)
+                        {
+                            // The rows have been simplified thus we can assign the IsSimplified to Rowset[i]
+                            // And add the obtained row to the simplifiedSet.
+                            rowSet[i].IsSimplified = true;
+                            rowSet[j].IsSimplified = true;
+                            simplifiedSet.Add(simplifiedRow);
+                        }
+                    }
+                }
+                if (rowSet[i].IsSimplified == false)
+                {
+                    simplifiedSet.Add(rowSet[i]);
+                }
+            }
+            return simplifiedSet;
         }
 
         public string TableHeader()
@@ -90,7 +140,6 @@ namespace LogicAndSetTheoryApplication
         {
             string result = TableHeader();
             string row = "";
-
             for (int i = 0; i < Rows.Count; i++)
             {
                 row = $"{Rows[i]}\n";
@@ -100,7 +149,6 @@ namespace LogicAndSetTheoryApplication
                 }
                 result += row;
             }
-
             return result;
         }
     }

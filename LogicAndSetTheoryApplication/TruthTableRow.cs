@@ -10,14 +10,16 @@ namespace LogicAndSetTheoryApplication
     {
         private Proposition propositionRoot;
         private List<Proposition> uniqueVariables;
-        public bool[] Cells { get; set; }
-        public bool Result { get; private set; }
+        public char[] Cells { get; set; }
+        public bool Result { get; set; }
+        public bool IsSimplified { get; set; }
 
         public TruthTableRow(Proposition propositionRoot, List<Proposition> uniqueVariables, int numberOfVariables)
         {
             this.propositionRoot = propositionRoot;
             this.uniqueVariables = uniqueVariables;
-            Cells = new bool[numberOfVariables];
+            Cells = new char[numberOfVariables];
+            IsSimplified = false;
         }
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace LogicAndSetTheoryApplication
         {
             for (int i = 0; i < uniqueVariables.Count; i++)
             {
-                uniqueVariables[i].TruthValue = Cells[i];
+                uniqueVariables[i].TruthValue = Cells[i] == '1' ? true : false ;
             }
             Result = propositionRoot.Calculate();
         }
@@ -43,26 +45,45 @@ namespace LogicAndSetTheoryApplication
             {
                 rowCopy.Cells[i] = Cells[i];
             }
+            rowCopy.Result = Result;
             return rowCopy;
+        }
+
+        public TruthTableRow Simplify(TruthTableRow otherRow)
+        {
+            TruthTableRow simplifiedRow = Copy();
+            int numberOfDeferringValues = 0;
+            for (int i = 0; i < simplifiedRow.Cells.Length; i++)
+            {
+                if (simplifiedRow.Cells[i] != otherRow.Cells[i])
+                {
+                    // Then we deal with a don't care variable, which we indicate by null.
+                    simplifiedRow.Cells[i] = '*';
+                    numberOfDeferringValues++;
+
+                    if (numberOfDeferringValues > 1)
+                    {
+                        return null;
+                    }
+                }
+            }
+            return simplifiedRow;
         }
 
         public override string ToString()
         {
             string result = "";
             string cell = "";
-            int truthValue;
 
             for (int i = 0; i < Cells.Length; i++)
             {
-                truthValue = Convert.ToInt32(Cells[i]);
-                cell = $"  {truthValue}";
+                cell = $"  {Cells[i]}";
                 if (i == 0)
                 {
-                    cell = $"{truthValue}";
+                    cell = $"{Cells[i]}";
                 }
                 result += cell;
             }
-            // Here I calculated the value of the row, to append it to the string representation of the table row object.
             result += $"  {Convert.ToInt32(Result)}";
             return result;
         }

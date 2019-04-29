@@ -16,6 +16,7 @@ namespace LogicAndSetTheoryApplication
         private Proposition propositionRoot;
         private Parser propositionParser;
         private TruthTable truthTable;
+        private List<TruthTableRow> simplifiedTruthTable;
         private HashCodeCalculator hashCalc;
 
         public LogicForm()
@@ -44,6 +45,9 @@ namespace LogicAndSetTheoryApplication
             Console.WriteLine(truthTable);
             Console.WriteLine();
 
+            simplifiedTruthTable = truthTable.Simplify();
+            AddSimplifiedTruthTable();
+
             hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
             Console.WriteLine(hashCalc);
             Console.WriteLine();
@@ -61,6 +65,19 @@ namespace LogicAndSetTheoryApplication
                 foreach (TruthTableRow row in truthTable.Rows)
                 {
                     truthTableLbx.Items.Add(row);
+                }
+            }
+        }
+
+        private void AddSimplifiedTruthTable()
+        {
+            simplifiedTruthTableLbx.Items.Clear();
+            if (simplifiedTruthTable != null)
+            {
+                simplifiedTruthTableLbx.Items.Add(truthTable.TableHeader());
+                foreach (TruthTableRow row in simplifiedTruthTable)
+                {
+                    simplifiedTruthTableLbx.Items.Add(row);
                 }
             }
         }
