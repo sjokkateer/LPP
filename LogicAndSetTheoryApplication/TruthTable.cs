@@ -79,7 +79,40 @@ namespace LogicAndSetTheoryApplication
 
         public TruthTable Simplify()
         {
-            return new TruthTable(propositionRoot, propositionVariablesSet, SimplifyRowsRecursively(-1, Rows));
+            return new TruthTable(propositionRoot, propositionVariablesSet, SimplifyRowsIteratively(Rows));
+        }
+
+        private bool EqualSets(List<TruthTableRow> set1, List<TruthTableRow> set2)
+        {
+            // Different number of rows automatically indicates they are different.
+            if (set1.Count != set2.Count)
+            {
+                return false;
+            }
+            else
+            {
+                // Test if every row is equal (cell values).
+                for (int i = 0; i < set1.Count; i++)
+                {
+                    if (!set1[i].EqualTo(set2[i]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        private List<TruthTableRow> SimplifyRowsIteratively(List<TruthTableRow> simplifiedRowSet)
+        {
+            List<TruthTableRow> oldSet;
+            // Create new test condition, testing if both sets are equal or not.
+            do
+            {
+                oldSet = simplifiedRowSet;
+                simplifiedRowSet = SimplifiyRowSet(simplifiedRowSet);
+            } while (!(EqualSets(oldSet, simplifiedRowSet)));
+            return simplifiedRowSet;
         }
 
         private List<TruthTableRow> SimplifyRowsRecursively(int rowCount, List<TruthTableRow> simplifiedRowSet)
@@ -96,8 +129,19 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
+        private void PrintRows(List<TruthTableRow> rows)
+        {
+            foreach (TruthTableRow r in rows)
+            {
+                Console.WriteLine(r);
+            }
+        }
+
         private List<TruthTableRow> SimplifiyRowSet(List<TruthTableRow> rowSet)
         {
+            Console.WriteLine("Original: ");
+            PrintRows(rowSet);
+            Console.WriteLine();
             List<TruthTableRow> simplifiedSet = new List<TruthTableRow>();
             for (int i = 0; i < rowSet.Count; i++)
             {
@@ -113,9 +157,12 @@ namespace LogicAndSetTheoryApplication
                         {
                             // The rows have been simplified thus we can assign the IsSimplified to Rowset[i]
                             // And add the obtained row to the simplifiedSet.
-                            rowSet[i].IsSimplified = true;
-                            rowSet[j].IsSimplified = true;
-                            simplifiedSet.Add(simplifiedRow);
+                            if (rowSet[i].IsSimplified == false || rowSet[j].IsSimplified == false)
+                            {
+                                rowSet[i].IsSimplified = true;
+                                rowSet[j].IsSimplified = true;
+                                simplifiedSet.Add(simplifiedRow);
+                            }
                         }
                     }
                 }
@@ -124,6 +171,9 @@ namespace LogicAndSetTheoryApplication
                     simplifiedSet.Add(rowSet[i]);
                 }
             }
+            Console.WriteLine("Simplified: ");
+            PrintRows(simplifiedSet);
+            Console.WriteLine();
             return simplifiedSet;
         }
 

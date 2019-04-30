@@ -14,6 +14,9 @@ namespace LogicAndSetTheoryApplication
         public bool Result { get; set; }
         public bool IsSimplified { get; set; }
 
+        public TruthTableRow(int numberOfVariables) : this(null, null, numberOfVariables)
+        { }
+
         public TruthTableRow(Proposition propositionRoot, List<Proposition> uniqueVariables, int numberOfVariables)
         {
             this.propositionRoot = propositionRoot;
@@ -51,11 +54,15 @@ namespace LogicAndSetTheoryApplication
 
         public TruthTableRow Simplify(TruthTableRow otherRow)
         {
-            TruthTableRow simplifiedRow = Copy();
+            // Instead of creating a memory intense copy, we create a very simple row object
+            // that will only hold the truth values in each cell and a result.
+            int numberOfVariables = Cells.Length;
+            TruthTableRow simplifiedRow = new TruthTableRow(numberOfVariables);
+            simplifiedRow.Result = Result;
             int numberOfDeferringValues = 0;
-            for (int i = 0; i < simplifiedRow.Cells.Length; i++)
+            for (int i = 0; i < Cells.Length; i++)
             {
-                if (simplifiedRow.Cells[i] != otherRow.Cells[i])
+                if (Cells[i] != otherRow.Cells[i])
                 {
                     // Then we deal with a don't care variable, which we indicate by null.
                     simplifiedRow.Cells[i] = '*';
@@ -66,8 +73,24 @@ namespace LogicAndSetTheoryApplication
                         return null;
                     }
                 }
+                else
+                {
+                    simplifiedRow.Cells[i] = Cells[i];
+                }
             }
             return simplifiedRow;
+        }
+
+        public bool EqualTo(TruthTableRow other)
+        {
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                if (Cells[i] != other.Cells[i])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public override string ToString()
