@@ -137,11 +137,26 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
+        private bool IsRowInSet(TruthTableRow row, List<TruthTableRow> rowSet)
+        {
+            foreach(TruthTableRow r in rowSet)
+            {
+                if (row.EqualTo(r))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private List<TruthTableRow> SimplifiyRowSet(List<TruthTableRow> rowSet)
         {
+            // Debugging statements
             Console.WriteLine("Original: ");
             PrintRows(rowSet);
             Console.WriteLine();
+            //
+
             List<TruthTableRow> simplifiedSet = new List<TruthTableRow>();
             for (int i = 0; i < rowSet.Count; i++)
             {
@@ -155,25 +170,37 @@ namespace LogicAndSetTheoryApplication
                         TruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
                         if (simplifiedRow != null)
                         {
-                            // The rows have been simplified thus we can assign the IsSimplified to Rowset[i]
-                            // And add the obtained row to the simplifiedSet.
-                            if (rowSet[i].IsSimplified == false || rowSet[j].IsSimplified == false)
+                            rowSet[i].IsSimplified = true;
+                            rowSet[j].IsSimplified = true;
+                            if (IsRowInSet(simplifiedRow, simplifiedSet) == false)
                             {
-                                rowSet[i].IsSimplified = true;
-                                rowSet[j].IsSimplified = true;
                                 simplifiedSet.Add(simplifiedRow);
                             }
                         }
                     }
                 }
+                // We exhausted our option, meaning that row i was not simplified,
+                // thus we have to add it to our set, ensuring one unique row is in it.
                 if (rowSet[i].IsSimplified == false)
                 {
-                    simplifiedSet.Add(rowSet[i]);
+                    if (IsRowInSet(rowSet[i], simplifiedSet) == false)
+                    {
+                        simplifiedSet.Add(rowSet[i]);
+                    }
                 }
             }
+
+            // Debugging statements
             Console.WriteLine("Simplified: ");
             PrintRows(simplifiedSet);
             Console.WriteLine();
+            Console.WriteLine($"{simplifiedSet.Count == 0}");
+            //
+
+            if (simplifiedSet.Count == 0)
+            {
+                return rowSet;
+            }
             return simplifiedSet;
         }
 
