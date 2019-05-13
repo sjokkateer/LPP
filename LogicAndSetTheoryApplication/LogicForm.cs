@@ -48,6 +48,7 @@ namespace LogicAndSetTheoryApplication
             Proposition disjunctiveProposition = truthTable.CreateDisjunctiveNormalForm();
             disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
 
+            // Simplified truth table.
             simplifiedTruthTable = truthTable.Simplify();
             AddTruthTable(simplifiedTruthTableLbx, simplifiedTruthTable);
             // < Disjunctive normal form >
@@ -61,13 +62,17 @@ namespace LogicAndSetTheoryApplication
             hashCodeTbx.BackColor = Color.LightGreen;
             
             TruthTable disjunctiveTruthTable = new TruthTable(disjunctiveProposition);
-            hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
+            hashCalc = new HashCodeCalculator(disjunctiveTruthTable.GetConvertedResultColumn(), 16);
             hashesListBox.Items.Add($"Disjunctive normal:");
             hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
 
             // Create truth table of the simplified disjunctive
             // Create a new hash calculator with the result column, base 16.
             // Add hash and bcde to the list boxes.
+            TruthTable simplifiedDisjunctiveTruthTable = new TruthTable(simplifiedDisjunctiveProposition);
+            hashCalc = new HashCodeCalculator(simplifiedDisjunctiveTruthTable.GetConvertedResultColumn(), 16);
+            hashesListBox.Items.Add($"Simplified Disjunctive normal:");
+            hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
         }
 
         private void AddTruthTable(ListBox truthTableLbx, TruthTable truthTable)

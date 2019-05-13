@@ -66,7 +66,7 @@ namespace LogicAndSetTheoryApplication
                     TruthTableRow copy = row.Copy();
                     copy.Calculate(); // Required call to Calculate, otherwise the Result truth value can not be set :-(
                     // With the current recursive approach, only one row is constructed inside the wrapper method.
-                    Rows.Add(copy);    
+                    Rows.Add(copy);  
                 }
                 else
                 {
@@ -151,12 +151,6 @@ namespace LogicAndSetTheoryApplication
 
         private List<TruthTableRow> SimplifiyRowSet(List<TruthTableRow> rowSet)
         {
-            // Debugging statements
-            Console.WriteLine("Original: ");
-            PrintRows(rowSet);
-            Console.WriteLine();
-            //
-
             List<TruthTableRow> simplifiedSet = new List<TruthTableRow>();
             for (int i = 0; i < rowSet.Count; i++)
             {
@@ -189,13 +183,6 @@ namespace LogicAndSetTheoryApplication
                     }
                 }
             }
-
-            // Debugging statements
-            Console.WriteLine("Simplified: ");
-            PrintRows(simplifiedSet);
-            Console.WriteLine();
-            Console.WriteLine($"{simplifiedSet.Count == 0}");
-            //
 
             if (simplifiedSet.Count == 0)
             {

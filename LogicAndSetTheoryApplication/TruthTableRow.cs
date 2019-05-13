@@ -17,6 +17,9 @@ namespace LogicAndSetTheoryApplication
         public TruthTableRow(int numberOfVariables) : this(null, null, numberOfVariables)
         { }
 
+        public TruthTableRow(List<Proposition> uniqueVariables, int numberOfVariables) : this(null, uniqueVariables, numberOfVariables)
+        { }
+
         public TruthTableRow(Proposition propositionRoot, List<Proposition> uniqueVariables, int numberOfVariables)
         {
             this.propositionRoot = propositionRoot;
@@ -60,7 +63,11 @@ namespace LogicAndSetTheoryApplication
             {
                 // return value is null if cell held *
                 // Add the obtained variable to the list such that we can process it.
-                propositionList.Add(GetDisjunctiveNormalFormVariable(Cells[i], uniqueVariables[i]));
+                Proposition resultVariable = GetDisjunctiveNormalFormVariable(Cells[i], uniqueVariables[i]);
+                if (resultVariable != null)
+                {
+                    propositionList.Add(resultVariable);
+                }
             }
             // Create conjuncts and insert them at the first position 
             // until there is 1 proposition object left. (the root)
@@ -92,13 +99,13 @@ namespace LogicAndSetTheoryApplication
                 {
                     // Negate a copy of the variable.
                     Negation negation = new Negation();
-                    negation.LeftSuccessor = variable.Copy();
+                    negation.LeftSuccessor = variable; // THIS WAS A COPY
                     disjunctiveNormalFormVariable = negation;
                 }
                 else if (truthValue == '1')
                 {
                     // Copy the variable and add it to the expression.
-                    disjunctiveNormalFormVariable = variable.Copy();
+                    disjunctiveNormalFormVariable = variable; // THIS WAS A COPY
                 }
             }
             return disjunctiveNormalFormVariable;
@@ -110,7 +117,7 @@ namespace LogicAndSetTheoryApplication
             // Instead of creating a memory intense copy, we create a very simple row object
             // that will only hold the truth values in each cell and a result.
             int numberOfVariables = Cells.Length;
-            TruthTableRow simplifiedRow = new TruthTableRow(numberOfVariables);
+            TruthTableRow simplifiedRow = new TruthTableRow(uniqueVariables, numberOfVariables);
             simplifiedRow.Result = Result;
             int numberOfDeferringValues = 0;
             for (int i = 0; i < Cells.Length; i++)

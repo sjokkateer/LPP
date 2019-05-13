@@ -47,6 +47,7 @@
             this.hashesListBox = new System.Windows.Forms.ListBox();
             this.simplifiedDisjunctiveFormTbx = new System.Windows.Forms.TextBox();
             this.hashCodesListbox = new System.Windows.Forms.ListBox();
+            this.simplifiedDisjunctiveFormLb = new System.Windows.Forms.Label();
             this.truthTableTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.simplifiedTruthTableTab.SuspendLayout();
@@ -198,10 +199,10 @@
             // hashesListBox
             // 
             this.hashesListBox.FormattingEnabled = true;
-            this.hashesListBox.Location = new System.Drawing.Point(357, 195);
+            this.hashesListBox.Location = new System.Drawing.Point(353, 195);
             this.hashesListBox.Margin = new System.Windows.Forms.Padding(2);
             this.hashesListBox.Name = "hashesListBox";
-            this.hashesListBox.Size = new System.Drawing.Size(98, 342);
+            this.hashesListBox.Size = new System.Drawing.Size(158, 342);
             this.hashesListBox.TabIndex = 13;
             // 
             // simplifiedDisjunctiveFormTbx
@@ -214,17 +215,28 @@
             // hashCodesListbox
             // 
             this.hashCodesListbox.FormattingEnabled = true;
-            this.hashCodesListbox.Location = new System.Drawing.Point(459, 195);
+            this.hashCodesListbox.Location = new System.Drawing.Point(515, 195);
             this.hashCodesListbox.Margin = new System.Windows.Forms.Padding(2);
             this.hashCodesListbox.Name = "hashCodesListbox";
             this.hashCodesListbox.Size = new System.Drawing.Size(209, 342);
             this.hashCodesListbox.TabIndex = 15;
             // 
+            // simplifiedDisjunctiveFormLb
+            // 
+            this.simplifiedDisjunctiveFormLb.AutoSize = true;
+            this.simplifiedDisjunctiveFormLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.simplifiedDisjunctiveFormLb.Location = new System.Drawing.Point(50, 119);
+            this.simplifiedDisjunctiveFormLb.Name = "simplifiedDisjunctiveFormLb";
+            this.simplifiedDisjunctiveFormLb.Size = new System.Drawing.Size(52, 13);
+            this.simplifiedDisjunctiveFormLb.TabIndex = 16;
+            this.simplifiedDisjunctiveFormLb.Text = "simplified:";
+            // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 552);
+            this.ClientSize = new System.Drawing.Size(732, 552);
+            this.Controls.Add(this.simplifiedDisjunctiveFormLb);
             this.Controls.Add(this.hashCodesListbox);
             this.Controls.Add(this.simplifiedDisjunctiveFormTbx);
             this.Controls.Add(this.hashesListBox);
@@ -271,6 +283,7 @@
         private System.Windows.Forms.ListBox hashesListBox;
         private System.Windows.Forms.TextBox simplifiedDisjunctiveFormTbx;
         private System.Windows.Forms.ListBox hashCodesListbox;
+        private System.Windows.Forms.Label simplifiedDisjunctiveFormLb;
     }
 }
 
