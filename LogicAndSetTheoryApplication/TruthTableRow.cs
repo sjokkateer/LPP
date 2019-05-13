@@ -85,7 +85,11 @@ namespace LogicAndSetTheoryApplication
                 // Insert the conjunct into the list.
                 propositionList.Add(conjunct);
             }
-            return propositionList[0];
+            if (propositionList.Count > 0)
+            {
+                return propositionList[0];
+            }
+            return null;
         }
 
         private Proposition GetDisjunctiveNormalFormVariable(char truthValue, Proposition variable)
@@ -99,13 +103,13 @@ namespace LogicAndSetTheoryApplication
                 {
                     // Negate a copy of the variable.
                     Negation negation = new Negation();
-                    negation.LeftSuccessor = variable; // THIS WAS A COPY
+                    negation.LeftSuccessor = variable;
                     disjunctiveNormalFormVariable = negation;
                 }
                 else if (truthValue == '1')
                 {
                     // Copy the variable and add it to the expression.
-                    disjunctiveNormalFormVariable = variable; // THIS WAS A COPY
+                    disjunctiveNormalFormVariable = variable;
                 }
             }
             return disjunctiveNormalFormVariable;
