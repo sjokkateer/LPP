@@ -51,11 +51,19 @@ namespace LogicAndSetTheoryApplication
 
             // < Disjunctive normal form >
             Proposition disjunctiveProposition = truthTable.CreateDisjunctiveNormalForm();
-            disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
-            TruthTable disjunctiveTruthTable = new TruthTable(disjunctiveProposition);
-            hashCalc = new HashCodeCalculator(disjunctiveTruthTable.GetConvertedResultColumn(), 16);
-            hashesListBox.Items.Add($"Disjunctive normal:");
-            hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+            if (disjunctiveProposition != null)
+            {
+                disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
+                TruthTable disjunctiveTruthTable = new TruthTable(disjunctiveProposition);
+                hashCalc = new HashCodeCalculator(disjunctiveTruthTable.GetConvertedResultColumn(), 16);
+                hashesListBox.Items.Add($"Disjunctive normal:");
+                hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+            }
+            else
+            {
+                // Reset the content of their textboxes.
+                disjunctiveFormTbx.Text = string.Empty;
+            }
 
             // Simplified truth table.
             simplifiedTruthTable = truthTable.Simplify();
@@ -72,6 +80,11 @@ namespace LogicAndSetTheoryApplication
                 hashCalc = new HashCodeCalculator(simplifiedDisjunctiveTruthTable.GetConvertedResultColumn(), 16);
                 hashesListBox.Items.Add($"Simplified Disjunctive normal:");
                 hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+            }
+            else
+            {
+                // Reset the content of their textboxes.
+                simplifiedDisjunctiveFormTbx.Text = string.Empty;
             }
         }
 

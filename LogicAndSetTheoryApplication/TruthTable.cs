@@ -219,7 +219,11 @@ namespace LogicAndSetTheoryApplication
                 // Insert the conjunct into the list.
                 propositionList.Add(disjunct);
             }
-            return propositionList[0];
+            if (propositionList.Count > 0)
+            {
+                return propositionList[0];
+            }
+            return null;
         }
         #endregion
 
