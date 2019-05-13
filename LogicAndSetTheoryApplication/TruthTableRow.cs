@@ -52,6 +52,59 @@ namespace LogicAndSetTheoryApplication
             return rowCopy;
         }
 
+        #region Disjunctive Normal Form.
+        public Proposition GetDisjunctiveNormalFormEquivalent()
+        {
+            List<Proposition> propositionList = new List<Proposition>();
+            for (int i = 0; i < Cells.Length; i++)
+            {
+                // return value is null if cell held *
+                // Add the obtained variable to the list such that we can process it.
+                propositionList.Add(GetDisjunctiveNormalFormVariable(Cells[i], uniqueVariables[i]));
+            }
+            // Create conjuncts and insert them at the first position 
+            // until there is 1 proposition object left. (the root)
+            while (propositionList.Count > 1)
+            {
+                // take vriable at pos 0 and 1 and create a conjunct between them.
+                // Insert them back in the first position of the list.
+                Conjunction conjunct = new Conjunction();
+                // We do not need to create copies of variables since we did that beforehand.
+                conjunct.LeftSuccessor = propositionList[0];
+                conjunct.RightSuccessor = propositionList[1];
+                // Remove the individual variables from the list.
+                propositionList.RemoveAt(1);
+                propositionList.RemoveAt(0);
+                // Insert the conjunct into the list.
+                propositionList.Add(conjunct);
+            }
+            return propositionList[0];
+        }
+
+        private Proposition GetDisjunctiveNormalFormVariable(char truthValue, Proposition variable)
+        {
+            Proposition disjunctiveNormalFormVariable = null;
+            // Can omit any actions if the cell holds a don't care variable 
+            // only the case for simplified truth tables.
+            if (truthValue != '*')
+            {
+                if (truthValue == '0')
+                {
+                    // Negate a copy of the variable.
+                    Negation negation = new Negation();
+                    negation.LeftSuccessor = variable.Copy();
+                    disjunctiveNormalFormVariable = negation;
+                }
+                else if (truthValue == '1')
+                {
+                    // Copy the variable and add it to the expression.
+                    disjunctiveNormalFormVariable = variable.Copy();
+                }
+            }
+            return disjunctiveNormalFormVariable;
+        }
+        #endregion
+
         public TruthTableRow Simplify(TruthTableRow otherRow)
         {
             // Instead of creating a memory intense copy, we create a very simple row object

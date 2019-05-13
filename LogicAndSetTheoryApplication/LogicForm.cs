@@ -42,9 +42,11 @@ namespace LogicAndSetTheoryApplication
 
             truthTable = new TruthTable(propositionRoot);
             AddTruthTable(truthTableLbx, truthTable);
+            disjunctiveFormTbx.Text = truthTable.CreateDisjunctiveNormalForm().ToString();
 
             simplifiedTruthTable = truthTable.Simplify();
             AddTruthTable(simplifiedTruthTableLbx, simplifiedTruthTable);
+            // simplifiedDisjunctiveFormTbx.Text = simplifiedTruthTable.CreateDisjunctiveNormalForm().ToString();
 
             hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
             Console.WriteLine(hashCalc);

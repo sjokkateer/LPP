@@ -42,6 +42,10 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.simplifiedTruthTableTab = new System.Windows.Forms.TabPage();
             this.simplifiedTruthTableLbx = new System.Windows.Forms.ListBox();
+            this.disjunctiveFormTbx = new System.Windows.Forms.TextBox();
+            this.disjunctiveFormLb = new System.Windows.Forms.Label();
+            this.hashesListBox = new System.Windows.Forms.ListBox();
+            this.simplifiedDisjunctiveFormTbx = new System.Windows.Forms.TextBox();
             this.truthTableTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.simplifiedTruthTableTab.SuspendLayout();
@@ -103,7 +107,7 @@
             // 
             this.truthTableLbx.FormattingEnabled = true;
             this.truthTableLbx.Location = new System.Drawing.Point(5, 2);
-            this.truthTableLbx.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.truthTableLbx.Margin = new System.Windows.Forms.Padding(2);
             this.truthTableLbx.Name = "truthTableLbx";
             this.truthTableLbx.Size = new System.Drawing.Size(322, 342);
             this.truthTableLbx.TabIndex = 6;
@@ -148,7 +152,7 @@
             this.tabPage1.Controls.Add(this.truthTableLbx);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(332, 351);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Truth Table";
@@ -159,7 +163,7 @@
             this.simplifiedTruthTableTab.Controls.Add(this.simplifiedTruthTableLbx);
             this.simplifiedTruthTableTab.Location = new System.Drawing.Point(4, 22);
             this.simplifiedTruthTableTab.Name = "simplifiedTruthTableTab";
-            this.simplifiedTruthTableTab.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.simplifiedTruthTableTab.Padding = new System.Windows.Forms.Padding(3);
             this.simplifiedTruthTableTab.Size = new System.Drawing.Size(332, 351);
             this.simplifiedTruthTableTab.TabIndex = 1;
             this.simplifiedTruthTableTab.Text = "Simplified Table";
@@ -169,16 +173,52 @@
             // 
             this.simplifiedTruthTableLbx.FormattingEnabled = true;
             this.simplifiedTruthTableLbx.Location = new System.Drawing.Point(5, 2);
-            this.simplifiedTruthTableLbx.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.simplifiedTruthTableLbx.Margin = new System.Windows.Forms.Padding(2);
             this.simplifiedTruthTableLbx.Name = "simplifiedTruthTableLbx";
             this.simplifiedTruthTableLbx.Size = new System.Drawing.Size(322, 342);
             this.simplifiedTruthTableLbx.TabIndex = 7;
+            // 
+            // disjunctiveFormTbx
+            // 
+            this.disjunctiveFormTbx.Location = new System.Drawing.Point(108, 90);
+            this.disjunctiveFormTbx.Name = "disjunctiveFormTbx";
+            this.disjunctiveFormTbx.Size = new System.Drawing.Size(347, 20);
+            this.disjunctiveFormTbx.TabIndex = 12;
+            // 
+            // disjunctiveFormLb
+            // 
+            this.disjunctiveFormLb.AutoSize = true;
+            this.disjunctiveFormLb.Location = new System.Drawing.Point(12, 93);
+            this.disjunctiveFormLb.Name = "disjunctiveFormLb";
+            this.disjunctiveFormLb.Size = new System.Drawing.Size(98, 13);
+            this.disjunctiveFormLb.TabIndex = 11;
+            this.disjunctiveFormLb.Text = "Disjunctive Normal:";
+            // 
+            // hashesListBox
+            // 
+            this.hashesListBox.FormattingEnabled = true;
+            this.hashesListBox.Location = new System.Drawing.Point(357, 195);
+            this.hashesListBox.Margin = new System.Windows.Forms.Padding(2);
+            this.hashesListBox.Name = "hashesListBox";
+            this.hashesListBox.Size = new System.Drawing.Size(322, 342);
+            this.hashesListBox.TabIndex = 13;
+            // 
+            // simplifiedDisjunctiveFormTbx
+            // 
+            this.simplifiedDisjunctiveFormTbx.Location = new System.Drawing.Point(108, 116);
+            this.simplifiedDisjunctiveFormTbx.Name = "simplifiedDisjunctiveFormTbx";
+            this.simplifiedDisjunctiveFormTbx.Size = new System.Drawing.Size(347, 20);
+            this.simplifiedDisjunctiveFormTbx.TabIndex = 14;
             // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(962, 552);
+            this.Controls.Add(this.simplifiedDisjunctiveFormTbx);
+            this.Controls.Add(this.hashesListBox);
+            this.Controls.Add(this.disjunctiveFormTbx);
+            this.Controls.Add(this.disjunctiveFormLb);
             this.Controls.Add(this.truthTableTab);
             this.Controls.Add(this.hashCodeLb);
             this.Controls.Add(this.uniqueVariablesTbx);
@@ -215,6 +255,10 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage simplifiedTruthTableTab;
         private System.Windows.Forms.ListBox simplifiedTruthTableLbx;
+        private System.Windows.Forms.TextBox disjunctiveFormTbx;
+        private System.Windows.Forms.Label disjunctiveFormLb;
+        private System.Windows.Forms.ListBox hashesListBox;
+        private System.Windows.Forms.TextBox simplifiedDisjunctiveFormTbx;
     }
 }
 

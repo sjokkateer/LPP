@@ -204,6 +204,38 @@ namespace LogicAndSetTheoryApplication
             return simplifiedSet;
         }
 
+        #region Disjunctive Normal Form
+        public Proposition CreateDisjunctiveNormalForm()
+        {
+            List<Proposition> propositionList = new List<Proposition>();
+            foreach (TruthTableRow row in Rows)
+            {
+                // if and only if the row has a result of 1.
+                if (row.Result == true)
+                {
+                    // Then we want to convert that row into a new expression.
+                    // and use it to construct a disjunct until the end.
+                    propositionList.Add(row.GetDisjunctiveNormalFormEquivalent());
+                }
+            }
+            while (propositionList.Count > 1)
+            {
+                // take vriable at pos 0 and 1 and create a disjunct between them.
+                // Insert them back in the first position of the list.
+                Disjunction disjunct = new Disjunction();
+                // We do not need to create copies of variables since we did that beforehand.
+                disjunct.LeftSuccessor = propositionList[0];
+                disjunct.RightSuccessor = propositionList[1];
+                // Remove the individual variables from the list.
+                propositionList.RemoveAt(1);
+                propositionList.RemoveAt(0);
+                // Insert the conjunct into the list.
+                propositionList.Add(disjunct);
+            }
+            return propositionList[0];
+        }
+        #endregion
+
         public string TableHeader()
         {
             string result = "";
