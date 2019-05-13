@@ -26,6 +26,8 @@ namespace LogicAndSetTheoryApplication
 
         private void parseBtn_Click(object sender, EventArgs e)
         {
+            ResetHashListBoxes();
+
             string proposition = propositionTbx.Text;
             propositionParser = new Parser(proposition);
             propositionRoot = propositionParser.Parse();
@@ -42,18 +44,30 @@ namespace LogicAndSetTheoryApplication
 
             truthTable = new TruthTable(propositionRoot);
             AddTruthTable(truthTableLbx, truthTable);
-            disjunctiveFormTbx.Text = truthTable.CreateDisjunctiveNormalForm().ToString();
+            // < Disjunctive normal form >
+            Proposition disjunctiveProposition = truthTable.CreateDisjunctiveNormalForm();
+            disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
 
             simplifiedTruthTable = truthTable.Simplify();
             AddTruthTable(simplifiedTruthTableLbx, simplifiedTruthTable);
-            // simplifiedDisjunctiveFormTbx.Text = simplifiedTruthTable.CreateDisjunctiveNormalForm().ToString();
+            // < Disjunctive normal form >
+            Proposition simplifiedDisjunctiveProposition = simplifiedTruthTable.CreateDisjunctiveNormalForm();
+            simplifiedDisjunctiveFormTbx.Text = simplifiedDisjunctiveProposition.ToString();
 
             hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
-            Console.WriteLine(hashCalc);
-            Console.WriteLine();
-
             hashCodeTbx.Text = hashCalc.HashCode;
+            hashesListBox.Items.Add("Proposition:");
+            hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
             hashCodeTbx.BackColor = Color.LightGreen;
+            
+            TruthTable disjunctiveTruthTable = new TruthTable(disjunctiveProposition);
+            hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
+            hashesListBox.Items.Add($"Disjunctive normal:");
+            hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+
+            // Create truth table of the simplified disjunctive
+            // Create a new hash calculator with the result column, base 16.
+            // Add hash and bcde to the list boxes.
         }
 
         private void AddTruthTable(ListBox truthTableLbx, TruthTable truthTable)
@@ -67,6 +81,17 @@ namespace LogicAndSetTheoryApplication
                     truthTableLbx.Items.Add(row);
                 }
             }
+        }
+
+        private void ResetHashListBoxes()
+        {
+            hashesListBox.Items.Clear();
+            hashesListBox.Items.Add("Hashes:");
+            hashesListBox.Items.Add("");
+
+            hashCodesListbox.Items.Clear();
+            hashCodesListbox.Items.Add("Codes:");
+            hashCodesListbox.Items.Add("");
         }
 
         private void CreateGraphOfExpression(Proposition propositionRoot, string dotFileName)

@@ -46,6 +46,7 @@
             this.disjunctiveFormLb = new System.Windows.Forms.Label();
             this.hashesListBox = new System.Windows.Forms.ListBox();
             this.simplifiedDisjunctiveFormTbx = new System.Windows.Forms.TextBox();
+            this.hashCodesListbox = new System.Windows.Forms.ListBox();
             this.truthTableTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.simplifiedTruthTableTab.SuspendLayout();
@@ -200,7 +201,7 @@
             this.hashesListBox.Location = new System.Drawing.Point(357, 195);
             this.hashesListBox.Margin = new System.Windows.Forms.Padding(2);
             this.hashesListBox.Name = "hashesListBox";
-            this.hashesListBox.Size = new System.Drawing.Size(322, 342);
+            this.hashesListBox.Size = new System.Drawing.Size(98, 342);
             this.hashesListBox.TabIndex = 13;
             // 
             // simplifiedDisjunctiveFormTbx
@@ -210,11 +211,21 @@
             this.simplifiedDisjunctiveFormTbx.Size = new System.Drawing.Size(347, 20);
             this.simplifiedDisjunctiveFormTbx.TabIndex = 14;
             // 
+            // hashCodesListbox
+            // 
+            this.hashCodesListbox.FormattingEnabled = true;
+            this.hashCodesListbox.Location = new System.Drawing.Point(459, 195);
+            this.hashCodesListbox.Margin = new System.Windows.Forms.Padding(2);
+            this.hashCodesListbox.Name = "hashCodesListbox";
+            this.hashCodesListbox.Size = new System.Drawing.Size(209, 342);
+            this.hashCodesListbox.TabIndex = 15;
+            // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(962, 552);
+            this.Controls.Add(this.hashCodesListbox);
             this.Controls.Add(this.simplifiedDisjunctiveFormTbx);
             this.Controls.Add(this.hashesListBox);
             this.Controls.Add(this.disjunctiveFormTbx);
@@ -259,6 +270,7 @@
         private System.Windows.Forms.Label disjunctiveFormLb;
         private System.Windows.Forms.ListBox hashesListBox;
         private System.Windows.Forms.TextBox simplifiedDisjunctiveFormTbx;
+        private System.Windows.Forms.ListBox hashCodesListbox;
     }
 }
 
