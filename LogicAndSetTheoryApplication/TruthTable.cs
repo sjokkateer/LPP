@@ -164,8 +164,12 @@ namespace LogicAndSetTheoryApplication
                         TruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
                         if (simplifiedRow != null)
                         {
+                            // Only assign is simplified to row i since that's the one under inspection.
                             rowSet[i].IsSimplified = true;
                             rowSet[j].IsSimplified = true;
+                            
+                            // Here we ensure that we only return unique rows,
+                            // that means rows with all different symbols in the cells.1
                             if (IsRowInSet(simplifiedRow, simplifiedSet) == false)
                             {
                                 simplifiedSet.Add(simplifiedRow);
@@ -184,10 +188,13 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
+            // If the set could not be simplified any further we can rewturn the original.
             if (simplifiedSet.Count == 0)
             {
                 return rowSet;
             }
+
+            // Else return the set of simplified rows.
             return simplifiedSet;
         }
 

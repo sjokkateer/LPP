@@ -8,7 +8,7 @@ namespace LogicAndSetTheoryApplication
 {
     class Negation : UnaryConnective
     {
-        public Negation() : base('¬')
+        public Negation() : base('~')
         { }
 
         public override bool Calculate()

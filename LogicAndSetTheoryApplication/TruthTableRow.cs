@@ -101,14 +101,14 @@ namespace LogicAndSetTheoryApplication
             {
                 if (truthValue == '0')
                 {
-                    // Negate a copy of the variable.
+                    // Negate the original variable as this will result into true in the conjunction.
                     Negation negation = new Negation();
                     negation.LeftSuccessor = variable;
                     disjunctiveNormalFormVariable = negation;
                 }
                 else if (truthValue == '1')
                 {
-                    // Copy the variable and add it to the expression.
+                    // Return the original variable.
                     disjunctiveNormalFormVariable = variable;
                 }
             }
