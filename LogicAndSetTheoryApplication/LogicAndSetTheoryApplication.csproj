@@ -59,6 +59,7 @@
     <Compile Include="LogicForm.Designer.cs">
       <DependentUpon>LogicForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Nand.cs" />
     <Compile Include="Negation.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />

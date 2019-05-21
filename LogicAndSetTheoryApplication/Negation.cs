@@ -23,5 +23,16 @@ namespace LogicAndSetTheoryApplication
             copy.LeftSuccessor = LeftSuccessor.Copy();
             return copy;
         }
+
+        public override Proposition Nandify()
+        {
+            // ~(A) == %(A , A)
+            Nand nand = new Nand();
+            Proposition nandifiedLeft = LeftSuccessor.Nandify();
+            nand.LeftSuccessor = nandifiedLeft;
+            nand.RightSuccessor = nandifiedLeft;
+
+            return nand;
+        }
     }
 }

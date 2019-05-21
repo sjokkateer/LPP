@@ -86,6 +86,11 @@ namespace LogicAndSetTheoryApplication
                 // Reset the content of their textboxes.
                 simplifiedDisjunctiveFormTbx.Text = string.Empty;
             }
+            Proposition nandified = propositionRoot.Nandify();
+            Console.WriteLine(nandified.ToString());
+            TruthTable tt = new TruthTable(nandified);
+            Console.WriteLine();
+            Console.WriteLine(tt);
         }
 
         private void AddTruthTable(ListBox truthTableLbx, TruthTable truthTable)

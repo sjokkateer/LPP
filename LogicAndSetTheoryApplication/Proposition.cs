@@ -44,6 +44,25 @@ namespace LogicAndSetTheoryApplication
 
             return ownVariable.CompareTo(otherVariable);
         }
+
+        public virtual Proposition Nandify()
+        {
+            // A == ~(~(A))
+            // ~(A) == ~(A ^ A)
+            // ~(~(A ^ A)) == ~(~(A ^ A) ^ ~(A ^ A))
+            // = (A % A) % (A % A)
+            Nand nand1 = new Nand();
+            Nand nand2 = new Nand();
+            Nand nand3 = new Nand();
+            nand2.LeftSuccessor = this;
+            nand2.RightSuccessor = this;
+            nand3.LeftSuccessor = this;
+            nand3.RightSuccessor = this;
+            nand1.LeftSuccessor = nand2;
+            nand1.RightSuccessor = nand3;
+            return nand1;
+        }
+
         public virtual Proposition Copy()
         {
             return new Proposition((char)Data);
