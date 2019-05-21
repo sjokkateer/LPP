@@ -18,10 +18,12 @@ namespace LogicAndSetTheoryApplication
         private TruthTable truthTable;
         private TruthTable simplifiedTruthTable;
         private HashCodeCalculator hashCalc;
+        private List<string> hashList;
 
         public LogicForm()
         {
             InitializeComponent();
+            hashList = new List<string>();
         }
 
         private void parseBtn_Click(object sender, EventArgs e)
@@ -44,6 +46,7 @@ namespace LogicAndSetTheoryApplication
             truthTable = new TruthTable(propositionRoot);
             AddTruthTable(truthTableLbx, truthTable);
             hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
+            hashList.Add(hashCalc.HashCode);
             hashCodeTbx.Text = hashCalc.HashCode;
             hashesListBox.Items.Add("Proposition:");
             hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
@@ -56,6 +59,7 @@ namespace LogicAndSetTheoryApplication
                 disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
                 TruthTable disjunctiveTruthTable = new TruthTable(disjunctiveProposition);
                 hashCalc = new HashCodeCalculator(disjunctiveTruthTable.GetConvertedResultColumn(), 16);
+                hashList.Add(hashCalc.HashCode);
                 hashesListBox.Items.Add($"Disjunctive normal:");
                 hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
             }
@@ -78,6 +82,7 @@ namespace LogicAndSetTheoryApplication
                 // Add hash and bcde to the list boxes.
                 TruthTable simplifiedDisjunctiveTruthTable = new TruthTable(simplifiedDisjunctiveProposition);
                 hashCalc = new HashCodeCalculator(simplifiedDisjunctiveTruthTable.GetConvertedResultColumn(), 16);
+                hashList.Add(hashCalc.HashCode);
                 hashesListBox.Items.Add($"Simplified Disjunctive normal:");
                 hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
             }
@@ -86,15 +91,32 @@ namespace LogicAndSetTheoryApplication
                 // Reset the content of their textboxes.
                 simplifiedDisjunctiveFormTbx.Text = string.Empty;
             }
+
             Proposition nandified = propositionRoot.Nandify();
-            Console.WriteLine(nandified.ToString());
-            TruthTable tt = new TruthTable(nandified);
-            hashCalc = new HashCodeCalculator(tt.GetConvertedResultColumn(), 16);
-            Console.WriteLine();
-            Console.WriteLine($"Hash code of nandified propo: {hashCalc.HashCode}");
-            Console.WriteLine();
-            Console.WriteLine(tt);
-            Console.WriteLine();
+            if (nandified != null)
+            {
+                nandifiedTbx.Text = nandified.ToString();
+                TruthTable tt = new TruthTable(nandified);
+                hashCalc = new HashCodeCalculator(tt.GetConvertedResultColumn(), 16);
+                hashList.Add(hashCalc.HashCode);
+                hashesListBox.Items.Add($"NAND:");
+                hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+
+                TruthTable simplifiedNandTable = tt.Simplify();
+                Console.WriteLine(simplifiedNandTable);
+                hashCalc = new HashCodeCalculator(simplifiedNandTable.GetConvertedResultColumn(), 16);
+                hashList.Add(hashCalc.HashCode);
+                hashesListBox.Items.Add($"Simplified NAND:");
+                hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+
+                Proposition nandifiedDisjunctiveNormal = simplifiedNandTable.CreateDisjunctiveNormalForm();
+            }
+            else
+            {
+                // Reset the content of their textboxes.
+                nandifiedTbx.Text = string.Empty;
+            }
+
         }
 
         private void AddTruthTable(ListBox truthTableLbx, TruthTable truthTable)
