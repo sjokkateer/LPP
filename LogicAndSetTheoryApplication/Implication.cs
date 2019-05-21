@@ -27,5 +27,16 @@ namespace LogicAndSetTheoryApplication
             copy.RightSuccessor = RightSuccessor.Copy();
             return copy;
         }
+
+        public override Proposition Nandify()
+        {
+            Negation negation = new Negation();
+            negation.LeftSuccessor = LeftSuccessor;
+            Disjunction disjunction = new Disjunction();
+            disjunction.LeftSuccessor = negation;
+            disjunction.RightSuccessor = RightSuccessor;
+
+            return disjunction.Nandify();
+        }
     }
 }

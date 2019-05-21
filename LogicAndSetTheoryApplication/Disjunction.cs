@@ -23,5 +23,19 @@ namespace LogicAndSetTheoryApplication
             copy.RightSuccessor = RightSuccessor.Copy();
             return copy;
         }
+
+        public override Proposition Nandify()
+        {
+            // P | Q == ~(~(P)) | ~(~(Q))
+            // == ~(~(P) & ~(Q)) == ~(P) % ~(Q)
+            Nand nand = new Nand();
+            Negation negationOfLeftSuccessor = new Negation();
+            negationOfLeftSuccessor.LeftSuccessor = LeftSuccessor;
+            Negation negationOfRightSuccessor = new Negation();
+            negationOfRightSuccessor.LeftSuccessor = RightSuccessor;
+            nand.LeftSuccessor = negationOfLeftSuccessor.Nandify();
+            nand.RightSuccessor = negationOfRightSuccessor.Nandify();
+            return nand;
+        }
     }
 }

@@ -26,12 +26,15 @@ namespace LogicAndSetTheoryApplication
 
         public override Proposition Nandify()
         {
-            // ~(A) == %(A , A)
+            // ~(A) == ~(A & A) == A % A
             Nand nand = new Nand();
-            Proposition nandifiedLeft = LeftSuccessor.Nandify();
+            Proposition nandifiedLeft = LeftSuccessor;
+            if (LeftSuccessor.GetType() != typeof(Proposition))
+            {
+                nandifiedLeft = LeftSuccessor.Nandify();
+            }
             nand.LeftSuccessor = nandifiedLeft;
             nand.RightSuccessor = nandifiedLeft;
-
             return nand;
         }
     }

@@ -89,8 +89,12 @@ namespace LogicAndSetTheoryApplication
             Proposition nandified = propositionRoot.Nandify();
             Console.WriteLine(nandified.ToString());
             TruthTable tt = new TruthTable(nandified);
+            hashCalc = new HashCodeCalculator(tt.GetConvertedResultColumn(), 16);
+            Console.WriteLine();
+            Console.WriteLine($"Hash code of nandified propo: {hashCalc.HashCode}");
             Console.WriteLine();
             Console.WriteLine(tt);
+            Console.WriteLine();
         }
 
         private void AddTruthTable(ListBox truthTableLbx, TruthTable truthTable)

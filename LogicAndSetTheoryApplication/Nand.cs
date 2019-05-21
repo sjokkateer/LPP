@@ -23,5 +23,20 @@ namespace LogicAndSetTheoryApplication
             newBase.RightSuccessor = RightSuccessor.Copy();
             return newBase;
         }
+
+        public override Proposition Nandify()
+        {
+            if (LeftSuccessor.GetType() != typeof(Proposition))
+            {
+                LeftSuccessor.Nandify();
+            }
+
+            if (RightSuccessor.GetType() != typeof(Proposition))
+            {
+                RightSuccessor.Nandify();
+            }
+
+            return this;
+        }
     }
 }

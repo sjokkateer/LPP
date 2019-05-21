@@ -48,9 +48,9 @@ namespace LogicAndSetTheoryApplication
         public virtual Proposition Nandify()
         {
             // A == ~(~(A))
-            // ~(A) == ~(A ^ A)
-            // ~(~(A ^ A)) == ~(~(A ^ A) ^ ~(A ^ A))
-            // = (A % A) % (A % A)
+            // ~(A) == ~(A ^ A) == A % A
+            // ~(~(A ^ A)) == ~(A % A)
+            // == (A % A) % (A % A)
             Nand nand1 = new Nand();
             Nand nand2 = new Nand();
             Nand nand3 = new Nand();

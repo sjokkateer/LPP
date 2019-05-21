@@ -154,30 +154,36 @@ namespace LogicAndSetTheoryApplication
             List<TruthTableRow> simplifiedSet = new List<TruthTableRow>();
             for (int i = 0; i < rowSet.Count; i++)
             {
-                for (int j = i + 1; j < rowSet.Count; j++)
+                for (int j = 0; j < rowSet.Count; j++)
                 {
-                    if (rowSet[i].Result == rowSet[j].Result)
+                    // Skip comparing the same row.
+                    if (j != i)
                     {
-                        // Try to simplify the two by a method call.
-                        // The method will return null if it was not succesfull
-                        // or a new row if it was successful.
-                        TruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
-                        if (simplifiedRow != null)
+                        // Only attempt to simplify the row if they have the same result value.
+                        if (rowSet[i].Result == rowSet[j].Result)
                         {
-                            // Only assign is simplified to row i since that's the one under inspection.
-                            rowSet[i].IsSimplified = true;
-                            rowSet[j].IsSimplified = true;
-                            
-                            // Here we ensure that we only return unique rows,
-                            // that means rows with all different symbols in the cells.1
-                            if (IsRowInSet(simplifiedRow, simplifiedSet) == false)
+                            // Try to simplify the two by a method call.
+                            // The method will return null if it was not succesfull
+                            // or a new row if it was successful.
+                            TruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
+                            if (simplifiedRow != null)
                             {
-                                simplifiedSet.Add(simplifiedRow);
+                                // Only assign is simplified to row i since that's the one under inspection.
+                                rowSet[i].IsSimplified = true;
+                                //rowSet[j].IsSimplified = true;
+
+                                // Here we ensure that we only return unique rows,
+                                // that means rows with all different symbols in the cells.1
+                                if (IsRowInSet(simplifiedRow, simplifiedSet) == false)
+                                {
+                                    simplifiedSet.Add(simplifiedRow);
+                                }
                             }
                         }
                     }
                 }
-                // We exhausted our option, meaning that row i was not simplified,
+
+                // We exhausted our option, meaning that row i was either simplified or not simplified,
                 // thus we have to add it to our set, ensuring one unique row is in it.
                 if (rowSet[i].IsSimplified == false)
                 {
