@@ -33,9 +33,9 @@ namespace LogicAndSetTheoryApplication
             negationOfLeftSuccessor.LeftSuccessor = LeftSuccessor;
             Negation negationOfRightSuccessor = new Negation();
             negationOfRightSuccessor.LeftSuccessor = RightSuccessor;
-            nand.LeftSuccessor = negationOfLeftSuccessor.Nandify();
-            nand.RightSuccessor = negationOfRightSuccessor.Nandify();
-            return nand;
+            nand.LeftSuccessor = negationOfLeftSuccessor;
+            nand.RightSuccessor = negationOfRightSuccessor;
+            return nand.Nandify();
         }
     }
 }

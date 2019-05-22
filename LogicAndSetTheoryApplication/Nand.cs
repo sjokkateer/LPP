@@ -28,14 +28,13 @@ namespace LogicAndSetTheoryApplication
         {
             if (LeftSuccessor.GetType() != typeof(Proposition))
             {
-                LeftSuccessor.Nandify();
+                LeftSuccessor = LeftSuccessor.Nandify();
             }
 
             if (RightSuccessor.GetType() != typeof(Proposition))
             {
-                RightSuccessor.Nandify();
+                RightSuccessor = RightSuccessor.Nandify();
             }
-
             return this;
         }
     }

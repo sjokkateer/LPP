@@ -50,6 +50,7 @@
             this.simplifiedDisjunctiveFormLb = new System.Windows.Forms.Label();
             this.nandifiedTbx = new System.Windows.Forms.TextBox();
             this.nandifiedLb = new System.Windows.Forms.Label();
+            this.hashCodeValidationTbx = new System.Windows.Forms.TextBox();
             this.truthTableTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.simplifiedTruthTableTab.SuspendLayout();
@@ -249,11 +250,20 @@
             this.nandifiedLb.TabIndex = 17;
             this.nandifiedLb.Text = "NAND:";
             // 
+            // hashCodeValidationTbx
+            // 
+            this.hashCodeValidationTbx.Location = new System.Drawing.Point(515, 170);
+            this.hashCodeValidationTbx.Name = "hashCodeValidationTbx";
+            this.hashCodeValidationTbx.ReadOnly = true;
+            this.hashCodeValidationTbx.Size = new System.Drawing.Size(209, 20);
+            this.hashCodeValidationTbx.TabIndex = 19;
+            // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(732, 552);
+            this.Controls.Add(this.hashCodeValidationTbx);
             this.Controls.Add(this.nandifiedTbx);
             this.Controls.Add(this.nandifiedLb);
             this.Controls.Add(this.simplifiedDisjunctiveFormLb);
@@ -306,6 +316,7 @@
         private System.Windows.Forms.Label simplifiedDisjunctiveFormLb;
         private System.Windows.Forms.TextBox nandifiedTbx;
         private System.Windows.Forms.Label nandifiedLb;
+        private System.Windows.Forms.TextBox hashCodeValidationTbx;
     }
 }
 
