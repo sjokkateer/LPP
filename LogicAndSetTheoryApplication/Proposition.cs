@@ -16,6 +16,8 @@ namespace LogicAndSetTheoryApplication
             Data = data;
         }
 
+        public List<Proposition> UniqueVariableSet { get; set; }
+
         public virtual List<Proposition> GetVariables()
         {
             return new List<Proposition>() { this };

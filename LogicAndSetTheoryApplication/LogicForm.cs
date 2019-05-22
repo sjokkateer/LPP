@@ -69,23 +69,25 @@ namespace LogicAndSetTheoryApplication
             // < Disjunctive normal form >
             // New proposition (DNF) and we repeat almost identical code.
             Proposition disjunctiveProposition = truthTable.CreateDisjunctiveNormalForm();
-            if (disjunctiveProposition != null)
+            if (disjunctiveProposition == null)
             {
-                // Parameters (TextBox tbx, Proposition proposition, hashCalculator)
-                disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
-                AddHashCodeInfo(disjunctiveProposition, "Disjunctive normal", 16); // 4. ORIGINAL + EVALUATE + NORMALIZE + EVALUATE.
+                // This should mean we only have 1 result value in the result column, a 0 for DNF
+                // Create a contradiction
+                Proposition tautologyOrContradiction = CreateContradiction(uniqueVariablesSet[0]);
+                tautologyOrContradiction.UniqueVariableSet = uniqueVariablesSet;
+                disjunctiveProposition = tautologyOrContradiction;
             }
-            else
-            {
-                // Reset the content of their textboxes.
-                disjunctiveFormTbx.Text = string.Empty;
-            }
+            // Parameters (TextBox tbx, Proposition proposition, hashCalculator)
+            disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
+            AddHashCodeInfo(disjunctiveProposition, "Disjunctive normal", 16); // 4. ORIGINAL + EVALUATE + NORMALIZE + EVALUATE.
 
             // Simplified truth table.
             simplifiedTruthTable = truthTable.Simplify();
             AddTruthTable(simplifiedTruthTableLbx, simplifiedTruthTable);
             // < Disjunctive normal form >
             Proposition simplifiedDisjunctiveProposition = simplifiedTruthTable.CreateDisjunctiveNormalForm();
+            // If the returned proposition is not null, we check if we are not missing any variables that got 
+            // left out by us simplifying a proposition.
             if (simplifiedDisjunctiveProposition != null)
             {
                 simplifiedDisjunctiveFormTbx.Text = simplifiedDisjunctiveProposition.ToString();
@@ -111,9 +113,6 @@ namespace LogicAndSetTheoryApplication
                         Proposition newVariable = new Proposition(alphabetCharacter);
                         // Since this # of variables resulted in no changes in the outcome of the result
                         // it should not matter too much on what binary operator is applied.
-                        Console.WriteLine();
-                        Console.WriteLine($"Adding variable: {newVariable}");
-                        Console.WriteLine();
                         Conjunction conjunction = new Conjunction();
                         Disjunction tautology = new Disjunction();
                         tautology.LeftSuccessor = newVariable; // A
@@ -125,8 +124,6 @@ namespace LogicAndSetTheoryApplication
                         // So if we add a tautology with the original expression, we take the old variable into consideration
                         // in the truth table but this variable will not change the result values of the truth table but will
                         // ensure that our hash codes will line up with the same number of bits.
-                        //conjunction.RightSuccessor = simplifiedDisjunctiveProposition;
-                        //simplifiedDisjunctiveProposition = conjunction;
                         addedVariables++;
                         break;
                     }
@@ -157,8 +154,6 @@ namespace LogicAndSetTheoryApplication
 
                 // NANDIFY 5 and eval to get 6
                 Proposition nandifiedFive = simplifiedDisjunctiveProposition.Nandify();
-                Console.WriteLine($"Simplified Disjunctive Normal: {simplifiedDisjunctiveProposition}");
-                Console.WriteLine($"Previous Nandified: {nandifiedFive}");
                 if (missingVariableList.Count > 0)
                 {
                     missingVariableList[missingVariableList.Count - 1].RightSuccessor = nandifiedFive;
@@ -172,8 +167,22 @@ namespace LogicAndSetTheoryApplication
             }
             else
             {
-                // Reset the content of their textboxes.
-                simplifiedDisjunctiveFormTbx.Text = string.Empty;
+                // Otherwise we are dealing with a tautology or contradiction.
+                int tautOrContra = simplifiedTruthTable.GetConvertedResultColumn()[0];
+                Proposition tautologyOrContradiction = null;
+                if (tautOrContra == 1)
+                {
+                    // Create a tautology but it should hold the same variable set as the original proposition.
+                    tautologyOrContradiction = CreateTautology(uniqueVariablesSet[0]);
+                }
+                else
+                {
+                    // Create a contradiction
+                    tautologyOrContradiction = CreateContradiction(uniqueVariablesSet[0]);
+                }
+                tautologyOrContradiction.UniqueVariableSet = uniqueVariablesSet;
+                simplifiedDisjunctiveProposition = tautologyOrContradiction;
+
             }
 
             Proposition nandified = propositionRoot.Nandify();
@@ -185,15 +194,38 @@ namespace LogicAndSetTheoryApplication
 
                 TruthTable simplifiedNandTt = tt.Simplify();
                 Proposition simplifiedNandDnf = simplifiedNandTt.CreateDisjunctiveNormalForm();
-                if (missingVariableList.Count > 0)
+                // If it is null we deal with a tautology or contradiction!
+                if (simplifiedNandDnf == null)
                 {
-                    missingVariableList[missingVariableList.Count - 1].RightSuccessor = simplifiedNandDnf;
-                    AddHashCodeInfo(missingVariableList[0], "Simplified NAND Normal", 16);
+                    // This should mean we only have 1 result value in the result column, either a 1 or 0
+                    int tautOrContra = simplifiedNandTt.GetConvertedResultColumn()[0];
+                    Proposition tautologyOrContradiction = null;
+                    if (tautOrContra == 1)
+                    {
+                        // Create a tautology but it should hold the same variable set as the original proposition.
+                        tautologyOrContradiction = CreateTautology(uniqueVariablesSet[0]);
+                    }
+                    else
+                    {
+                        // Create a contradiction
+                        tautologyOrContradiction = CreateContradiction(uniqueVariablesSet[0]);
+                    }
+                    tautologyOrContradiction.UniqueVariableSet = uniqueVariablesSet;
+                    AddHashCodeInfo(tautologyOrContradiction, "Simplified NAND Normal", 16);
                 }
                 else
                 {
-                    // Keeping the original the original.
-                    AddHashCodeInfo(simplifiedNandDnf, "Simplified NAND Normal", 16); // 3. ORIGINAL + NAND + EVALUATE + SIMPLIFY + NORMALIZE
+
+                    if (missingVariableList.Count > 0)
+                    {
+                        missingVariableList[missingVariableList.Count - 1].RightSuccessor = simplifiedNandDnf;
+                        AddHashCodeInfo(missingVariableList[0], "Simplified NAND Normal", 16);
+                    }
+                    else
+                    {
+                        // Keeping the original the original.
+                        AddHashCodeInfo(simplifiedNandDnf, "Simplified NAND Normal", 16); // 3. ORIGINAL + NAND + EVALUATE + SIMPLIFY + NORMALIZE
+                    }
                 }
             }
             else
@@ -240,6 +272,24 @@ namespace LogicAndSetTheoryApplication
                     truthTableLbx.Items.Add(row);
                 }
             }
+        }
+
+        private Proposition CreateTautology(Proposition variable)
+        {
+            Conjunction conjunction = new Conjunction();
+            Disjunction tautology = new Disjunction();
+            tautology.LeftSuccessor = variable; // A
+            Negation negatedVariable = new Negation();
+            negatedVariable.LeftSuccessor = variable;
+            tautology.RightSuccessor = negatedVariable; // A | ~(A) == 1
+            return tautology;
+        }
+
+        private Proposition CreateContradiction(Proposition variable)
+        {
+            Negation negation = new Negation();
+            negation.LeftSuccessor = CreateTautology(variable);
+            return negation;
         }
 
         private void ResetHashRelatedItems()

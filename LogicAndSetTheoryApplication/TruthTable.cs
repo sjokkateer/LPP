@@ -15,7 +15,14 @@ namespace LogicAndSetTheoryApplication
         public TruthTable(Proposition propositionRoot)
         {
             this.propositionRoot = propositionRoot;
-            propositionVariablesSet = propositionRoot.GetVariables();
+            if (propositionRoot.UniqueVariableSet == null)
+            {
+                propositionVariablesSet = propositionRoot.GetVariables();
+            }
+            else
+            {
+                propositionVariablesSet = propositionRoot.UniqueVariableSet;
+            }
             propositionVariablesSet.Sort();
             Rows = new List<TruthTableRow>();
             CreateTruthTableRows();
