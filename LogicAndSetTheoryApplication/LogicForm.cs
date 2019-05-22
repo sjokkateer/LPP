@@ -80,9 +80,50 @@ namespace LogicAndSetTheoryApplication
                 // Create truth table of the simplified disjunctive
                 // Create a new hash calculator with the result column, base 16.
                 // Add hash and bcde to the list boxes.
+                List<Proposition> simplifiedDisjunctiveUniqueVariables = simplifiedDisjunctiveProposition.GetVariables();
+                if (simplifiedDisjunctiveUniqueVariables.Count < uniqueVariablesSet.Count)
+                {
+                    // Create an extra placeholder variable on the proposition to fill up the left out variable spot.
+                    // Important that the variabel IS unique, such that it adds to the number of combinations of truth values.
+                    foreach (char alphabetCharacter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+                    {
+                        foreach (Proposition uniqueVariable in uniqueVariablesSet)
+                        {
+                            if (alphabetCharacter == (char)uniqueVariable.Data)
+                            {
+                                break;
+                            }
+                        }
+                        // Exhausted without breaking out of the loop thus we are looking at a unique variable.
+                        Proposition newVariable = new Proposition(alphabetCharacter);
+                        // Since this # of variables resulted in no changes in the outcome of the result
+                        // it should not matter too much on what binary operator is applied.
+                        Console.WriteLine();
+                        Console.WriteLine($"Adding variable: {newVariable}");
+                        Console.WriteLine();
+                        Conjunction conjunction = new Conjunction();
+                        Disjunction tautology = new Disjunction();
+                        tautology.LeftSuccessor = newVariable; // A
+                        Negation negatedVariable = new Negation();
+                        negatedVariable.LeftSuccessor = newVariable;
+                        tautology.RightSuccessor = negatedVariable; // A | ~(A) == 1
+                        conjunction.LeftSuccessor = tautology;
+                        // So if we add a tautology with the original expression, we take the old variable into consideration
+                        // in the truth table but this variable will not change the result values of the truth table but will
+                        // ensure that our hash codes will line up with the same number of bits.
+                        conjunction.RightSuccessor = simplifiedDisjunctiveProposition;
+                        simplifiedDisjunctiveProposition = conjunction;
+                        break;
+                    }
+                }
+                Console.WriteLine($"Simplified Normal Proposition: {simplifiedDisjunctiveProposition}");
+                Console.WriteLine();
                 TruthTable simplifiedDisjunctiveTruthTable = new TruthTable(simplifiedDisjunctiveProposition);
                 hashCalc = new HashCodeCalculator(simplifiedDisjunctiveTruthTable.GetConvertedResultColumn(), 16);
                 hashList.Add(hashCalc.HashCode);
+                Console.WriteLine($"Simplified Normal Proposition TT:");
+                Console.WriteLine(simplifiedDisjunctiveTruthTable);
+                Console.WriteLine();
                 hashesListBox.Items.Add($"Simplified Disjunctive normal:");
                 hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
             }

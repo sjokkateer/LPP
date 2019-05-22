@@ -16,7 +16,6 @@ namespace LogicAndSetTheoryApplication
             Data = data;
         }
 
-        // Probably can remove the IEquatable interface since we can compare references now.
         public virtual List<Proposition> GetVariables()
         {
             return new List<Proposition>() { this };
