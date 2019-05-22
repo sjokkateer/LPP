@@ -19,16 +19,32 @@ namespace LogicAndSetTheoryApplication
         private TruthTable simplifiedTruthTable;
         private HashCodeCalculator hashCalc;
         private List<string> hashList;
+        private List<Conjunction> missingVariableList;
 
         public LogicForm()
         {
             InitializeComponent();
             hashList = new List<string>();
+            missingVariableList = new List<Conjunction>();
+        }
+
+        private void AddHashCodeInfo(Proposition proposition, string typeOfProposition, int hashBase, TruthTable tt = null)
+        {
+            if (tt == null)
+            {
+                tt = new TruthTable(proposition);
+            }
+            HashCodeCalculator hashCodeCalculator = new HashCodeCalculator(tt.GetConvertedResultColumn(), hashBase);
+            hashList.Add(hashCodeCalculator.HashCode);
+            hashesListBox.Items.Add($"{typeOfProposition}: ");
+            hashCodesListbox.Items.Add($"{hashCodeCalculator.HashCode}");
         }
 
         private void parseBtn_Click(object sender, EventArgs e)
         {
-            ResetHashListBoxes();
+            ResetHashRelatedItems();
+            // Reset the missing variable list.
+            missingVariableList = new List<Conjunction>();
 
             string proposition = propositionTbx.Text;
             propositionParser = new Parser(proposition);
@@ -44,24 +60,21 @@ namespace LogicAndSetTheoryApplication
                 uniqueVariablesTbx.Text += $" {s}";
             }
             truthTable = new TruthTable(propositionRoot);
+            // This is specific to the original proposition.
             AddTruthTable(truthTableLbx, truthTable);
-            hashCalc = new HashCodeCalculator(truthTable.GetConvertedResultColumn(), 16);
-            hashList.Add(hashCalc.HashCode);
-            hashCodeTbx.Text = hashCalc.HashCode;
-            hashesListBox.Items.Add("Proposition:");
-            hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+            AddHashCodeInfo(propositionRoot, "Proposition" , 16, truthTable);
+            // Need to keep this as exclusive for the original proposition.
+            hashCodeTbx.Text = hashList[0]; // <---- THIS IS NOT GOOD CODING!
             hashCodeTbx.BackColor = Color.LightGreen;
 
             // < Disjunctive normal form >
+            // New proposition (DNF) and we repeat almost identical code.
             Proposition disjunctiveProposition = truthTable.CreateDisjunctiveNormalForm();
             if (disjunctiveProposition != null)
             {
+                // Parameters (TextBox tbx, Proposition proposition, hashCalculator)
                 disjunctiveFormTbx.Text = disjunctiveProposition.ToString();
-                TruthTable disjunctiveTruthTable = new TruthTable(disjunctiveProposition);
-                hashCalc = new HashCodeCalculator(disjunctiveTruthTable.GetConvertedResultColumn(), 16);
-                hashList.Add(hashCalc.HashCode);
-                hashesListBox.Items.Add($"Disjunctive normal:");
-                hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+                AddHashCodeInfo(disjunctiveProposition, "Disjunctive normal", 16);
             }
             else
             {
@@ -81,7 +94,8 @@ namespace LogicAndSetTheoryApplication
                 // Create a new hash calculator with the result column, base 16.
                 // Add hash and bcde to the list boxes.
                 List<Proposition> simplifiedDisjunctiveUniqueVariables = simplifiedDisjunctiveProposition.GetVariables();
-                if (simplifiedDisjunctiveUniqueVariables.Count < uniqueVariablesSet.Count)
+                int addedVariables = 0;
+                while (simplifiedDisjunctiveUniqueVariables.Count + addedVariables < uniqueVariablesSet.Count)
                 {
                     // Create an extra placeholder variable on the proposition to fill up the left out variable spot.
                     // Important that the variabel IS unique, such that it adds to the number of combinations of truth values.
@@ -108,24 +122,39 @@ namespace LogicAndSetTheoryApplication
                         negatedVariable.LeftSuccessor = newVariable;
                         tautology.RightSuccessor = negatedVariable; // A | ~(A) == 1
                         conjunction.LeftSuccessor = tautology;
+                        missingVariableList.Add(conjunction);
                         // So if we add a tautology with the original expression, we take the old variable into consideration
                         // in the truth table but this variable will not change the result values of the truth table but will
                         // ensure that our hash codes will line up with the same number of bits.
-                        conjunction.RightSuccessor = simplifiedDisjunctiveProposition;
-                        simplifiedDisjunctiveProposition = conjunction;
+                        //conjunction.RightSuccessor = simplifiedDisjunctiveProposition;
+                        //simplifiedDisjunctiveProposition = conjunction;
+                        addedVariables++;
                         break;
                     }
                 }
-                Console.WriteLine($"Simplified Normal Proposition: {simplifiedDisjunctiveProposition}");
-                Console.WriteLine();
-                TruthTable simplifiedDisjunctiveTruthTable = new TruthTable(simplifiedDisjunctiveProposition);
-                hashCalc = new HashCodeCalculator(simplifiedDisjunctiveTruthTable.GetConvertedResultColumn(), 16);
-                hashList.Add(hashCalc.HashCode);
-                Console.WriteLine($"Simplified Normal Proposition TT:");
-                Console.WriteLine(simplifiedDisjunctiveTruthTable);
-                Console.WriteLine();
-                hashesListBox.Items.Add($"Simplified Disjunctive normal:");
-                hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+                // Now we have all missing variables in the list of missing variables.
+                // Thus we can add to the right successor of each index, the previous or the root expression.
+                int lastIndex = missingVariableList.Count - 1;
+                Proposition propositionToAppend = null;
+                for (int i = lastIndex; i >= 0; i--)
+                {
+                    if (i == lastIndex)
+                    {
+                        propositionToAppend = simplifiedDisjunctiveProposition;
+                    }
+                    missingVariableList[i].RightSuccessor = propositionToAppend;
+                    propositionToAppend = missingVariableList[i];
+                }
+
+                if (missingVariableList.Count > 0)
+                {
+                    AddHashCodeInfo(missingVariableList[0], "Simplified Disjunctive Normal", 16);
+                }
+                else
+                {
+                    // Keeping the original the original.
+                    AddHashCodeInfo(simplifiedDisjunctiveProposition, "Simplified Disjunctive Normal", 16);
+                }
             }
             else
             {
@@ -138,19 +167,20 @@ namespace LogicAndSetTheoryApplication
             {
                 nandifiedTbx.Text = nandified.ToString();
                 TruthTable tt = new TruthTable(nandified);
-                hashCalc = new HashCodeCalculator(tt.GetConvertedResultColumn(), 16);
-                hashList.Add(hashCalc.HashCode);
-                hashesListBox.Items.Add($"NAND:");
-                hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
+                AddHashCodeInfo(nandified, "NAND", 16, tt);
 
-                TruthTable simplifiedNandTable = tt.Simplify();
-                Console.WriteLine(simplifiedNandTable);
-                hashCalc = new HashCodeCalculator(simplifiedNandTable.GetConvertedResultColumn(), 16);
-                hashList.Add(hashCalc.HashCode);
-                hashesListBox.Items.Add($"Simplified NAND:");
-                hashCodesListbox.Items.Add($"{hashCalc.HashCode}");
-
-                Proposition nandifiedDisjunctiveNormal = simplifiedNandTable.CreateDisjunctiveNormalForm();
+                TruthTable simplifiedNandTt = tt.Simplify();
+                Proposition simplifiedNandDnf = simplifiedNandTt.CreateDisjunctiveNormalForm();
+                if (missingVariableList.Count > 0)
+                {
+                    missingVariableList[missingVariableList.Count - 1].RightSuccessor = simplifiedNandDnf;
+                    AddHashCodeInfo(missingVariableList[0], "Simplified NAND Normal", 16);
+                }
+                else
+                {
+                    // Keeping the original the original.
+                    AddHashCodeInfo(simplifiedNandDnf, "Simplified NAND Normal", 16);
+                }
             }
             else
             {
@@ -173,8 +203,11 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        private void ResetHashListBoxes()
+        private void ResetHashRelatedItems()
         {
+            // The list of hashes used for comparing the hash codes to ensure the program is working correctly.
+            hashList.Clear();
+
             hashesListBox.Items.Clear();
             hashesListBox.Items.Add("Hashes:");
             hashesListBox.Items.Add("");
