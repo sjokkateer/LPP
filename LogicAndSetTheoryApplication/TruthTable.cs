@@ -51,7 +51,18 @@ namespace LogicAndSetTheoryApplication
         /// </summary>
         private void CreateTruthTableRows()
         {
-            CreateRowsRecursively(0, new char[] { '0', '1' }, new TruthTableRow(propositionRoot, propositionVariablesSet, propositionVariablesSet.Count));
+            TruthTableRow initialRow = new TruthTableRow(propositionRoot, propositionVariablesSet, propositionVariablesSet.Count);
+            if (initialRow.Cells.Length == 0)
+            {
+                // We had no variables and are dealing with one of the constants.
+                // return an emppty row with only a result value.
+                initialRow.Calculate();
+                Rows.Add(initialRow);
+            }
+            else
+            {
+                CreateRowsRecursively(0, new char[] { '0', '1' }, initialRow);
+            }   
         }
 
         /// <summary>
@@ -64,6 +75,7 @@ namespace LogicAndSetTheoryApplication
         /// <param name="row">A truth table row object that holds the combination of truth values for the abstract proposition variables.</param>
         private void CreateRowsRecursively(int index, char[] truthSet, TruthTableRow row)
         {
+            // This is something we only have to execute if we have abstract proposition variables.
             foreach (char truthValue in truthSet)
             {
                 if (index == propositionVariablesSet.Count - 1)
@@ -72,8 +84,8 @@ namespace LogicAndSetTheoryApplication
                     row.Cells[index] = truthValue;
                     TruthTableRow copy = row.Copy();
                     copy.Calculate(); // Required call to Calculate, otherwise the Result truth value can not be set :-(
-                    // With the current recursive approach, only one row is constructed inside the wrapper method.
-                    Rows.Add(copy);  
+                                        // With the current recursive approach, only one row is constructed inside the wrapper method.
+                    Rows.Add(copy);
                 }
                 else
                 {
@@ -243,23 +255,18 @@ namespace LogicAndSetTheoryApplication
             {
                 return propositionList[0];
             }
-            return null;
+            return new False();
         }
         #endregion
 
         public string TableHeader()
         {
             string result = "";
-            string variable ="";
             for (int i = 0; i < propositionVariablesSet.Count; i++)
-            {
-                variable = $"{propositionVariablesSet[i]}  ";
-                if (i == propositionVariablesSet.Count - 1)
-                {
-                    variable = $"{propositionVariablesSet[i]}  v\n";
-                }
-                result += variable;
+            { 
+                result += $"{propositionVariablesSet[i]}  ";
             }
+            result += "v\n";
             return result;
         }
 

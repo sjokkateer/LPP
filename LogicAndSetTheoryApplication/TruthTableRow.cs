@@ -89,7 +89,7 @@ namespace LogicAndSetTheoryApplication
             {
                 return propositionList[0];
             }
-            return null;
+            return new False();
         }
 
         private Proposition GetDisjunctiveNormalFormVariable(char truthValue, Proposition variable)
@@ -160,18 +160,11 @@ namespace LogicAndSetTheoryApplication
         public override string ToString()
         {
             string result = "";
-            string cell = "";
-
             for (int i = 0; i < Cells.Length; i++)
             {
-                cell = $"  {Cells[i]}";
-                if (i == 0)
-                {
-                    cell = $"{Cells[i]}";
-                }
-                result += cell;
+                result += $"{Cells[i]}  ";
             }
-            result += $"  {Convert.ToInt32(Result)}";
+            result += $"{Convert.ToInt32(Result)}";
             return result;
         }
     }

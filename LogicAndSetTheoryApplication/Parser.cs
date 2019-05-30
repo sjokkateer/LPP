@@ -8,6 +8,7 @@ namespace LogicAndSetTheoryApplication
     {
         private const string CONNECTIVES = "~>=&|";
         private const string VARIABLES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string CONSTANTS = "01";
 
         private string proposition;
 
@@ -53,6 +54,19 @@ namespace LogicAndSetTheoryApplication
                     }
                     symbols.Add(symbol);
                 }
+                else if (CONSTANTS.Contains(s[0]))
+                {
+                    Proposition symbol = null;
+                    if (s[0] == '0')
+                    {
+                        symbol = new False();
+                    }
+                    else
+                    {
+                        symbol = new True();
+                    }
+                    symbols.Add(symbol);
+                }
                 else if (s[0] == '(')
                 {
                     connectives.Add('(');
@@ -67,6 +81,8 @@ namespace LogicAndSetTheoryApplication
                 ParseHelper(s.Substring(1));
             }
         }
+
+
 
         private void CreateConnective(char connective)
         {
