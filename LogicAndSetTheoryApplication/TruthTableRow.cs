@@ -89,6 +89,11 @@ namespace LogicAndSetTheoryApplication
             {
                 return propositionList[0];
             }
+            Console.WriteLine($"Result: {Result}");
+            if (Result == true)
+            {
+                return new True();
+            }
             return new False();
         }
 

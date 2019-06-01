@@ -255,6 +255,12 @@ namespace LogicAndSetTheoryApplication
             {
                 return propositionList[0];
             }
+            foreach (TruthTableRow r in Rows)
+            {
+                Console.WriteLine(r);
+                Console.WriteLine(r.Result);
+            }
+            
             return new False();
         }
         #endregion
