@@ -273,15 +273,9 @@ namespace LogicAndSetTheoryApplication
         public override string ToString()
         {
             string result = TableHeader();
-            string row = "";
             for (int i = 0; i < Rows.Count; i++)
             {
-                row = $"{Rows[i]}\n";
-                if (i == Rows.Count - 1)
-                {
-                    row = $"{Rows[i]}";
-                }
-                result += row;
+                result += $"{Rows[i]}\n";
             }
             return result;
         }
