@@ -319,5 +319,16 @@ namespace LogicAndSetTheoryApplication
                 CreateGraphOfExpression(propositionRoot.Copy(), "Proposition");
             }
         }
+
+        private void semanticTableauxBtn_Click(object sender, EventArgs e)
+        {
+            string proposition = propositionTbx.Text;
+            propositionParser = new Parser(proposition);
+            propositionRoot = propositionParser.Parse();
+            infixTbx.Text = propositionRoot.ToString();
+
+            // If it is a tautology color the button green, if not red.
+
+        }
     }
 }

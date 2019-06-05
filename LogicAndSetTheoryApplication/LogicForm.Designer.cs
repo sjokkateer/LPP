@@ -51,6 +51,7 @@
             this.nandifiedTbx = new System.Windows.Forms.TextBox();
             this.nandifiedLb = new System.Windows.Forms.Label();
             this.hashCodeValidationTbx = new System.Windows.Forms.TextBox();
+            this.semanticTableauxBtn = new System.Windows.Forms.Button();
             this.truthTableTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.simplifiedTruthTableTab.SuspendLayout();
@@ -258,11 +259,22 @@
             this.hashCodeValidationTbx.Size = new System.Drawing.Size(209, 20);
             this.hashCodeValidationTbx.TabIndex = 19;
             // 
+            // semanticTableauxBtn
+            // 
+            this.semanticTableauxBtn.Location = new System.Drawing.Point(470, 36);
+            this.semanticTableauxBtn.Name = "semanticTableauxBtn";
+            this.semanticTableauxBtn.Size = new System.Drawing.Size(75, 23);
+            this.semanticTableauxBtn.TabIndex = 20;
+            this.semanticTableauxBtn.Text = "Semantic Tableaux";
+            this.semanticTableauxBtn.UseVisualStyleBackColor = true;
+            this.semanticTableauxBtn.Click += new System.EventHandler(this.semanticTableauxBtn_Click);
+            // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(732, 552);
+            this.Controls.Add(this.semanticTableauxBtn);
             this.Controls.Add(this.hashCodeValidationTbx);
             this.Controls.Add(this.nandifiedTbx);
             this.Controls.Add(this.nandifiedLb);
@@ -317,6 +329,7 @@
         private System.Windows.Forms.TextBox nandifiedTbx;
         private System.Windows.Forms.Label nandifiedLb;
         private System.Windows.Forms.TextBox hashCodeValidationTbx;
+        private System.Windows.Forms.Button semanticTableauxBtn;
     }
 }
 
