@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Proposition : IComparable<Proposition>
+    public class Proposition : IComparable<Proposition>
     {
         public int NodeNumber { get; set; }
         public object Data { get; }

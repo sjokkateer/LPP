@@ -4,7 +4,7 @@ using System;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Parser
+    public class Parser
     {
         private const string CONNECTIVES = "~>=&|";
         private const string VARIABLES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -18,6 +18,7 @@ namespace LogicAndSetTheoryApplication
         private List<char> connectives;
         private List<Proposition> symbols;
 
+        // Proposition has to be given in pre-fix notation.
         public Parser(string proposition)
         {
             this.proposition = proposition;
@@ -30,6 +31,7 @@ namespace LogicAndSetTheoryApplication
         public Proposition Parse()
         {
             ParseHelper(proposition);
+
             return symbols[0];
         }
 
@@ -56,7 +58,8 @@ namespace LogicAndSetTheoryApplication
                 }
                 else if (CONSTANTS.Contains(s[0]))
                 {
-                    Proposition symbol = null;
+                    Proposition symbol;
+                    
                     if (s[0] == '0')
                     {
                         symbol = new False();
@@ -65,6 +68,7 @@ namespace LogicAndSetTheoryApplication
                     {
                         symbol = new True();
                     }
+
                     symbols.Add(symbol);
                 }
                 else if (s[0] == '(')
@@ -73,20 +77,32 @@ namespace LogicAndSetTheoryApplication
                 }
                 else if (s[0] == ')')
                 {
+                    // If we reach a closing parenth we should check if we have an opening
+                    // parenth already, otherwise we could consider the expression invalid.
+
+                    // There should be equal pairs of opening and closing parenths or the 
+                    // expression could be considered invalid.
+
+                    // Tries to remove the corresponding opening parenthesis.
                     connectives.RemoveAt(connectives.Count - 1);
+
+                    // Pops the operator that preceeded the opening parenth.
                     char currentOperator = connectives[connectives.Count - 1];
                     connectives.RemoveAt(connectives.Count - 1);
+
+                    // Creates a connective from it.
                     CreateConnective(currentOperator);
                 }
+
                 ParseHelper(s.Substring(1));
             }
         }
 
-
-
         private void CreateConnective(char connective)
         {
             Proposition result = null;
+
+            // 'GetCorrespondingConnective'
             switch (connective)
             {
                 case '~':
@@ -105,6 +121,9 @@ namespace LogicAndSetTheoryApplication
                     result = new Disjunction();
                     break;
             }
+
+            // 'CreateExpression'
+            // The symbols[symbols.Count - 1] can always be done. Placement is dependent on Unary or Binary connective.
             if (result is BinaryConnective)
             {
                 ((BinaryConnective)result).LeftSuccessor = symbols[symbols.Count - 2];
@@ -117,6 +136,9 @@ namespace LogicAndSetTheoryApplication
                 ((UnaryConnective)result).LeftSuccessor = symbols[symbols.Count - 1];
                 symbols.RemoveAt(symbols.Count - 1);
             }
+
+            // Now the expression is a symbol in case a nested connective needs to use it
+            // as right or left successor.
             symbols.Add(result);
         }
 

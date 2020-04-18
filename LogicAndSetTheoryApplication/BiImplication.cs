@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class BiImplication : BinaryConnective
+    public class BiImplication : BinaryConnective
     {
         public BiImplication() : base('=')
         { }

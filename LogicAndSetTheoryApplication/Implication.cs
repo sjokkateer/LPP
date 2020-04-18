@@ -13,10 +13,11 @@ namespace LogicAndSetTheoryApplication
 
         public override bool Calculate()
         {
-             if (LeftSuccessor.Calculate() == true &&  (RightSuccessor.Calculate() == false))
+             if (LeftSuccessor.Calculate() == true && (RightSuccessor.Calculate() == false))
              {
                 return false;
              }
+
              return true;
         }
 
@@ -25,6 +26,7 @@ namespace LogicAndSetTheoryApplication
             Implication copy = new Implication();
             copy.LeftSuccessor = LeftSuccessor.Copy();
             copy.RightSuccessor = RightSuccessor.Copy();
+            
             return copy;
         }
 

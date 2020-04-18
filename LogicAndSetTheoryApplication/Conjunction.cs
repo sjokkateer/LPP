@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Conjunction : BinaryConnective
+    public class Conjunction : BinaryConnective
     {
         public Conjunction() : base('&')
         { }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Negation : UnaryConnective
+    public class Negation : UnaryConnective
     {
         public Negation() : base('~')
         { }

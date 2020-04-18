@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class UnaryConnective : Proposition
+    public class UnaryConnective : Proposition
     {
         public Proposition LeftSuccessor { get; set; }
 
