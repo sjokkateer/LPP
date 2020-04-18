@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Nand : BinaryConnective
+    public class Nand : BinaryConnective
     {
         public Nand() : base('%')
         { }
@@ -21,6 +21,7 @@ namespace LogicAndSetTheoryApplication
             Nand newBase = new Nand();
             newBase.LeftSuccessor = LeftSuccessor.Copy();
             newBase.RightSuccessor = RightSuccessor.Copy();
+
             return newBase;
         }
 
