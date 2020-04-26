@@ -8,9 +8,6 @@ namespace LPPUnitTests
 {
     public class PropositionTests
     {
-        private static int CAPITAL_A = 65;
-        private static int CAPITAL_Z = 90;
-
         private static Proposition VALID_PROPOSITION = new Proposition('A');
         private static int SAME_POSITION = 0;
 
@@ -18,29 +15,13 @@ namespace LPPUnitTests
         public void Constructor_ConstructPropositionWithValidCharacterRepresentingVariable_ExpectedObjectToHoldCharacterAsVariable()
         {
             // Arrange
-            char randomValidVariableLetter = getRandomVariableLetter();
+            char randomValidVariableLetter = PropositionGenerator.getRandomVariableLetter();
 
             // Act
             Proposition proposition = new Proposition(randomValidVariableLetter);
 
             // Assert
             proposition.Data.Should().BeEquivalentTo(randomValidVariableLetter, "because the random variable letter should be assigned to the data field by the constructor");
-        }
-
-        public static char getRandomVariableLetter()
-        {
-            Random rng = new Random();
-            int randomCapitalLetter = rng.Next(CAPITAL_A, CAPITAL_Z + 1);
-
-            return (char)randomCapitalLetter;
-        }
-
-        public static char getRandomConnective()
-        {
-            Random rng = new Random();
-            int randomIndexOfConnectivesString = rng.Next(0, Parser.CONNECTIVES.Length);
-
-            return Parser.CONNECTIVES[randomIndexOfConnectivesString];
         }
 
         [Theory]
@@ -86,7 +67,7 @@ namespace LPPUnitTests
         public void GetVariables_CallGetVariablesOnARandomValidProposition_ExpectedListReturnedWithTheVariableAsIndividualElement()
         {
             // Arrange 
-            char randomVariableLetter = getRandomVariableLetter();
+            char randomVariableLetter = PropositionGenerator.getRandomVariableLetter();
             Proposition validProposition = new Proposition(randomVariableLetter);
 
             int expectedNumberOfElements = 1;
@@ -116,7 +97,7 @@ namespace LPPUnitTests
         public void Nandify_CallToNandifyOnValidRandomVariable_ExpectedNandifiedPropositionReturned()
         {
             // Arrange
-            char randomVariableLetter = getRandomVariableLetter();
+            char randomVariableLetter = PropositionGenerator.getRandomVariableLetter();
             Proposition validProposition = new Proposition(randomVariableLetter);
 
             // Act

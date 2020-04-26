@@ -7,8 +7,11 @@ using Xunit;
 
 namespace LPPUnitTests
 {
-    public class BiImplicationTests
+    public class BiImplicationTests : BinaryConnectiveTestsBase
     {
+        public BiImplicationTests() : base('=')
+        { }
+
         [Theory]
         [InlineData(false, false, true)]
         [InlineData(false, true, false)]
@@ -17,41 +20,34 @@ namespace LPPUnitTests
         public void Calculate_DetermineAllPossibleValuesBetweenTwoPropositionVariables_ExpectedToReturnTrueWhenBothHaveEqualTruthValues(bool leftTruthValue, bool rightTruthValue, bool expectedTruthValue)
         {
             // Arrange
-            BiImplication biImplication = createBiImplicationWithRandomSymbols();
-            biImplication.LeftSuccessor.TruthValue = leftTruthValue;
-            biImplication.RightSuccessor.TruthValue = rightTruthValue;
+            BiImplication biImplication = generateBiImplication();
+            string message = "because bi implication is true when both left and right successor have the same truth value.";
 
-            // Act
-            bool actualTruthValue = biImplication.Calculate();
+            // Act // Assert
+            Calculate_DetermineAllPossibleValuesBetweenTwoPropositionVariables(biImplication, message, leftTruthValue, rightTruthValue, expectedTruthValue);
+        }
 
-            // Assert
-            actualTruthValue.Should().Be(expectedTruthValue, "because bi implication is true when both left and right successor have the same truth value.");
+
+
+        // Provide the binary connective and the string message to the base method.
+
+        private BiImplication generateBiImplication()
+        {
+            return (BiImplication)createBinaryConnective();
         }
 
         [Fact]
-        public void Copy_CopyingBiImplicationWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForAllPropositions()
+        public void Copy_CopyingBiImplicationWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective()
         {
             // Arrange
-            BiImplication biImplication = createBiImplicationWithRandomSymbols();
+            BiImplication biImplication = generateBiImplication();
 
             // Act
             BiImplication copy = (BiImplication) biImplication.Copy();
 
             // Assert
-            biImplication.Should().NotBe(copy, "because it is a copy.");
-        }
-
-        private BiImplication createBiImplicationWithRandomSymbols()
-        {
-            Proposition left = new Proposition(PropositionTests.getRandomVariableLetter());
-            Proposition right = new Proposition(PropositionTests.getRandomVariableLetter());
-
-            BiImplication biImplication = new BiImplication();
-
-            biImplication.LeftSuccessor = left;
-            biImplication.RightSuccessor = right;
-
-            return biImplication;
+            // Because the Comparable is not overridden.
+            biImplication.Equals(copy).Should().BeFalse("because it is a copy.");
         }
     }
 }

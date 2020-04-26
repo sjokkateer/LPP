@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,10 @@ namespace LogicAndSetTheoryApplication
                         Union(leftChildVariables.Intersect(rightChildVariables)).ToList(); // { A } Intersection { B }, resulting in a set containing all unique elements (unordered though)
         }
 
+        // Otherwise this will be very tightly coupled to tests
+        // and if this would ever change, the test would also 
+        // have to change in that exact manner.
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             string result = "(";
@@ -50,6 +55,8 @@ namespace LogicAndSetTheoryApplication
             return result;
         }
 
+        // Similarly for nodelabels imo.
+        [ExcludeFromCodeCoverage]
         public override string NodeLabel()
         {
             string result = base.NodeLabel();

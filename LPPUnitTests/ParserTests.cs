@@ -36,8 +36,8 @@ namespace LPPUnitTests
         public void Parse_SameSymbolCharacterInExpression_ShouldBeSameObject()
         {
             // Arrange
-            char randomSymbol = PropositionTests.getRandomVariableLetter();
-            char randomConnective = PropositionTests.getRandomConnective();
+            char randomSymbol = PropositionGenerator.getRandomVariableLetter();
+            char randomConnective = PropositionGenerator.getRandomConnective();
 
             string proposition = $"{randomConnective}({randomSymbol}, {randomSymbol})";
             int expectedNumberOfVariables = 1;
