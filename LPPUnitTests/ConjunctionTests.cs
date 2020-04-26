@@ -7,8 +7,11 @@ using LogicAndSetTheoryApplication;
 
 namespace LPPUnitTests
 {
-    public class ConjunctionTests
+    public class ConjunctionTests : BinaryConnectiveTestsBase
     {
+        public ConjunctionTests() : base('&')
+        { }
+
         [Theory]
         [InlineData(false, false, false)]
         [InlineData(false, true, false)]
@@ -17,18 +20,13 @@ namespace LPPUnitTests
         public void Calculate_CalculateAllPossibleTruthValues_ExpectedTrueWhenLeftAndRightAreTrue(bool leftTruthValue, bool rightTruthValue, bool expectedTruthValue)
         {
             // Arrange
-            Conjunction conjunction = generateBiImplication();
-            conjunction.LeftSuccessor.TruthValue = leftTruthValue;
-            conjunction.RightSuccessor.TruthValue = rightTruthValue;
+            Conjunction conjunction = generateConjunction();
+            string message = "because conjunction is true when both left and right are true";
 
-            // Act
-            bool actualTruthValue = conjunction.Calculate();
-
-            // Assert
-            actualTruthValue.Should().Be(expectedTruthValue, "because conjunction is true when both left and right are true");
+            Calculate_DetermineAllPossibleValuesBetweenTwoPropositionVariables(conjunction, message, leftTruthValue, rightTruthValue, expectedTruthValue);
         }
 
-        private Conjunction generateBiImplication()
+        private Conjunction generateConjunction()
         {
             return (Conjunction)PropositionGenerator.createBinaryConnectiveWithRandomSymbols('&');
         }
@@ -36,14 +34,10 @@ namespace LPPUnitTests
         [Fact]
         public void Copy_CopyingConjunctionWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective()
         {
-            // Arrange
-            Conjunction conjunction = generateBiImplication();
+            // Arrange // Act // Assert
+            Conjunction conjunction = generateConjunction();
 
-            // Act
-            Conjunction copy = (Conjunction) conjunction.Copy();
-
-            // Assert
-            conjunction.Equals(copy).Should().BeFalse("because it is a copy of the original");
+            Copy_CopyingBinaryConnectiveWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective(conjunction);
         }
     }
 }

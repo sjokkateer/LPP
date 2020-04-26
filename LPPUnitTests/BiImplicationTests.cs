@@ -27,10 +27,7 @@ namespace LPPUnitTests
             Calculate_DetermineAllPossibleValuesBetweenTwoPropositionVariables(biImplication, message, leftTruthValue, rightTruthValue, expectedTruthValue);
         }
 
-
-
         // Provide the binary connective and the string message to the base method.
-
         private BiImplication generateBiImplication()
         {
             return (BiImplication)createBinaryConnective();
@@ -39,15 +36,10 @@ namespace LPPUnitTests
         [Fact]
         public void Copy_CopyingBiImplicationWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective()
         {
-            // Arrange
+            // Arrange // Act // Assert
             BiImplication biImplication = generateBiImplication();
 
-            // Act
-            BiImplication copy = (BiImplication) biImplication.Copy();
-
-            // Assert
-            // Because the Comparable is not overridden.
-            biImplication.Equals(copy).Should().BeFalse("because it is a copy.");
+            Copy_CopyingBinaryConnectiveWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective(biImplication);
         }
     }
 }

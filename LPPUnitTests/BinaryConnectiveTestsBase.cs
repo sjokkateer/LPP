@@ -32,5 +32,14 @@ namespace LPPUnitTests
             // Assert
             actualTruthValue.Should().Be(expected, message);
         }
+
+        protected void Copy_CopyingBinaryConnectiveWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective(BinaryConnective originalConenctive)
+        {
+            // Act
+            Proposition copy = originalConenctive.Copy();
+
+            // Assert
+            originalConenctive.Equals(copy).Should().BeFalse("because it is a copy.");
+        }
     }
 }
