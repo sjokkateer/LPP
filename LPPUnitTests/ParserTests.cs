@@ -30,11 +30,6 @@ namespace LPPUnitTests
             Assert.Equal(root.GetType(), typeOfRoot);
         }
 
-        // For errors, some invalid strings.
-        // Empty string
-        // null input
-        // Open and closing parenthesis missmatch.
-
         // Parse an expression containing the same variable character multiple times.
         // Test that the reference is the same for all occurences.
         [Fact]
@@ -54,8 +49,8 @@ namespace LPPUnitTests
             List<Proposition> expressionVariables = root.GetVariables();
 
             // Assert
-            expressionVariables.Count.Should().Be(expectedNumberOfVariables, "because it is the same symbol character");
-            expressionVariables[0].Data.Should().Be(randomSymbol, "because that is the symbol given to the proposition by the parser");
+            expressionVariables.Count.Should().Be(expectedNumberOfVariables, "because there should be one proposition variable for each unique character");
+            expressionVariables[0].Data.Should().Be(randomSymbol, "because that is the only given symbol");
         }
 
         [Fact]
@@ -72,7 +67,12 @@ namespace LPPUnitTests
             List<Proposition> expressionVariables = root.GetVariables();
 
             // Assert
-            expressionVariables.Count.Should().Be(expectedNumberOfVariables, "because it is the same symbol character");
+            expressionVariables.Count.Should().Be(expectedNumberOfVariables, "because there should be one proposition variable for each unique character");
         }
+
+        // For errors, some invalid strings.
+        // Empty string
+        // null input
+        // Open and closing parenthesis missmatch.
     }
 }

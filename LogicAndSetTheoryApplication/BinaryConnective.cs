@@ -35,7 +35,6 @@ namespace LogicAndSetTheoryApplication
             List<Proposition> leftChildVariables = LeftSuccessor.GetVariables();
             List<Proposition> rightChildVariables = RightSuccessor.GetVariables();
             
-            // This looks daunting but it just is not, since it's documented. Right?
             return leftChildVariables.Except(rightChildVariables). // Set difference gets applied { A } \ { B }
                     Union(rightChildVariables.Except(leftChildVariables)). // { B } \ { A }
                         Union(leftChildVariables.Intersect(rightChildVariables)).ToList(); // { A } Intersection { B }, resulting in a set containing all unique elements (unordered though)
