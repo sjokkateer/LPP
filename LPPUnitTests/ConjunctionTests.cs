@@ -9,7 +9,7 @@ namespace LPPUnitTests
 {
     public class ConjunctionTests : BinaryConnectiveTestsBase
     {
-        public ConjunctionTests() : base('&')
+        public ConjunctionTests() : base(Conjunction.SYMBOL)
         { }
 
         [Theory]
@@ -28,7 +28,7 @@ namespace LPPUnitTests
 
         private Conjunction generateConjunction()
         {
-            return (Conjunction)PropositionGenerator.createBinaryConnectiveWithRandomSymbols('&');
+            return (Conjunction)createBinaryConnective();
         }
 
         [Fact]

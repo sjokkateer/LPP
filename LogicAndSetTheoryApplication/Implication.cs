@@ -8,7 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class Implication : BinaryConnective
     {
-        public Implication() : base('>')
+        public const char SYMBOL = '>';
+        public Implication() : base(SYMBOL)
         { }
 
         public override bool Calculate()

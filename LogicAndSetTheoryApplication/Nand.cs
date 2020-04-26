@@ -8,7 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class Nand : BinaryConnective
     {
-        public Nand() : base('%')
+        public const char SYMBOL = '%';
+        public Nand() : base(SYMBOL)
         { }
 
         public override bool Calculate()

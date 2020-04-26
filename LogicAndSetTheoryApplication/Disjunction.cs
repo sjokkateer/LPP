@@ -8,7 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class Disjunction : BinaryConnective
     {
-        public Disjunction() : base('|')
+        public const char SYMBOL = '|';
+        public Disjunction() : base(SYMBOL)
         { }
 
         public override bool Calculate()

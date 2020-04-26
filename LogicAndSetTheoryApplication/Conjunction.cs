@@ -8,7 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class Conjunction : BinaryConnective
     {
-        public Conjunction() : base('&')
+        public const char SYMBOL = '&';
+        public Conjunction() : base(SYMBOL)
         { }
 
         public override bool Calculate()

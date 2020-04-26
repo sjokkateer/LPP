@@ -5,7 +5,7 @@ namespace LPPUnitTests
 {
     public class DisjunctionTests : BinaryConnectiveTestsBase
     {
-        public DisjunctionTests() : base('|')
+        public DisjunctionTests() : base(Disjunction.SYMBOL)
         { }
 
         [Theory]
@@ -24,7 +24,7 @@ namespace LPPUnitTests
 
         private Disjunction generateDisjunction()
         {
-            return (Disjunction)PropositionGenerator.createBinaryConnectiveWithRandomSymbols('|');
+            return (Disjunction)createBinaryConnective();
         }
 
         [Fact]

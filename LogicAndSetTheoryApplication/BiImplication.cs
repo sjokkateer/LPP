@@ -8,7 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class BiImplication : BinaryConnective
     {
-        public BiImplication() : base('=')
+        public const char SYMBOL = '=';
+        public BiImplication() : base(SYMBOL)
         { }
 
         public override bool Calculate()

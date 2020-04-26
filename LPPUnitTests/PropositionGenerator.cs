@@ -18,14 +18,17 @@ namespace LPPUnitTests
 
             switch(binaryConnectiveSymbol)
             {
-                case '&':
+                case Conjunction.SYMBOL:
                     binaryConnective = new Conjunction();
                     break;
-                case '=':
+                case BiImplication.SYMBOL:
                     binaryConnective = new BiImplication();
                     break;
-                case '|':
+                case Disjunction.SYMBOL:
                     binaryConnective = new Disjunction();
+                    break;
+                case Implication.SYMBOL:
+                    binaryConnective = new Implication();
                     break;
                 default:
                     throw new ArgumentNullException("Could not convert symbol into a connective!");

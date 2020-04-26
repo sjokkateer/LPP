@@ -9,7 +9,7 @@ namespace LPPUnitTests
 {
     public class BiImplicationTests : BinaryConnectiveTestsBase
     {
-        public BiImplicationTests() : base('=')
+        public BiImplicationTests() : base(BiImplication.SYMBOL)
         { }
 
         [Theory]
