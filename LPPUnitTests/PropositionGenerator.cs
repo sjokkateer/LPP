@@ -24,6 +24,11 @@ namespace LPPUnitTests
                 case '=':
                     binaryConnective = new BiImplication();
                     break;
+                case '|':
+                    binaryConnective = new Disjunction();
+                    break;
+                default:
+                    throw new ArgumentNullException("Could not convert symbol into a connective!");
             }
 
             binaryConnective.LeftSuccessor = new Proposition(getRandomVariableLetter());

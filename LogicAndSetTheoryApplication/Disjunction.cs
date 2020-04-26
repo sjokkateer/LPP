@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Disjunction : BinaryConnective
+    public class Disjunction : BinaryConnective
     {
         public Disjunction() : base('|')
         { }
