@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class Implication : BinaryConnective
+    public class Implication : BinaryConnective
     {
         public Implication() : base('>')
         { }

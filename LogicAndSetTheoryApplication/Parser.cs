@@ -6,7 +6,7 @@ namespace LogicAndSetTheoryApplication
 {
     public class Parser
     {
-        private const string CONNECTIVES = "~>=&|";
+        public const string CONNECTIVES = "~>=&|";
         private const string VARIABLES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const string CONSTANTS = "01";
 
@@ -154,11 +154,12 @@ namespace LogicAndSetTheoryApplication
         {
             foreach (Proposition processedVariable in alreadyProcessedVariables)
             {
-                if ((char)processedVariable.Data == variable)
+                if (processedVariable.Data == variable)
                 {
                     return processedVariable;
                 }
             }
+
             return null;
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class False : Proposition
+    public class False : Proposition
     {
         public False() : base('0')
         {

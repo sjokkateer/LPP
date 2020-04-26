@@ -27,12 +27,20 @@ namespace LPPUnitTests
             proposition.Data.Should().BeEquivalentTo(randomValidVariableLetter, "because the random variable letter should be assigned to the data field by the constructor");
         }
 
-        private char getRandomVariableLetter()
+        public static char getRandomVariableLetter()
         {
             Random rng = new Random();
             int randomCapitalLetter = rng.Next(CAPITAL_A, CAPITAL_Z + 1);
 
             return (char)randomCapitalLetter;
+        }
+
+        public static char getRandomConnective()
+        {
+            Random rng = new Random();
+            int randomIndexOfConnectivesString = rng.Next(0, Parser.CONNECTIVES.Length);
+
+            return Parser.CONNECTIVES[randomIndexOfConnectivesString];
         }
 
         [Theory]
