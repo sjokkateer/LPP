@@ -34,8 +34,8 @@ namespace LPPUnitTests
                     throw new ArgumentNullException("Could not convert symbol into a connective!");
             }
 
-            binaryConnective.LeftSuccessor = new Proposition(getRandomVariableLetter());
-            binaryConnective.RightSuccessor = new Proposition(getRandomVariableLetter());
+            binaryConnective.LeftSuccessor = getRandomPropositionSymbol();
+            binaryConnective.RightSuccessor = getRandomPropositionSymbol();
 
             return binaryConnective;
         }
@@ -46,6 +46,11 @@ namespace LPPUnitTests
             int randomCapitalLetter = rng.Next(CAPITAL_A, CAPITAL_Z + 1);
 
             return (char)randomCapitalLetter;
+        }
+
+        public static Proposition getRandomPropositionSymbol()
+        {
+            return new Proposition(getRandomVariableLetter());
         }
 
         public static char getRandomConnective()

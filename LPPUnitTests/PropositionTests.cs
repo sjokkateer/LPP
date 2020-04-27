@@ -67,8 +67,7 @@ namespace LPPUnitTests
         public void GetVariables_CallGetVariablesOnARandomValidProposition_ExpectedListReturnedWithTheVariableAsIndividualElement()
         {
             // Arrange 
-            char randomVariableLetter = PropositionGenerator.getRandomVariableLetter();
-            Proposition validProposition = new Proposition(randomVariableLetter);
+            Proposition validProposition = PropositionGenerator.getRandomPropositionSymbol();
 
             int expectedNumberOfElements = 1;
 
@@ -97,8 +96,7 @@ namespace LPPUnitTests
         public void Nandify_CallToNandifyOnValidRandomVariable_ExpectedNandifiedPropositionReturned()
         {
             // Arrange
-            char randomVariableLetter = PropositionGenerator.getRandomVariableLetter();
-            Proposition validProposition = new Proposition(randomVariableLetter);
+            Proposition validProposition = PropositionGenerator.getRandomPropositionSymbol();
 
             // Act
             Proposition nandifiedProposition = validProposition.Nandify();
