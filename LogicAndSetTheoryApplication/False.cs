@@ -8,7 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class False : Proposition
     {
-        public False() : base('0')
+        public const char SYMBOL = '0';
+        public False() : base(SYMBOL)
         {
             TruthValue = false;
         }

@@ -14,7 +14,7 @@ namespace LPPUnitTests
 
         public static BinaryConnective createBinaryConnectiveWithRandomSymbols(char binaryConnectiveSymbol)
         {
-            BinaryConnective binaryConnective = null;
+            BinaryConnective binaryConnective;
 
             switch(binaryConnectiveSymbol)
             {
