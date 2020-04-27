@@ -6,14 +6,14 @@ using LogicAndSetTheoryApplication;
 
 namespace LPPUnitTests
 {
-    public class FalseTests : PropositionConstantBase
+    public class TrueTests : PropositionConstantBase
     {
-        public FalseTests() : base(new False())
+        public TrueTests() : base(new True())
         { }
 
         public override void ActualTruthValueShouldBe(bool actualTruthValue)
         {
-            actualTruthValue.Should().BeFalse("because the constant false is always false");
+            actualTruthValue.Should().BeTrue("because the constant true is always true");
         }
     }
 }

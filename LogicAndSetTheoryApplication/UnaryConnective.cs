@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace LogicAndSetTheoryApplication
             return LeftSuccessor.GetVariables().Distinct().ToList();
         }
 
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             string result = Convert.ToString(Data);
@@ -36,6 +38,7 @@ namespace LogicAndSetTheoryApplication
             return result;
         }
 
+        [ExcludeFromCodeCoverage]
         public override string NodeLabel()
         {
             string result = base.NodeLabel();
