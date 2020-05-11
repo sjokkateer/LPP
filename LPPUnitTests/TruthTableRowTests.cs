@@ -56,8 +56,8 @@ namespace LPPUnitTests
             TruthTableRow copy = ttr.Copy();
 
             // Assert
-            ttr.Cells[0].Should().Be(copy.Cells[0]);
-            ttr.Result.Should().Be(copy.Result);
+            ttr.Cells[0].Should().Be(copy.Cells[0], "Because it is a copy, it should have identical values per cell");
+            ttr.Result.Should().Be(copy.Result, "Because it is a copy, the result values should be identical");
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace LPPUnitTests
             bool areEqual = ttrOne.EqualTo(ttrTwo);
 
             // Assert
-            areEqual.Should().BeFalse();
+            areEqual.Should().BeFalse("Because the size of the two arrays differs (equivalently the number of variables)");
         }
 
         private TruthTableRow GenerateTruthTableRowWithXPropositionVariables(int x)
@@ -91,7 +91,7 @@ namespace LPPUnitTests
             
             List<Proposition> propositions = new List<Proposition>();
 
-            do
+            while (propositions.Count < x)
             {
                 previous = newProposition;
                 newProposition = PropositionGenerator.getRandomProposition();
@@ -101,7 +101,7 @@ namespace LPPUnitTests
                     propositions.Add(newProposition);
                 }
 
-            } while (propositions.Count < x);
+            }
 
             return propositions;
         }
@@ -122,7 +122,7 @@ namespace LPPUnitTests
             bool areEqual = ttrOne.EqualTo(ttrTwo);
 
             // Assert
-            areEqual.Should().BeFalse();
+            areEqual.Should().BeFalse("Because the cells in the truth table rows have differing values");
         }
 
         private void SetToDifferingValues(TruthTableRow ttrOne, TruthTableRow ttrTwo, int index, int value)
@@ -160,12 +160,47 @@ namespace LPPUnitTests
             bool areEqual = ttrOne.EqualTo(ttrTwo);
 
             // Assert
-            areEqual.Should().BeTrue();
+            areEqual.Should().BeTrue("Because they are of equal size and have identical values in each cell");
         }
 
         private void SetToEquivalentValues(TruthTableRow ttrOne, TruthTableRow ttrTwo, int index, int value)
         {
             ttrOne.Cells[index] = ttrTwo.Cells[index] = (char)value;
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void ToString_NoVariablesInTruthTableRow_OnlyResultColumnReturned(bool resultValue)
+        {
+            // Arrange
+            TruthTableRow ttr = GenerateTruthTableRowWithXPropositionVariables(0);
+            ttr.Result = resultValue;
+
+            // Act
+            String result = ttr.ToString();
+            int len = result.Split().Length;
+
+            // Assert
+            len.Should().Be(1, "Because only the resulting column will be included");
+        }
+
+        [Fact]
+        public void ToString_MultipleVariablesInTruthTableRow_NumberOfPiecesShouldBeEquivalentToNumberOfVariablesPlusOneForResultColumn()
+        {
+            // Arrange
+            Random rng = new Random();
+            int numberOfVariables = rng.Next(1, 5);
+            TruthTableRow ttr = GenerateTruthTableRowWithXPropositionVariables(numberOfVariables);
+
+            // Act
+            String result = ttr.ToString();
+            String[] parts = result.Split(TruthTableRow.GetPadding());
+            
+            int numberOfExpectedParts = numberOfVariables + 1;
+
+            // Assert
+            parts.Length.Should().Be(numberOfExpectedParts, "Because the string should display a value for each variable and a result");
         }
     }
 }

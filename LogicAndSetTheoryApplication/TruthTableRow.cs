@@ -8,6 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class TruthTableRow
     {
+        public const int PADDING = 2;
+
         private Proposition propositionRoot;
         private List<Proposition> uniqueVariables;
         public char[] Cells { get; set; }
@@ -179,9 +181,21 @@ namespace LogicAndSetTheoryApplication
             string result = "";
             for (int i = 0; i < Cells.Length; i++)
             {
-                result += $"{Cells[i]}  ";
+                result += $"{Cells[i]}" + GetPadding();
             }
             result += $"{Convert.ToInt32(Result)}";
+            return result;
+        }
+
+        public static String GetPadding()
+        {
+            String result = "";
+
+            for (int i = 0; i < PADDING; i++)
+            {
+                result += " ";
+            }
+
             return result;
         }
     }
