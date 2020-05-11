@@ -158,6 +158,11 @@ namespace LogicAndSetTheoryApplication
 
         public bool EqualTo(TruthTableRow other)
         {
+            if (Cells.Length != other.Cells.Length)
+            {
+                return false;
+            }
+
             for (int i = 0; i < Cells.Length; i++)
             {
                 if (Cells[i] != other.Cells[i])
@@ -165,6 +170,7 @@ namespace LogicAndSetTheoryApplication
                     return false;
                 }
             }
+
             return true;
         }
 

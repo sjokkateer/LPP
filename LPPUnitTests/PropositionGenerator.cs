@@ -55,5 +55,10 @@ namespace LPPUnitTests
 
             return Parser.CONNECTIVES[randomIndexOfConnectivesString];
         }
+
+        public static Proposition getRandomProposition()
+        {
+            return new Proposition(getRandomVariableLetter());
+        }
     }
 }
