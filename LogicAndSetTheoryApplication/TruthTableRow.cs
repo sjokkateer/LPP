@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class TruthTableRow
+    public class TruthTableRow
     {
         private Proposition propositionRoot;
         private List<Proposition> uniqueVariables;
@@ -28,6 +28,10 @@ namespace LogicAndSetTheoryApplication
             IsSimplified = false;
         }
 
+        public TruthTableRow(Proposition propositionRoot) : this(propositionRoot, propositionRoot.GetVariables(), propositionRoot.GetVariables().Count)
+        {
+        }
+
         /// <summary>
         /// Method will assign the stored truth value to each respective
         /// abstract proposition variable, and then recursively calculate
@@ -39,6 +43,8 @@ namespace LogicAndSetTheoryApplication
         {
             for (int i = 0; i < uniqueVariables.Count; i++)
             {
+                // Could be simplified to Cells[i] == '1';
+                // Lets do that refactor after we made tests
                 uniqueVariables[i].TruthValue = Cells[i] == '1' ? true : false ;
             }
             Result = propositionRoot.Calculate();

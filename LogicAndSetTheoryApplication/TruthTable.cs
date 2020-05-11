@@ -15,6 +15,7 @@ namespace LogicAndSetTheoryApplication
         public TruthTable(Proposition propositionRoot)
         {
             this.propositionRoot = propositionRoot;
+            // Transparent caching?
             if (propositionRoot.UniqueVariableSet == null)
             {
                 propositionVariablesSet = propositionRoot.GetVariables();
@@ -23,6 +24,7 @@ namespace LogicAndSetTheoryApplication
             {
                 propositionVariablesSet = propositionRoot.UniqueVariableSet;
             }
+            // Place them in alphabetic order
             propositionVariablesSet.Sort();
             Rows = new List<TruthTableRow>();
             CreateTruthTableRows();
@@ -35,6 +37,7 @@ namespace LogicAndSetTheoryApplication
             Rows = simplifiedRows;
         }
 
+        // Is used by the hashcode calculator
         public List<int> GetConvertedResultColumn()
         {
             List<int> resultColumn = new List<int>();
@@ -55,7 +58,7 @@ namespace LogicAndSetTheoryApplication
             if (initialRow.Cells.Length == 0)
             {
                 // We had no variables and are dealing with one of the constants.
-                // return an emppty row with only a result value.
+                // return an empty row with only a result value.
                 initialRow.Calculate();
                 Rows.Add(initialRow);
             }
@@ -89,7 +92,7 @@ namespace LogicAndSetTheoryApplication
                 }
                 else
                 {
-                    // Not at the final variabel so we add the cell into the row and call the method again.
+                    // Not at the final variable so we add the cell into the row and call the method again.
                     row.Cells[index] = truthValue;
                     CreateRowsRecursively(index + 1, truthSet, row);
                 }

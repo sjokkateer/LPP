@@ -15,7 +15,9 @@ namespace LogicAndSetTheoryApplication
         public char Data { get; }
         [ExcludeFromCodeCoverage]
         public bool TruthValue { get; set; }
-        
+
+        public Proposition() { }
+
         public Proposition(char data)
         {
             Data = data;
