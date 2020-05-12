@@ -181,9 +181,9 @@ namespace LogicAndSetTheoryApplication
             string result = "";
             for (int i = 0; i < Cells.Length; i++)
             {
-                result += $"{Cells[i]}" + GetPadding();
+                result += Cells[i] + GetPadding();
             }
-            result += $"{Convert.ToInt32(Result)}";
+            result += Convert.ToInt32(Result);
             return result;
         }
 

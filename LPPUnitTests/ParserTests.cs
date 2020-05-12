@@ -69,10 +69,5 @@ namespace LPPUnitTests
             // Assert
             expressionVariables.Count.Should().Be(expectedNumberOfVariables, "because there should be one proposition variable for each unique character");
         }
-
-        // For errors, some invalid strings.
-        // Empty string
-        // null input
-        // Open and closing parenthesis missmatch.
     }
 }

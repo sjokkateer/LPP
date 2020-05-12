@@ -11,10 +11,64 @@ namespace LPPUnitTests
 {
     public class TruthTableTests
     {
+        private Parser parser;
 
-        public void Method_SUT_Should()
+        [Theory]
+        [InlineData("1", 1)] // 0 ^ 2
+        [InlineData("A", 2)] // 1 ^ 2
+        [InlineData("|(A, B)", 4)] // n ^ 2 rows
+        [InlineData("|(A, &(B, C))", 8)]
+        public void Constructor_ConstructWithVariablesAlreadySetOnProposition_ShouldResultInAProperlyConstructedObjectWithANumberOfRowsEqualToNumberOfVariablesToThePowerOfTwo(String toParseExpression, int expectedNumberOfRows)
         {
+            // Arrange
+            parser = new Parser(toParseExpression);
+            Proposition root = parser.Parse();
 
+            // Act
+            root.UniqueVariableSet = root.GetVariables();
+            TruthTable tt = new TruthTable(root);
+            int actualNumberOfRows = tt.Rows.Count;
+
+            // Assert
+            actualNumberOfRows.Should().Be(expectedNumberOfRows);
+        }
+
+        [Theory]
+        [InlineData("A")]
+        [InlineData("1")]
+        [InlineData("=(A,B)")]
+        public void Simplify_NonSimplifiablTruthTable_ShouldResultInTheOriginalTruthTable(String toParseExpression)
+        {
+            // Same number of rows
+            // These should result in the same sets of rows
+            parser = new Parser(toParseExpression);
+            Proposition root = parser.Parse();
+            TruthTable tt = new TruthTable(root);
+
+            // Act
+            TruthTable simplifiedTt = tt.Simplify();
+
+            // Assert
+            tt.Rows.Count.Should().Be(simplifiedTt.Rows.Count, "Because the expression could not be simplified");
+        }
+
+        [Theory]
+        [InlineData("|(B, T)")]
+        [InlineData("&(B, T)")]
+        public void Simplify_SimplifiableTruthTable_ShouldResultInSimplifiedTruthTable(String toParseExpression)
+        {
+            // A simplified truth table has less rows than the original.
+            // They are also flagged as simplified and for that reason treated differently
+            // Arrange
+            parser = new Parser(toParseExpression);
+            Proposition root = parser.Parse();
+            TruthTable tt = new TruthTable(root);
+
+            // Act
+            TruthTable simplifiedTt = tt.Simplify();
+
+            // Assert
+            tt.Rows.Count.Should().BeGreaterThan(simplifiedTt.Rows.Count, "Because the simplified truth table should have less rows as some could be simplified");
         }
 
         [Fact]
@@ -40,6 +94,7 @@ namespace LPPUnitTests
             }
         }
 
+        // Helper
         private List<ITruthTableRow> GenerateXTruthTableRowMocks(int numberOfRows)
         {
             List<ITruthTableRow> ttrs = new List<ITruthTableRow>();
@@ -54,11 +109,57 @@ namespace LPPUnitTests
             return ttrs;
         }
 
+        // Helper
         private bool GetRandomTruthValue()
         {
             Random rng = new Random();
 
             return Convert.ToBoolean(rng.Next(0, 1));
+        }
+
+        [Theory]
+        [InlineData("1")]
+        [InlineData("A")]
+        [InlineData("|(A, B)")]
+        [InlineData("|(A, &(B, C))")]
+        public void ToString_MultipleVariablesInTruthTable_NumberOfPiecesShouldBeEquivalentToNumberOfVariablesPlusOneForResultColumn(String toParseExpression)
+        {
+            // Arrange
+            parser = new Parser(toParseExpression);
+            Proposition root = parser.Parse();
+            TruthTable tt = new TruthTable(root);
+
+            int numberOfVariables = root.GetVariables().Count;
+            int numberOfExpectedParts = numberOfVariables + 1;
+
+            // Act
+            String result = tt.TableHeader();
+            String[] parts = result.Split(TruthTableRow.GetPadding());
+
+            // Assert
+            parts.Length.Should().Be(numberOfExpectedParts, "Because the string should display a value for each variable and a result");
+        }
+
+        // ToString
+        // Should result in number of rows + 1 for the table header when we split on \n
+        [Theory]
+        [InlineData("1", 2)] // 0 ^ 2 + 1
+        [InlineData("A", 3)] // # variables ^ 2 + 1 for header
+        [InlineData("|(A, B)", 5)]
+        [InlineData("|(A, &(B, C))", 9)]
+        public void ToString_ConstantPropositionRootGivenToConstructor_ExpectedTwoRowsPrinted(String toParseExpression, int expectedNumberOfRows)
+        {
+            // Arrange
+            parser = new Parser(toParseExpression);
+            Proposition root = parser.Parse();
+            TruthTable tt = new TruthTable(root);
+
+            // Act
+            String tableToString = tt.ToString();
+            String[] rowsAsString = tableToString.Split("\n");
+
+            // Assert
+            rowsAsString.Length.Should().Be(expectedNumberOfRows);
         }
     }
 }

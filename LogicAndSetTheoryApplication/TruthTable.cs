@@ -15,7 +15,7 @@ namespace LogicAndSetTheoryApplication
         public TruthTable(Proposition propositionRoot)
         {
             this.propositionRoot = propositionRoot;
-            // Transparent caching?
+            // Transparent caching
             if (propositionRoot.UniqueVariableSet == null)
             {
                 propositionVariablesSet = propositionRoot.GetVariables();
@@ -30,6 +30,7 @@ namespace LogicAndSetTheoryApplication
             CreateTruthTableRows();
         }
 
+        // Should probably be private and accessible via a FactoryMethod 
         public TruthTable(Proposition propositionRoot, List<Proposition> propositionVariablesSet, List<ITruthTableRow> simplifiedRows)
         {
             this.propositionRoot = propositionRoot;
@@ -140,28 +141,6 @@ namespace LogicAndSetTheoryApplication
                 simplifiedRowSet = SimplifiyRowSet(simplifiedRowSet);
             } while (!(EqualSets(oldSet, simplifiedRowSet)));
             return simplifiedRowSet;
-        }
-
-        private List<ITruthTableRow> SimplifyRowsRecursively(int rowCount, List<ITruthTableRow> simplifiedRowSet)
-        {
-            if (rowCount == simplifiedRowSet.Count)
-            {
-                return simplifiedRowSet;
-            }
-            else
-            {
-                int rowCountBeforeSimplification = simplifiedRowSet.Count;
-                simplifiedRowSet = SimplifiyRowSet(simplifiedRowSet);
-                return SimplifyRowsRecursively(rowCountBeforeSimplification, simplifiedRowSet);
-            }
-        }
-
-        private void PrintRows(List<ITruthTableRow> rows)
-        {
-            foreach (TruthTableRow r in rows)
-            {
-                Console.WriteLine(r);
-            }
         }
 
         private bool IsRowInSet(ITruthTableRow row, List<ITruthTableRow> rowSet)
@@ -278,7 +257,7 @@ namespace LogicAndSetTheoryApplication
             string result = "";
             for (int i = 0; i < propositionVariablesSet.Count; i++)
             { 
-                result += $"{propositionVariablesSet[i]}  ";
+                result += propositionVariablesSet[i] + TruthTableRow.GetPadding();
             }
             result += "v\n";
             return result;
@@ -289,7 +268,12 @@ namespace LogicAndSetTheoryApplication
             string result = TableHeader();
             for (int i = 0; i < Rows.Count; i++)
             {
-                result += $"{Rows[i]}\n";
+                result += Rows[i];
+
+                if (i < Rows.Count - 1)
+                {
+                    result += "\n";
+                }
             }
             return result;
         }
