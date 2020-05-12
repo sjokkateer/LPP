@@ -16,9 +16,6 @@ namespace LogicAndSetTheoryApplication
         public bool Result { get; set; }
         public bool IsSimplified { get; set; }
 
-        public TruthTableRow(int numberOfVariables) : this(null, null, numberOfVariables)
-        { }
-
         public TruthTableRow(List<Proposition> uniqueVariables, int numberOfVariables) : this(null, uniqueVariables, numberOfVariables)
         { }
 
