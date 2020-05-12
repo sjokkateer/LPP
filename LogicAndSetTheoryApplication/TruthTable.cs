@@ -46,7 +46,7 @@ namespace LogicAndSetTheoryApplication
         public List<int> GetConvertedResultColumn()
         {
             List<int> resultColumn = new List<int>();
-            foreach (TruthTableRow row in Rows)
+            foreach (ITruthTableRow row in Rows)
             {
                 resultColumn.Add(Convert.ToInt32(row.Result));
             }

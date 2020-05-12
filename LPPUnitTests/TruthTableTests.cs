@@ -28,13 +28,14 @@ namespace LPPUnitTests
             // Act
             List<int> convertedResultColumn = tt.GetConvertedResultColumn();
 
-            // Assert
             int resultValue;
             ITruthTableRow currentRow;
             for (int i = 0; i < convertedResultColumn.Count; i++)
             {
                 resultValue = convertedResultColumn[i];
                 currentRow = ttrs[i];
+                
+                // Assert
                 resultValue.Should().Be(Convert.ToInt32(currentRow.Result), "Because the resulting truth value should reflect the according integer value");
             }
         }
