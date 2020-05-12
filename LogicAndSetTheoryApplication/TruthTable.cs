@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class TruthTable
+    public class TruthTable
     {
         private Proposition propositionRoot;
         private List<Proposition> propositionVariablesSet;
-        public List<TruthTableRow> Rows { get; }
+        public List<ITruthTableRow> Rows { get; }
 
         public TruthTable(Proposition propositionRoot)
         {
@@ -26,15 +26,20 @@ namespace LogicAndSetTheoryApplication
             }
             // Place them in alphabetic order
             propositionVariablesSet.Sort();
-            Rows = new List<TruthTableRow>();
+            Rows = new List<ITruthTableRow>();
             CreateTruthTableRows();
         }
 
-        public TruthTable(Proposition propositionRoot, List<Proposition> propositionVariablesSet, List<TruthTableRow> simplifiedRows)
+        public TruthTable(Proposition propositionRoot, List<Proposition> propositionVariablesSet, List<ITruthTableRow> simplifiedRows)
         {
             this.propositionRoot = propositionRoot;
             this.propositionVariablesSet = propositionVariablesSet;
             Rows = simplifiedRows;
+        }
+
+        public TruthTable(List<ITruthTableRow> rows)
+        {
+            Rows = rows;
         }
 
         // Is used by the hashcode calculator
@@ -104,7 +109,7 @@ namespace LogicAndSetTheoryApplication
             return new TruthTable(propositionRoot, propositionVariablesSet, SimplifyRowsIteratively(Rows));
         }
 
-        private bool EqualSets(List<TruthTableRow> set1, List<TruthTableRow> set2)
+        private bool EqualSets(List<ITruthTableRow> set1, List<ITruthTableRow> set2)
         {
             // Different number of rows automatically indicates they are different.
             if (set1.Count != set2.Count)
@@ -125,9 +130,9 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        private List<TruthTableRow> SimplifyRowsIteratively(List<TruthTableRow> simplifiedRowSet)
+        private List<ITruthTableRow> SimplifyRowsIteratively(List<ITruthTableRow> simplifiedRowSet)
         {
-            List<TruthTableRow> oldSet;
+            List<ITruthTableRow> oldSet;
             // Create new test condition, testing if both sets are equal or not.
             do
             {
@@ -137,7 +142,7 @@ namespace LogicAndSetTheoryApplication
             return simplifiedRowSet;
         }
 
-        private List<TruthTableRow> SimplifyRowsRecursively(int rowCount, List<TruthTableRow> simplifiedRowSet)
+        private List<ITruthTableRow> SimplifyRowsRecursively(int rowCount, List<ITruthTableRow> simplifiedRowSet)
         {
             if (rowCount == simplifiedRowSet.Count)
             {
@@ -151,7 +156,7 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        private void PrintRows(List<TruthTableRow> rows)
+        private void PrintRows(List<ITruthTableRow> rows)
         {
             foreach (TruthTableRow r in rows)
             {
@@ -159,9 +164,9 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        private bool IsRowInSet(TruthTableRow row, List<TruthTableRow> rowSet)
+        private bool IsRowInSet(ITruthTableRow row, List<ITruthTableRow> rowSet)
         {
-            foreach(TruthTableRow r in rowSet)
+            foreach(ITruthTableRow r in rowSet)
             {
                 if (row.EqualTo(r))
                 {
@@ -171,9 +176,9 @@ namespace LogicAndSetTheoryApplication
             return false;
         }
 
-        private List<TruthTableRow> SimplifiyRowSet(List<TruthTableRow> rowSet)
+        private List<ITruthTableRow> SimplifiyRowSet(List<ITruthTableRow> rowSet)
         {
-            List<TruthTableRow> simplifiedSet = new List<TruthTableRow>();
+            List<ITruthTableRow> simplifiedSet = new List<ITruthTableRow>();
             for (int i = 0; i < rowSet.Count; i++)
             {
                 for (int j = 0; j < rowSet.Count; j++)
@@ -187,7 +192,7 @@ namespace LogicAndSetTheoryApplication
                             // Try to simplify the two by a method call.
                             // The method will return null if it was not succesfull
                             // or a new row if it was successful.
-                            TruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
+                            ITruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
                             if (simplifiedRow != null)
                             {
                                 // Only assign is simplified to row i since that's the one under inspection.

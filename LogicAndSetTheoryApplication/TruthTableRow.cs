@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    public class TruthTableRow
+    public class TruthTableRow: ITruthTableRow
     {
         public const int PADDING = 2;
 
@@ -129,7 +129,7 @@ namespace LogicAndSetTheoryApplication
         }
         #endregion
 
-        public TruthTableRow Simplify(TruthTableRow otherRow)
+        public ITruthTableRow Simplify(ITruthTableRow otherRow)
         {
             // Instead of creating a memory intense copy, we create a very simple row object
             // that will only hold the truth values in each cell and a result.
@@ -158,7 +158,7 @@ namespace LogicAndSetTheoryApplication
             return simplifiedRow;
         }
 
-        public bool EqualTo(TruthTableRow other)
+        public bool EqualTo(ITruthTableRow other)
         {
             if (Cells.Length != other.Cells.Length)
             {
