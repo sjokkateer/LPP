@@ -17,7 +17,7 @@ namespace LPPUnitTests
 
         protected BinaryConnective createBinaryConnective()
         {
-            return PropositionGenerator.createBinaryConnectiveWithRandomSymbols(symbol);
+            return PropositionGenerator.CreateBinaryConnectiveWithRandomSymbols(symbol);
         }
 
         protected void Calculate_DetermineAllPossibleValuesBetweenTwoPropositionVariables(BinaryConnective connective, string message, bool left, bool right, bool expected)

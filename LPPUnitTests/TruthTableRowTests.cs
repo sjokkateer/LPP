@@ -17,7 +17,7 @@ namespace LPPUnitTests
 
         public TruthTableRowTests()
         {
-            List<Proposition> propVariables = new List<Proposition>() { new Proposition(PropositionGenerator.getRandomVariableLetter()) };
+            List<Proposition> propVariables = new List<Proposition>() { new Proposition(PropositionGenerator.GetRandomVariableLetter()) };
 
             proposition = new Mock<Proposition>();
             proposition.Setup(p => p.GetVariables()).Returns(propVariables);
@@ -94,7 +94,7 @@ namespace LPPUnitTests
             while (propositions.Count < x)
             {
                 previous = newProposition;
-                newProposition = PropositionGenerator.getRandomProposition();
+                newProposition = PropositionGenerator.GetRandomProposition();
 
                 if (previous != null && !newProposition.Data.Equals(previous.Data))
                 {

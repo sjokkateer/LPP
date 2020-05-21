@@ -6,6 +6,7 @@ using Moq;
 using LogicAndSetTheoryApplication;
 using FluentAssertions.Primitives;
 using Xunit;
+using System.Collections;
 
 namespace LPPUnitTests
 {
@@ -161,5 +162,149 @@ namespace LPPUnitTests
             // Assert
             rowsAsString.Length.Should().Be(expectedNumberOfRows);
         }
+
+        // An individual proposition is already in DNF thus this could be an individual test
+        [Fact]
+        public void CreateDisjunctiveNormalForm_IndividualPropositionGiven_ExpectedIndividualPropositionReturned()
+        {
+            // Arrange
+            Proposition originalProposition = PropositionGenerator.GetRandomProposition();
+            TruthTable tt = new TruthTable(originalProposition);
+            TruthTable simplifiedTt = tt.Simplify();
+            
+            // Act
+            Proposition dnf = tt.CreateDisjunctiveNormalForm();
+            Proposition simplifiedDnf = simplifiedTt.CreateDisjunctiveNormalForm();
+
+            // Assert
+            dnf.Should().BeEquivalentTo(originalProposition, "Because the disjunctive normal of a proposition literal is the literal itself");
+            simplifiedDnf.Should().BeEquivalentTo(originalProposition, "Because a literal can not be simplified any further and should result in the literal itself.");
+        }
+
+        [Fact]
+        public void CreateDisjunctiveNormalForm_NegatedProposition_ExpectedOriginalNegatedPropositionReturned()
+        {
+            // Arrange
+            Proposition originalProposition = PropositionGenerator.CreateUnaryConnectiveWithRandomSymbol(Negation.SYMBOL);
+            TruthTable tt = new TruthTable(originalProposition);
+            TruthTable simplifiedTt = tt.Simplify();
+
+            // Act
+            Proposition dnf = tt.CreateDisjunctiveNormalForm();
+            Proposition simplifiedDnf = simplifiedTt.CreateDisjunctiveNormalForm();
+
+            // Assert
+            dnf.Should().BeEquivalentTo(originalProposition, "Because the disjunctive normal of a negated proposition literal is the negated literal itself");
+            simplifiedDnf.Should().BeEquivalentTo(originalProposition, "Because a negated literal can not be simplified any further and should result in the negated literal itself.");
+        }
+
+        [Theory]
+        [InlineData(Implication.SYMBOL)]
+        [InlineData(BiImplication.SYMBOL)]
+        [InlineData(Conjunction.SYMBOL)]
+        [InlineData(Disjunction.SYMBOL)]
+        public void CreateDisjunctiveNormalForm_ExpressionGiven_ExpectedPropositionLiteralsAtTheLeavesAndNoDisjunctionDeeperThanConjunction(char expressionSymbol)
+        {
+            // For the binary connectives, we should check all (both) possible branches if they contain
+            // no disjunction below a conjunction
+
+            // Arrange
+            BinaryConnective root = PropositionGenerator.CreateBinaryConnectiveWithRandomSymbols(expressionSymbol);
+            TruthTable tt = new TruthTable(root);
+            TruthTable simplifiedTt = tt.Simplify();
+
+            // Act
+            Proposition dnf = tt.CreateDisjunctiveNormalForm();
+            Proposition simplifiedDnf = simplifiedTt.CreateDisjunctiveNormalForm();
+
+            // Assert
+            Assert.True(IsInDnf(dnf), "Because this expression should be in DNF");
+            Assert.True(IsInDnf(simplifiedDnf), "Because the simplified expression should also be in DNF");
+        }
+
+        [Fact]
+        // This method actually tests the logic of the helper functions for testing if a proposition is in dnf.
+        // Other symbols most likely will never occure based on application logic for disjunctive normal form
+        // but it is good to make sure that the helper method actually expresses the logic we want it to.
+        public void CreateDisjunctiveNormalForm_ExpressionNotInDisjunctiveNormalForm_ExpectedFalseReturned()
+        {
+            // Arrange
+            parser = new Parser("&(|(P,Q),R)");
+            Proposition proposition = parser.Parse();
+
+            // Act
+            bool dnf = IsInDnf(proposition);
+
+            // Assert
+            dnf.Should().BeFalse("Because the expression does not match the pattern of an expression in disjunctive normal form.");
+        }
+
+        private bool IsInDnf(Proposition dnfRoot)
+        {
+            bool dnf = true;
+
+            Stack<Proposition> propositionStack = new Stack<Proposition>();
+            propositionStack.Push(dnfRoot);
+
+            Proposition currentProposition = dnfRoot;
+
+            while (propositionStack.Count > 0)
+            {
+                if (currentProposition.GetType() == typeof(Conjunction))
+                {
+                    Conjunction conjunction = (Conjunction)currentProposition;
+                    dnf = checkIfNotFollowedByDisjunction(conjunction);
+
+                    if (!dnf) // If it fails anywhere in the syntax tree we can early exit.
+                    {
+                        return dnf;
+                    }
+                }
+                else
+                {
+                    AddChildrenToStack(ref propositionStack, currentProposition);
+                }
+
+                currentProposition = propositionStack.Pop();
+            }
+
+            return dnf;
+        }
+
+        private bool checkIfNotFollowedByDisjunction(Conjunction conjunction)
+        {
+            Stack<Proposition> propositionStack = new Stack<Proposition>();
+            propositionStack.Push(conjunction);
+            Proposition currentProposition = conjunction;
+
+            while(propositionStack.Count > 0)
+            {
+                if (currentProposition.GetType() == typeof(Disjunction))
+                {
+                    return false;
+                }
+
+                AddChildrenToStack(ref propositionStack, currentProposition);
+                currentProposition = propositionStack.Pop();
+            }
+
+            return true;
+        }
+
+        private void AddChildrenToStack(ref Stack<Proposition> propositionStack, Proposition proposition)
+        {
+            if (proposition is UnaryConnective)
+            {
+                UnaryConnective unaryConnective = (UnaryConnective)proposition;
+                propositionStack.Push(unaryConnective.LeftSuccessor);
+            }
+
+            if (proposition is BinaryConnective)
+            {
+                BinaryConnective binaryConnective = (BinaryConnective)proposition;
+                propositionStack.Push(binaryConnective.RightSuccessor);
+            }
+        }
     }
+
 }

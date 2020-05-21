@@ -12,7 +12,25 @@ namespace LPPUnitTests
 
         private static Random rng;
 
-        public static BinaryConnective createBinaryConnectiveWithRandomSymbols(char binaryConnectiveSymbol)
+        public static UnaryConnective CreateUnaryConnectiveWithRandomSymbol(char unaryConnectiveSymbol)
+        {
+            UnaryConnective unaryConnective = null;
+
+            switch(unaryConnectiveSymbol)
+            {
+                case Negation.SYMBOL:
+                    unaryConnective = new Negation();
+                    break;
+                default:
+                    throw new ArgumentNullException("Could not convert symbol into a connective!");
+            }
+
+            unaryConnective.LeftSuccessor = GetRandomProposition();
+            
+            return unaryConnective;
+        }
+
+        public static BinaryConnective CreateBinaryConnectiveWithRandomSymbols(char binaryConnectiveSymbol)
         {
             BinaryConnective binaryConnective = null;
 
@@ -34,13 +52,13 @@ namespace LPPUnitTests
                     throw new ArgumentNullException("Could not convert symbol into a connective!");
             }
 
-            binaryConnective.LeftSuccessor = new Proposition(getRandomVariableLetter());
-            binaryConnective.RightSuccessor = new Proposition(getRandomVariableLetter());
+            binaryConnective.LeftSuccessor = GetRandomProposition();
+            binaryConnective.RightSuccessor = GetRandomProposition();
 
             return binaryConnective;
         }
 
-        public static char getRandomVariableLetter()
+        public static char GetRandomVariableLetter()
         {
             rng = new Random();
             int randomCapitalLetter = rng.Next(CAPITAL_A, CAPITAL_Z + 1);
@@ -48,7 +66,7 @@ namespace LPPUnitTests
             return (char)randomCapitalLetter;
         }
 
-        public static char getRandomConnective()
+        public static char GetRandomConnective()
         {
             rng = new Random();
             int randomIndexOfConnectivesString = rng.Next(0, Parser.CONNECTIVES.Length);
@@ -56,9 +74,9 @@ namespace LPPUnitTests
             return Parser.CONNECTIVES[randomIndexOfConnectivesString];
         }
 
-        public static Proposition getRandomProposition()
+        public static Proposition GetRandomProposition()
         {
-            return new Proposition(getRandomVariableLetter());
+            return new Proposition(GetRandomVariableLetter());
         }
     }
 }
