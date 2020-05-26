@@ -14,7 +14,7 @@ namespace LPPUnitTests
         public NegationTests()
         {
             negation = new Negation();
-            negation.LeftSuccessor = PropositionGenerator.getRandomPropositionSymbol();
+            negation.LeftSuccessor = PropositionGenerator.GetRandomPropositionSymbol();
         }
 
         [Theory]

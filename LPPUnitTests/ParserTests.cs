@@ -36,8 +36,8 @@ namespace LPPUnitTests
         public void Parse_SameSymbolCharacterInExpression_ShouldBeSameObject()
         {
             // Arrange
-            char randomSymbol = PropositionGenerator.getRandomVariableLetter();
-            char randomConnective = PropositionGenerator.getRandomConnective();
+            char randomSymbol = PropositionGenerator.GetRandomVariableLetter();
+            char randomConnective = PropositionGenerator.GetRandomConnective();
 
             string proposition = $"{randomConnective}({randomSymbol}, {randomSymbol})";
             int expectedNumberOfVariables = 1;
@@ -69,10 +69,5 @@ namespace LPPUnitTests
             // Assert
             expressionVariables.Count.Should().Be(expectedNumberOfVariables, "because there should be one proposition variable for each unique character");
         }
-
-        // For errors, some invalid strings.
-        // Empty string
-        // null input
-        // Open and closing parenthesis missmatch.
     }
 }

@@ -9,6 +9,7 @@ namespace LogicAndSetTheoryApplication
     public class Negation : UnaryConnective
     {
         public const char SYMBOL = '~';
+
         public Negation() : base(SYMBOL)
         { }
 

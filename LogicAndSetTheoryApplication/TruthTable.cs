@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class TruthTable
+    public class TruthTable
     {
         private Proposition propositionRoot;
         private List<Proposition> propositionVariablesSet;
-        public List<TruthTableRow> Rows { get; }
+        public List<ITruthTableRow> Rows { get; }
 
         public TruthTable(Proposition propositionRoot)
         {
             this.propositionRoot = propositionRoot;
+            // Transparent caching
             if (propositionRoot.UniqueVariableSet == null)
             {
                 propositionVariablesSet = propositionRoot.GetVariables();
@@ -23,22 +24,30 @@ namespace LogicAndSetTheoryApplication
             {
                 propositionVariablesSet = propositionRoot.UniqueVariableSet;
             }
+            // Place them in alphabetic order
             propositionVariablesSet.Sort();
-            Rows = new List<TruthTableRow>();
+            Rows = new List<ITruthTableRow>();
             CreateTruthTableRows();
         }
 
-        public TruthTable(Proposition propositionRoot, List<Proposition> propositionVariablesSet, List<TruthTableRow> simplifiedRows)
+        // Should probably be private and accessible via a FactoryMethod 
+        public TruthTable(Proposition propositionRoot, List<Proposition> propositionVariablesSet, List<ITruthTableRow> simplifiedRows)
         {
             this.propositionRoot = propositionRoot;
             this.propositionVariablesSet = propositionVariablesSet;
             Rows = simplifiedRows;
         }
 
+        public TruthTable(List<ITruthTableRow> rows)
+        {
+            Rows = rows;
+        }
+
+        // Is used by the hashcode calculator
         public List<int> GetConvertedResultColumn()
         {
             List<int> resultColumn = new List<int>();
-            foreach (TruthTableRow row in Rows)
+            foreach (ITruthTableRow row in Rows)
             {
                 resultColumn.Add(Convert.ToInt32(row.Result));
             }
@@ -55,7 +64,7 @@ namespace LogicAndSetTheoryApplication
             if (initialRow.Cells.Length == 0)
             {
                 // We had no variables and are dealing with one of the constants.
-                // return an emppty row with only a result value.
+                // return an empty row with only a result value.
                 initialRow.Calculate();
                 Rows.Add(initialRow);
             }
@@ -89,7 +98,7 @@ namespace LogicAndSetTheoryApplication
                 }
                 else
                 {
-                    // Not at the final variabel so we add the cell into the row and call the method again.
+                    // Not at the final variable so we add the cell into the row and call the method again.
                     row.Cells[index] = truthValue;
                     CreateRowsRecursively(index + 1, truthSet, row);
                 }
@@ -101,7 +110,7 @@ namespace LogicAndSetTheoryApplication
             return new TruthTable(propositionRoot, propositionVariablesSet, SimplifyRowsIteratively(Rows));
         }
 
-        private bool EqualSets(List<TruthTableRow> set1, List<TruthTableRow> set2)
+        private bool EqualSets(List<ITruthTableRow> set1, List<ITruthTableRow> set2)
         {
             // Different number of rows automatically indicates they are different.
             if (set1.Count != set2.Count)
@@ -122,9 +131,9 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        private List<TruthTableRow> SimplifyRowsIteratively(List<TruthTableRow> simplifiedRowSet)
+        private List<ITruthTableRow> SimplifyRowsIteratively(List<ITruthTableRow> simplifiedRowSet)
         {
-            List<TruthTableRow> oldSet;
+            List<ITruthTableRow> oldSet;
             // Create new test condition, testing if both sets are equal or not.
             do
             {
@@ -134,31 +143,9 @@ namespace LogicAndSetTheoryApplication
             return simplifiedRowSet;
         }
 
-        private List<TruthTableRow> SimplifyRowsRecursively(int rowCount, List<TruthTableRow> simplifiedRowSet)
+        private bool IsRowInSet(ITruthTableRow row, List<ITruthTableRow> rowSet)
         {
-            if (rowCount == simplifiedRowSet.Count)
-            {
-                return simplifiedRowSet;
-            }
-            else
-            {
-                int rowCountBeforeSimplification = simplifiedRowSet.Count;
-                simplifiedRowSet = SimplifiyRowSet(simplifiedRowSet);
-                return SimplifyRowsRecursively(rowCountBeforeSimplification, simplifiedRowSet);
-            }
-        }
-
-        private void PrintRows(List<TruthTableRow> rows)
-        {
-            foreach (TruthTableRow r in rows)
-            {
-                Console.WriteLine(r);
-            }
-        }
-
-        private bool IsRowInSet(TruthTableRow row, List<TruthTableRow> rowSet)
-        {
-            foreach(TruthTableRow r in rowSet)
+            foreach(ITruthTableRow r in rowSet)
             {
                 if (row.EqualTo(r))
                 {
@@ -168,9 +155,9 @@ namespace LogicAndSetTheoryApplication
             return false;
         }
 
-        private List<TruthTableRow> SimplifiyRowSet(List<TruthTableRow> rowSet)
+        private List<ITruthTableRow> SimplifiyRowSet(List<ITruthTableRow> rowSet)
         {
-            List<TruthTableRow> simplifiedSet = new List<TruthTableRow>();
+            List<ITruthTableRow> simplifiedSet = new List<ITruthTableRow>();
             for (int i = 0; i < rowSet.Count; i++)
             {
                 for (int j = 0; j < rowSet.Count; j++)
@@ -184,7 +171,7 @@ namespace LogicAndSetTheoryApplication
                             // Try to simplify the two by a method call.
                             // The method will return null if it was not succesfull
                             // or a new row if it was successful.
-                            TruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
+                            ITruthTableRow simplifiedRow = rowSet[i].Simplify(rowSet[j]);
                             if (simplifiedRow != null)
                             {
                                 // Only assign is simplified to row i since that's the one under inspection.
@@ -255,11 +242,6 @@ namespace LogicAndSetTheoryApplication
             {
                 return propositionList[0];
             }
-            foreach (TruthTableRow r in Rows)
-            {
-                Console.WriteLine(r);
-                Console.WriteLine(r.Result);
-            }
             
             return new False();
         }
@@ -270,7 +252,7 @@ namespace LogicAndSetTheoryApplication
             string result = "";
             for (int i = 0; i < propositionVariablesSet.Count; i++)
             { 
-                result += $"{propositionVariablesSet[i]}  ";
+                result += propositionVariablesSet[i] + TruthTableRow.GetPadding();
             }
             result += "v\n";
             return result;
@@ -281,7 +263,12 @@ namespace LogicAndSetTheoryApplication
             string result = TableHeader();
             for (int i = 0; i < Rows.Count; i++)
             {
-                result += $"{Rows[i]}\n";
+                result += Rows[i];
+
+                if (i < Rows.Count - 1)
+                {
+                    result += "\n";
+                }
             }
             return result;
         }

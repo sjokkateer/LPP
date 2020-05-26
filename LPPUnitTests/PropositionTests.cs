@@ -15,7 +15,7 @@ namespace LPPUnitTests
         public void Constructor_ConstructPropositionWithValidCharacterRepresentingVariable_ExpectedObjectToHoldCharacterAsVariable()
         {
             // Arrange
-            char randomValidVariableLetter = PropositionGenerator.getRandomVariableLetter();
+            char randomValidVariableLetter = PropositionGenerator.GetRandomVariableLetter();
 
             // Act
             Proposition proposition = new Proposition(randomValidVariableLetter);
@@ -67,7 +67,7 @@ namespace LPPUnitTests
         public void GetVariables_CallGetVariablesOnARandomValidProposition_ExpectedListReturnedWithTheVariableAsIndividualElement()
         {
             // Arrange 
-            Proposition validProposition = PropositionGenerator.getRandomPropositionSymbol();
+            Proposition validProposition = PropositionGenerator.GetRandomPropositionSymbol();
 
             int expectedNumberOfElements = 1;
 
@@ -96,7 +96,7 @@ namespace LPPUnitTests
         public void Nandify_CallToNandifyOnValidRandomVariable_ExpectedNandifiedPropositionReturned()
         {
             // Arrange
-            Proposition validProposition = PropositionGenerator.getRandomPropositionSymbol();
+            Proposition validProposition = PropositionGenerator.GetRandomPropositionSymbol();
 
             // Act
             Proposition nandifiedProposition = validProposition.Nandify();

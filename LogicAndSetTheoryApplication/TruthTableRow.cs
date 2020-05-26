@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class TruthTableRow
+    public class TruthTableRow: ITruthTableRow
     {
+        public const int PADDING = 2;
+
         private Proposition propositionRoot;
         private List<Proposition> uniqueVariables;
         public char[] Cells { get; set; }
         public bool Result { get; set; }
         public bool IsSimplified { get; set; }
-
-        public TruthTableRow(int numberOfVariables) : this(null, null, numberOfVariables)
-        { }
 
         public TruthTableRow(List<Proposition> uniqueVariables, int numberOfVariables) : this(null, uniqueVariables, numberOfVariables)
         { }
@@ -26,6 +25,10 @@ namespace LogicAndSetTheoryApplication
             this.uniqueVariables = uniqueVariables;
             Cells = new char[numberOfVariables];
             IsSimplified = false;
+        }
+
+        public TruthTableRow(Proposition propositionRoot) : this(propositionRoot, propositionRoot.GetVariables(), propositionRoot.GetVariables().Count)
+        {
         }
 
         /// <summary>
@@ -39,6 +42,8 @@ namespace LogicAndSetTheoryApplication
         {
             for (int i = 0; i < uniqueVariables.Count; i++)
             {
+                // Could be simplified to Cells[i] == '1';
+                // Lets do that refactor after we made tests
                 uniqueVariables[i].TruthValue = Cells[i] == '1' ? true : false ;
             }
             Result = propositionRoot.Calculate();
@@ -121,7 +126,7 @@ namespace LogicAndSetTheoryApplication
         }
         #endregion
 
-        public TruthTableRow Simplify(TruthTableRow otherRow)
+        public ITruthTableRow Simplify(ITruthTableRow otherRow)
         {
             // Instead of creating a memory intense copy, we create a very simple row object
             // that will only hold the truth values in each cell and a result.
@@ -150,8 +155,13 @@ namespace LogicAndSetTheoryApplication
             return simplifiedRow;
         }
 
-        public bool EqualTo(TruthTableRow other)
+        public bool EqualTo(ITruthTableRow other)
         {
+            if (Cells.Length != other.Cells.Length)
+            {
+                return false;
+            }
+
             for (int i = 0; i < Cells.Length; i++)
             {
                 if (Cells[i] != other.Cells[i])
@@ -159,6 +169,7 @@ namespace LogicAndSetTheoryApplication
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -167,9 +178,21 @@ namespace LogicAndSetTheoryApplication
             string result = "";
             for (int i = 0; i < Cells.Length; i++)
             {
-                result += $"{Cells[i]}  ";
+                result += Cells[i] + GetPadding();
             }
-            result += $"{Convert.ToInt32(Result)}";
+            result += Convert.ToInt32(Result);
+            return result;
+        }
+
+        public static String GetPadding()
+        {
+            String result = "";
+
+            for (int i = 0; i < PADDING; i++)
+            {
+                result += " ";
+            }
+
             return result;
         }
     }

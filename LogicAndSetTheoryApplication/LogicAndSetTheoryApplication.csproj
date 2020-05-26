@@ -54,6 +54,7 @@
     <Compile Include="Grapher.cs" />
     <Compile Include="HashCodeCalculator.cs" />
     <Compile Include="Implication.cs" />
+    <Compile Include="ITruthTableRow.cs" />
     <Compile Include="LogicForm.cs">
       <SubType>Form</SubType>
     </Compile>
