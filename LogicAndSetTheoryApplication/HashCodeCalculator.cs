@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    class HashCodeCalculator
+    public class HashCodeCalculator
     {
         private int hashBase;
         private List<int> convertedResultColumn;

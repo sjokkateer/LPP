@@ -67,6 +67,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proposition.cs" />
+    <Compile Include="PropositionGenerator.cs" />
     <Compile Include="True.cs" />
     <Compile Include="TruthTable.cs" />
     <Compile Include="TruthTableRow.cs" />
