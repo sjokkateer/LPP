@@ -41,5 +41,17 @@ namespace LPPUnitTests
             // Assert
             originalConenctive.Equals(copy).Should().BeFalse("because it is a copy.");
         }
+
+        public virtual void TestNandify()
+        {
+            // Arrange
+            Proposition validProposition = PropositionGenerator.CreateBinaryConnectiveWithRandomSymbols(symbol);
+
+            // Act
+            Proposition nandifiedProposition = validProposition.Nandify();
+
+            // Assert
+            NandChecker.hasNandStructure(new List<Proposition>() { nandifiedProposition });
+        }
     }
 }

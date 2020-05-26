@@ -48,6 +48,9 @@ namespace LPPUnitTests
                 case Implication.SYMBOL:
                     binaryConnective = new Implication();
                     break;
+                case Nand.SYMBOL:
+                    binaryConnective = new Nand();
+                    break;
                 default:
                     throw new ArgumentNullException("Could not convert symbol into a connective!");
             }

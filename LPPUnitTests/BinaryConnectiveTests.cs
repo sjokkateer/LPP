@@ -16,6 +16,7 @@ namespace LPPUnitTests
         public void ToString_LeftSuccessorNotSet_ExpectedNullReferenceException()
         {
             // Arrange
+            BINARY_CONNECTIVE.LeftSuccessor = null;
             BINARY_CONNECTIVE.RightSuccessor = SUCCESSOR;
 
             // Act
@@ -29,6 +30,7 @@ namespace LPPUnitTests
         public void ToString_RightSuccessorNotSet_ExpectedNullReferenceException()
         {
             // Arrange
+            BINARY_CONNECTIVE.RightSuccessor = null;
             BINARY_CONNECTIVE.LeftSuccessor = SUCCESSOR;
 
             // Act

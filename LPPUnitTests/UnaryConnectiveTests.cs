@@ -52,6 +52,8 @@ namespace LPPUnitTests
         public void ToString_UnaryConnectiveWithNoSuccessorSet_ExpectedNullReferenceException()
         {
             // Arrange
+            UNARY_CONNECTIVE.LeftSuccessor = null;
+
             // Act
             Action act = () => UNARY_CONNECTIVE.ToString();
 

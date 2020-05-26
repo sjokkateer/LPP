@@ -1,4 +1,5 @@
 ﻿using LogicAndSetTheoryApplication;
+using System.Collections.Generic;
 using Xunit;
 
 namespace LPPUnitTests
@@ -34,6 +35,12 @@ namespace LPPUnitTests
             Disjunction disjunction = generateDisjunction();
 
             Copy_CopyingBinaryConnectiveWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective(disjunction);
+        }
+
+        [Fact]
+        public void Nandify_CallToNandifyOnDisjunctionWithTwoPropositionChildren_ExpectedPropositionWithNandStructure()
+        {
+            TestNandify();
         }
     }
 }

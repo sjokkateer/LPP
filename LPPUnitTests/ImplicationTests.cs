@@ -39,5 +39,11 @@ namespace LPPUnitTests
 
             Copy_CopyingBinaryConnectiveWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective(implication);
         }
+
+        [Fact]
+        public void Nandify_CallToNandifyOnImplicationWithTwoPropositionChildren_ExpectedPropositionWithNandStructure()
+        {
+            TestNandify();
+        }
     }
 }

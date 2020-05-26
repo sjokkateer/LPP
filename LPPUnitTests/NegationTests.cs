@@ -51,29 +51,23 @@ namespace LPPUnitTests
             // Arrange
             // Act
             Proposition nandifiedNegation = negation.Nandify();
-            Nand nand = (Nand)nandifiedNegation;
 
             // Assert
-            nandifiedNegation.Should().BeOfType<Nand>("because the expression is nandified");
-
-            // This is a fairly fragile part in case someone were to udpate the tests to more complex test cases?
-            nand.LeftSuccessor.Should().Be(negation.LeftSuccessor, "because terminal nodes will be equal to the symbol");
-            nand.RightSuccessor.Should().Be(negation.LeftSuccessor, "because terminal nodes will be equal to the symbol");
+            NandChecker.hasNandStructure(new List<Proposition>() { nandifiedNegation });
         }
 
         [Fact]
         public void Nandify_CallToNandifyWithConnectiveAsSuccessor_ShouldReturnNandRootWithNandSuccessors()
         {
+            // Arrange
             Negation anotherNegation = new Negation();
             anotherNegation.LeftSuccessor = negation;
 
+            // Act
             Proposition nandifiedNegationWithNestedNegation = anotherNegation.Nandify();
-            Nand nand = (Nand)nandifiedNegationWithNestedNegation;
 
-            nandifiedNegationWithNestedNegation.Should().BeOfType<Nand>("because the expression is nandified");
-
-            nand.LeftSuccessor.Should().BeOfType<Nand>("because the inner expression is nandified");
-            nand.RightSuccessor.Should().BeOfType<Nand>("because the inner expression is nandified");
+            // Assert
+            NandChecker.hasNandStructure(new List<Proposition>() { nandifiedNegationWithNestedNegation });
         }
     }
 }

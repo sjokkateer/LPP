@@ -9,6 +9,7 @@ namespace LogicAndSetTheoryApplication
     public class Nand : BinaryConnective
     {
         public const char SYMBOL = '%';
+
         public Nand() : base(SYMBOL)
         { }
 
@@ -37,6 +38,7 @@ namespace LogicAndSetTheoryApplication
             {
                 RightSuccessor = RightSuccessor.Nandify();
             }
+            
             return this;
         }
     }

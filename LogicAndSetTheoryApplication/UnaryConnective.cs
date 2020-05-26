@@ -29,6 +29,7 @@ namespace LogicAndSetTheoryApplication
             }
 
             string result = Convert.ToString(Data);
+
             if (!(LeftSuccessor is BinaryConnective))
             {
                 result += "(";
@@ -39,6 +40,7 @@ namespace LogicAndSetTheoryApplication
             {
                 result += LeftSuccessor;
             }
+
             return result;
         }
 

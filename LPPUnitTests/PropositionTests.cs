@@ -119,60 +119,9 @@ namespace LPPUnitTests
             Proposition nandifiedProposition = validProposition.Nandify();
 
             // Assert
-            // The leaves are 'variable symbols' and the non terminal nodes are nand connectives.
-            List<Proposition> queue = new List<Proposition>() { nandifiedProposition };
-            Proposition current;
-
-            // BFS Traversal over the proposition tree
-            do
-            {
-                current = pop(queue);
-
-                if (current is BinaryConnective) 
-                {
-                    // Assert non terminal node is a Nand connective.
-                    current.Should().BeOfType<Nand>("because the proposition is being nandified");
-                    addChildren((BinaryConnective)current, queue);
-                }
-                else
-                {
-                    // Assert that terminal nodes are the proposition variable.
-                    current.Should().BeEquivalentTo(validProposition, "because the proposition variable is a terminal node");
-                }
-
-            } while (queue.Count > 0);
+            NandChecker.hasNandStructure(new List<Proposition>() { nandifiedProposition });
         }
-
-        private Proposition pop(List<Proposition> queue)
-        {
-            int head = 0;
-            Proposition firstSymbol = null;
-
-            if (queue.Count > 0)
-            {
-                firstSymbol = queue[head];
-                queue.RemoveAt(head);
-            }
-
-            return firstSymbol;
-        }
-
-        private void addChildren(BinaryConnective binaryConnective, List<Proposition> queue)
-        {
-            Proposition leftSuccessor = binaryConnective.LeftSuccessor;
-            Proposition rightSuccessor = binaryConnective.RightSuccessor;
-
-            if (leftSuccessor != null)
-            {
-                queue.Add(leftSuccessor);
-            }
-
-            if (rightSuccessor != null)
-            {
-                queue.Add(rightSuccessor);
-            }
-        }
-
+    
         [Fact]
         public void CompareTo_TwoPropositionsOfWhichOtherIsNull_ExpectedArgumentNullExceptionThrown()
         {

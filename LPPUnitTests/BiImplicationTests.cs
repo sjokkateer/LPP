@@ -41,5 +41,11 @@ namespace LPPUnitTests
 
             Copy_CopyingBinaryConnectiveWithTwoRandomVariableSymbols_ExpectedDifferentReferencesForConnective(biImplication);
         }
+
+        [Fact]
+        public void Nandify_CallToNandifyOnBiImplicationWithTwoPropositionChildren_ExpectedPropositionWithNandStructure()
+        {
+            TestNandify();
+        }
     }
 }
