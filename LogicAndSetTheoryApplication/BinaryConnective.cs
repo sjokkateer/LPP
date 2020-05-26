@@ -41,12 +41,13 @@ namespace LogicAndSetTheoryApplication
                         Union(leftChildVariables.Intersect(rightChildVariables)).ToList(); // { A } Intersection { B }, resulting in a set containing all unique elements (unordered though)
         }
 
-        // Otherwise this will be very tightly coupled to tests
-        // and if this would ever change, the test would also 
-        // have to change in that exact manner.
-        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
+            if (LeftSuccessor == null || RightSuccessor == null)
+            {
+                throw new NullReferenceException("Both left and right successor must not be null!");
+            }
+
             string result = "(";
             result += LeftSuccessor;
             result += $" {Data} ";
@@ -55,7 +56,6 @@ namespace LogicAndSetTheoryApplication
             return result;
         }
 
-        // Similarly for nodelabels imo.
         [ExcludeFromCodeCoverage]
         public override string NodeLabel()
         {

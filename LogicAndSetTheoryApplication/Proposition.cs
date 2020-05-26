@@ -36,7 +36,6 @@ namespace LogicAndSetTheoryApplication
             return TruthValue;
         }
 
-        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return Data.ToString();

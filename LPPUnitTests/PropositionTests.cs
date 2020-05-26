@@ -11,6 +11,23 @@ namespace LPPUnitTests
         private static Proposition VALID_PROPOSITION = new Proposition('A');
         private static int SAME_POSITION = 0;
 
+        [Theory]
+        [InlineData('A', "A")]
+        [InlineData('L', "L")]
+        [InlineData('Q', "Q")]
+        [InlineData('X', "X")]
+        public void ToString_ValidPropositionWithSpecificSymbol_ExpectedDataAsString(char symbol, string expectedToString)
+        {
+            // Arrange
+            Proposition proposition = new Proposition(symbol);
+
+            // Act
+            string actualToString = proposition.ToString();
+
+            // Assert
+            actualToString.Should().Be(expectedToString, "Because for a proposition only the symbol itself is returned.");
+        }
+
         [Fact]
         public void Constructor_ConstructPropositionWithValidCharacterRepresentingVariable_ExpectedObjectToHoldCharacterAsVariable()
         {

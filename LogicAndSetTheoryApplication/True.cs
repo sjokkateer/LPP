@@ -9,6 +9,7 @@ namespace LogicAndSetTheoryApplication
     public class True : Proposition
     {
         public const char SYMBOL = '1';
+
         public True() : base(SYMBOL)
         {
             TruthValue = true;

@@ -9,6 +9,7 @@ namespace LogicAndSetTheoryApplication
     public class Disjunction : BinaryConnective
     {
         public const char SYMBOL = '|';
+
         public Disjunction() : base(SYMBOL)
         { }
 

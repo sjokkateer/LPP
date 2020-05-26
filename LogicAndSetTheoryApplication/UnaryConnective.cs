@@ -21,9 +21,13 @@ namespace LogicAndSetTheoryApplication
             return LeftSuccessor.GetVariables().Distinct().ToList();
         }
 
-        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
+            if (LeftSuccessor == null)
+            {
+                throw new NullReferenceException("The left successor should not be null!");
+            }
+
             string result = Convert.ToString(Data);
             if (!(LeftSuccessor is BinaryConnective))
             {
