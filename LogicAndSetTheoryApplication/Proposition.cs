@@ -47,6 +47,16 @@ namespace LogicAndSetTheoryApplication
             return $"\tnode{NodeNumber} [ label = \"{Data}\" ]\n";
         }
 
+        public override bool Equals(object obj)
+        {
+            // We dont want to compare by reference
+            // only by connectives and variables.
+            if (GetType() != obj.GetType()) return false;
+
+            Proposition proposition = (Proposition)obj;
+            return Data.Equals(proposition.Data);
+        }
+
         public int CompareTo(Proposition other)
         {
             if (other == null)

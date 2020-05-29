@@ -76,7 +76,7 @@ namespace LogicAndSetTheoryApplication
 
             if (negatedProposition != null)
             {
-                return negatedProposition.LeftSuccessor.CompareTo(targetLiteral) == 0;
+                return negatedProposition.LeftSuccessor.Equals(targetLiteral);
             }
 
             return false;
@@ -151,7 +151,7 @@ namespace LogicAndSetTheoryApplication
 
             foreach (Proposition p in Propositions)
             {
-                if (p.CompareTo(proposition) != 0)
+                if (!p.Equals(proposition))
                 {
                     propositions.Add(p);
                 }
@@ -231,7 +231,7 @@ namespace LogicAndSetTheoryApplication
 
             foreach (Proposition p in Propositions)
             {
-                if (p.CompareTo(proposition) != 0)
+                if (!p.Equals(proposition))
                 {
                     leftChildPropositions.Add(p);
                     rightChildPropositions.Add(p);
@@ -361,7 +361,7 @@ namespace LogicAndSetTheoryApplication
 
             foreach (Proposition p in Propositions)
             {
-                if (p.CompareTo(proposition) != 0)
+                if (!p.Equals(proposition))
                 {
                     childPropositions.Add(p);
                 }

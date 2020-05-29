@@ -21,6 +21,16 @@ namespace LogicAndSetTheoryApplication
             return LeftSuccessor.GetVariables().Distinct().ToList();
         }
 
+        public override bool Equals(object obj)
+        {
+            // Means our data is the same or the obj reference
+            if (!base.Equals(obj)) return false;
+            if (GetType() != obj.GetType()) return false;
+
+            UnaryConnective unaryConnective = (UnaryConnective)obj;
+            return unaryConnective.LeftSuccessor.Equals(LeftSuccessor);
+        }
+
         public override string ToString()
         {
             if (LeftSuccessor == null)

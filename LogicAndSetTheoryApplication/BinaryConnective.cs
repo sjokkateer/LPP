@@ -41,6 +41,15 @@ namespace LogicAndSetTheoryApplication
                         Union(leftChildVariables.Intersect(rightChildVariables)).ToList(); // { A } Intersection { B }, resulting in a set containing all unique elements (unordered though)
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!base.Equals(obj)) return false;
+            if (GetType() != obj.GetType()) return false;
+
+            BinaryConnective binaryConnective = (BinaryConnective)obj;
+            return binaryConnective.RightSuccessor.Equals(RightSuccessor);
+        }
+
         public override string ToString()
         {
             if (LeftSuccessor == null || RightSuccessor == null)
