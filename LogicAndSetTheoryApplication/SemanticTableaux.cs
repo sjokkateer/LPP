@@ -9,7 +9,7 @@ namespace LogicAndSetTheoryApplication
     public class SemanticTableaux
     {
         public Proposition Proposition { get; }
-        private SemanticTableauxElement semanticTableauxElement;
+        public SemanticTableauxElement Head { get; }
 
         public SemanticTableaux(Proposition proposition)
         {
@@ -28,12 +28,12 @@ namespace LogicAndSetTheoryApplication
                 negation
             };
 
-            semanticTableauxElement = new SemanticTableauxElement(propositions);
+            Head = new SemanticTableauxElement(propositions);
         }
 
         public bool IsClosed()
         {
-            return semanticTableauxElement.IsClosed();
+            return Head.IsClosed();
         }
     }
 }

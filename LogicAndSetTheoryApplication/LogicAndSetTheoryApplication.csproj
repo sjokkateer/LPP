@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDotFile.cs" />
     <Compile Include="SemanticTableaux.cs" />
     <Compile Include="SemanticTableauxElement.cs" />
     <Compile Include="BiImplication.cs" />

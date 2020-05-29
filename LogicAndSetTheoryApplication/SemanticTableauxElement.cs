@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    public class SemanticTableauxElement
+    public class SemanticTableauxElement: IDotFile
     {
+        public int NodeNumber { get; set; }
+
         public HashSet<Proposition> Propositions { get; }
         public SemanticTableauxElement LeftChild { get; private set; }
         public SemanticTableauxElement RightChild { get; private set; }
@@ -403,6 +406,34 @@ namespace LogicAndSetTheoryApplication
             }
 
             LeftChild = new SemanticTableauxElement(childPropositions);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public string NodeLabel()
+        {
+            string label = $"node{NodeNumber}[ label = \"";
+
+            foreach(Proposition proposition in Propositions)
+            {
+                label += proposition + "\n";
+            }
+
+            label.Trim('\n');
+            label += "\"]\n";
+
+            if (LeftChild != null)
+            {
+                label += $"node{NodeNumber} -- node{LeftChild.NodeNumber}\n";
+                label += LeftChild.NodeLabel();
+            }
+
+            if (RightChild != null)
+            {
+                label += $"node{NodeNumber} -- node{RightChild.NodeNumber}\n";
+                label += RightChild.NodeLabel();
+            }
+
+            return label;
         }
     }
 }

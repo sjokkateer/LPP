@@ -16,6 +16,41 @@ namespace LogicAndSetTheoryApplication
             CreateGraph(fileName, propositionRoot.NodeLabel());
         }
 
+        public static void CreateGraphOfFunction(SemanticTableaux semanticTableaux, string fileName)
+        {
+            NumberElements(semanticTableaux);
+            CreateGraph(fileName, semanticTableaux.Head.NodeLabel(), "rectangle");
+        }
+
+        private static void NumberElements(SemanticTableaux semanticTableaux)
+        {
+            List<SemanticTableauxElement> queue = new List<SemanticTableauxElement>();
+
+            queue.Add(semanticTableaux.Head);
+            int nodeCounter = 1;
+            SemanticTableauxElement currentElement = null;
+
+            while (queue.Count > 0)
+            {
+                currentElement = queue[0];
+                queue.RemoveAt(0);
+
+                currentElement.NodeNumber = nodeCounter;
+                
+                if (currentElement.LeftChild != null)
+                {
+                    queue.Add(currentElement.LeftChild);
+                }
+
+                if (currentElement.RightChild != null)
+                {
+                    queue.Add(currentElement.RightChild);
+                }
+
+                nodeCounter++;
+            }
+        }
+
         private static void NumberOperands(Proposition expressionRoot)
         {
             List<Proposition> queue = new List<Proposition>();
@@ -50,9 +85,9 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        private static void CreateGraph(string dotFileName, string fileContent)
+        private static void CreateGraph(string dotFileName, string fileContent, string shape = "")
         {
-            CreateDotFile(dotFileName, fileContent);
+            CreateDotFile(dotFileName, fileContent, shape);
 
             Process dot = new Process();
             dot.StartInfo.FileName = "dot.exe";
@@ -61,7 +96,7 @@ namespace LogicAndSetTheoryApplication
             dot.WaitForExit();
         }
 
-        private static void CreateDotFile(string fileName, string fileContent)
+        private static void CreateDotFile(string fileName, string fileContent, string shape)
         {
             FileStream fs = new FileStream($"{fileName}.dot", FileMode.Create, FileAccess.Write);
             StreamWriter sw = new StreamWriter(fs);
@@ -70,7 +105,16 @@ namespace LogicAndSetTheoryApplication
                 if (sw != null)
                 {
                     sw.WriteLine("graph logic {");
-                    sw.WriteLine("\tnode [ fontname = \"Arial\" ]");
+                    
+                    if (shape == String.Empty)
+                    { 
+                        sw.WriteLine("\tnode [ fontname = \"Arial\" ]");
+                    }
+                    else
+                    {
+                        sw.WriteLine($"\tnode [ fontname = \"Arial\", shape={shape}]");
+                    }
+
                     sw.Write(fileContent);
                     sw.WriteLine("}");
                     sw.Close();

@@ -20,11 +20,16 @@ namespace LogicAndSetTheoryApplication
         private List<string> hashList;
         private List<Conjunction> missingVariableList;
 
+        private bool graphOfTableaux;
+        private SemanticTableaux semanticTableaux;
+
         public LogicForm()
         {
             InitializeComponent();
             hashList = new List<string>();
             missingVariableList = new List<Conjunction>();
+            
+            graphOfTableaux = false;
         }
 
         private void AddHashCodeInfo(Proposition proposition, string typeOfProposition, int hashBase, TruthTable tt = null)
@@ -41,6 +46,8 @@ namespace LogicAndSetTheoryApplication
 
         private void parseBtn_Click(object sender, EventArgs e)
         {
+            graphOfTableaux = false;
+
             ResetHashRelatedItems();
             // Reset the missing variable list.
             missingVariableList = new List<Conjunction>();
@@ -312,11 +319,24 @@ namespace LogicAndSetTheoryApplication
             Process.Start($"{dotFileName}.png");
         }
 
+        private void CreateGraphOfExpression(SemanticTableaux semanticTableaux, string dotFileName)
+        {
+            Grapher.CreateGraphOfFunction(semanticTableaux, dotFileName);
+            Process.Start($"{dotFileName}.png");
+        }
+
         private void viewTreeBtn_Click(object sender, EventArgs e)
         {
             if (propositionRoot != null)
             {
-                CreateGraphOfExpression(propositionRoot.Copy(), "Proposition");
+                if (!graphOfTableaux)
+                {
+                    CreateGraphOfExpression(propositionRoot.Copy(), "Proposition");
+                }
+                else
+                {
+                    CreateGraphOfExpression(semanticTableaux, "Tableaux");
+                }
             }
         }
 
@@ -327,8 +347,21 @@ namespace LogicAndSetTheoryApplication
             propositionRoot = propositionParser.Parse();
             infixTbx.Text = propositionRoot.ToString();
 
-            // If it is a tautology color the button green, if not red.
+            semanticTableaux = new SemanticTableaux(propositionRoot);
+            bool isTautology = semanticTableaux.IsClosed();
 
+            if (isTautology)
+            {
+                semanticTableauxBtn.BackColor = Color.LightGreen;
+                semanticTableauxBtn.ForeColor = Color.Black;
+            }
+            else
+            {
+                semanticTableauxBtn.BackColor = Color.Red;
+                semanticTableauxBtn.ForeColor = Color.White;
+            }
+
+            graphOfTableaux = true;
         }
     }
 }
