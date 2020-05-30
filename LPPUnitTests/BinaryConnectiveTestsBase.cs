@@ -37,9 +37,11 @@ namespace LPPUnitTests
         {
             // Act
             Proposition copy = originalConenctive.Copy();
+            bool sameReference = originalConenctive == copy;
 
             // Assert
-            originalConenctive.Equals(copy).Should().BeFalse("because it is a copy.");
+            originalConenctive.Equals(copy).Should().BeTrue("Because all the data should be equal");
+            sameReference.Should().BeFalse("Because a copy should be a different object reference");
         }
 
         public virtual void TestNandify()

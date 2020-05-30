@@ -6,7 +6,7 @@ namespace LogicAndSetTheoryApplication
 {
     public class Parser
     {
-        public const string CONNECTIVES = "~>=&|";
+        public const string CONNECTIVES = "~>=&|%";
         private const string VARIABLES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const string CONSTANTS = "01";
 
@@ -105,20 +105,23 @@ namespace LogicAndSetTheoryApplication
             // 'GetCorrespondingConnective'
             switch (connective)
             {
-                case '~':
+                case Negation.SYMBOL:
                     result = new Negation();
                     break;
-                case '>':
+                case Implication.SYMBOL:
                     result = new Implication();
                     break;
-                case '=':
+                case BiImplication.SYMBOL:
                     result = new BiImplication();
                     break;
-                case '&':
+                case Conjunction.SYMBOL:
                     result = new Conjunction();
                     break;
-                case '|':
+                case Disjunction.SYMBOL:
                     result = new Disjunction();
+                    break;
+                case Nand.SYMBOL:
+                    result = new Nand();
                     break;
             }
 

@@ -38,10 +38,11 @@ namespace LPPUnitTests
             // Arrange
             // Act
             Proposition copy = negation.Copy();
+            bool sameReference = negation == copy;
 
             // Assert
-            copy.Equals(negation).Should().BeFalse("because a copy has a different object reference");
-            copy.Should().BeOfType<Negation>("because it is a copy of a negation object");
+            sameReference.Should().BeFalse("Because the copy should be a different object reference");
+            copy.Equals(negation).Should().BeTrue("Because the copy should have the same data");
         }
 
         [Fact]
