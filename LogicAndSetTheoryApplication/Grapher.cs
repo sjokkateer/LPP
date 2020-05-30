@@ -10,13 +10,13 @@ namespace LogicAndSetTheoryApplication
 {
     static class Grapher
     {
-        public static void CreateGraphOfFunction(Proposition propositionRoot, string fileName)
+        public static void CreateGraphOfProposition(Proposition propositionRoot, string fileName)
         {
             NumberOperands(propositionRoot);
             CreateGraph(fileName, propositionRoot.NodeLabel());
         }
 
-        public static void CreateGraphOfFunction(SemanticTableaux semanticTableaux, string fileName)
+        public static void CreateGraphOfTableaux(SemanticTableaux semanticTableaux, string fileName)
         {
             NumberElements(semanticTableaux);
             CreateGraph(fileName, semanticTableaux.Head.NodeLabel(), "rectangle");

@@ -18,18 +18,31 @@ namespace LogicAndSetTheoryApplication
         private List<char> connectives;
         private List<Proposition> symbols;
 
-        // Proposition has to be given in pre-fix notation.
-        public Parser(string proposition)
-        {
-            this.proposition = proposition;
+        public Parser()
+        { }
 
+        private void Reset()
+        {
             connectives = new List<char>();
             symbols = new List<Proposition>();
             alreadyProcessedVariables = new List<Proposition>();
         }
 
+        public Parser(string proposition): this()
+        {
+            this.proposition = proposition;
+        }
+
+        public Proposition Parse(string propositionExpression)
+        {
+            proposition = propositionExpression;
+            
+            return Parse();
+        }
+
         public Proposition Parse()
         {
+            Reset();
             ParseHelper(proposition);
 
             return symbols[0];

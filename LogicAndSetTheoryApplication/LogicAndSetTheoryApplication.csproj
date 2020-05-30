@@ -47,7 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDotFile.cs" />
+    <Compile Include="LogicApp.cs" />
+    <Compile Include="LogicAppBase.cs" />
     <Compile Include="SemanticTableaux.cs" />
+    <Compile Include="SemanticTableauxApp.cs" />
     <Compile Include="SemanticTableauxElement.cs" />
     <Compile Include="BiImplication.cs" />
     <Compile Include="BinaryConnective.cs" />
