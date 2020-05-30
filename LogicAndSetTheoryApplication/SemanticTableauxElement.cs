@@ -419,7 +419,14 @@ namespace LogicAndSetTheoryApplication
             }
 
             label.Trim('\n');
-            label += "\"]\n";
+            label += "\"";
+
+            if (IsClosed() && LeftChild == null && RightChild == null)
+            {
+                label += ", color = red";
+            }
+
+            label += " ]\n";
 
             if (LeftChild != null)
             {

@@ -42,7 +42,23 @@ namespace LPPUnitTests
         [InlineData("|(P,~(&(P, Q)))")]
         [InlineData("&(|(A, ~(A)), |(B, ~(B)))")]
         [InlineData(">(&(&(|(P, Q), >(P, R)), >(Q, R)), R)")] // Case distinction
-        public void IsClosed_SimpleTautologyGiven_ShouldResultInTrue(string tautologyExpression)
+        [InlineData(">(~(Q), ~(&(P, Q)))")]
+        [InlineData(">(~(&(P, Q)), >(P, ~(Q)))")]
+        [InlineData(">(&(P, ~(Q)), ~(>(P, Q)))")]
+        [InlineData(">(>(P, ~(Q)), >(>(P, Q), ~(P)))")]
+        [InlineData(">(>(>(P, Q), ~(P)), >(P, ~(Q)))")]
+        [InlineData(">(&(P, Q), >(~(P), R))")]
+        [InlineData(">(~(P), ~(>(>(P, Q), P)))")]
+        [InlineData(">(>(~(P), P), P)")]
+        [InlineData(">(~(>(P, Q)), P)")]
+        [InlineData("|(>(P, Q), P)")]
+        [InlineData("|(>(P, Q), ~(Q))")]
+        [InlineData(">(=(P, Q), |(&(P, Q), &(~(P), ~(Q))))")]
+        [InlineData(">(=(P, Q), =(~(P), ~(Q)))")]
+        [InlineData("=(&(P, >(Q, R)), >(>(P, Q), &(P, R)))")]
+        [InlineData(">(|(P, Q), |(P, &(~(P), Q)))")]
+        [InlineData(">(>(P, Q), |(Q, >(P, R)))")]
+        public void IsClosed_TautologyGiven_ShouldResultInTrue(string tautologyExpression)
         {
             // Arrange
             parser = new Parser(tautologyExpression);
@@ -59,7 +75,6 @@ namespace LPPUnitTests
 
         [Theory]
         [InlineData("&(P, ~(P))")]
-
         public void IsClosed_ContradictionGiven_ShouldResultInFalse(string contradictionExpression)
         {
             // Arrange
@@ -72,12 +87,22 @@ namespace LPPUnitTests
             bool closed = semanticTableaux.IsClosed();
 
             // Assert
+            // Even though that is not always the case, since contingencies can also open in all branches.
+            // Contradictions could then still be tested by evaluating all truth values and check if the result column is 0s
             closed.Should().BeFalse("Because the given proposition is a contradiction and therefore the tableaux should not be closed, and ALL branches should be open.");
         }
 
         [Theory]
         [InlineData("~(>(|(P, ~(P)), P)")]
         [InlineData("&(&(>(A, A), |(B, ~(B))), ~(>(|(C, >(C, D)), |(&(A, C), D))))")]
+        [InlineData("|(A, B)")]
+        [InlineData("=(A, B)")]
+        [InlineData(">(A, B)")]
+        [InlineData("&(A, B)")]
+        [InlineData("~(A)")]
+        [InlineData("%(A, B)")]
+        [InlineData(">(>(P, Q), |(P, >(Q, R)))")]
+
         public void IsClosed_ContingentPropositionGiven_ShouldResultInFalse(string contingencyExpression)
         {
             // Arrange
@@ -90,7 +115,7 @@ namespace LPPUnitTests
             bool closed = semanticTableaux.IsClosed();
 
             // Assert
-            closed.Should().BeFalse("Because the given proposition is a contingency and therefore the tableaux should have some branches closed and some open.");
+            closed.Should().BeFalse("Because the given proposition is a contingency and therefore the tableaux could have some branches closed and some open.");
         }
     }
 }
