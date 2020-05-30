@@ -11,6 +11,25 @@ namespace LogicAndSetTheoryApplication
 
         private static Random rng;
 
+        public static Proposition CreateTautologyFromProposition(Proposition variable)
+        {
+            Disjunction tautology = new Disjunction();
+            tautology.LeftSuccessor = variable; // A
+            Negation negatedVariable = new Negation();
+            negatedVariable.LeftSuccessor = variable;
+            tautology.RightSuccessor = negatedVariable; // A | ~(A) == 1
+            
+            return tautology;
+        }
+
+        public static Proposition CreateContradictionFromProposition(Proposition variable)
+        {
+            Negation negation = new Negation();
+            negation.LeftSuccessor = CreateTautologyFromProposition(variable);
+            
+            return negation;
+        }
+
         public static UnaryConnective CreateUnaryConnectiveWithRandomSymbol(char unaryConnectiveSymbol)
         {
             UnaryConnective unaryConnective = null;

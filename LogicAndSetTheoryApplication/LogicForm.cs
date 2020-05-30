@@ -38,6 +38,7 @@ namespace LogicAndSetTheoryApplication
             {
                 tt = new TruthTable(proposition);
             }
+
             HashCodeCalculator hashCodeCalculator = new HashCodeCalculator(tt.GetConvertedResultColumn(), hashBase);
             hashList.Add(hashCodeCalculator.HashCode);
             hashesListBox.Items.Add($"{typeOfProposition}: ");
@@ -80,7 +81,7 @@ namespace LogicAndSetTheoryApplication
             {
                 // This should mean we only have 1 result value in the result column, a 0 for DNF
                 // Create a contradiction
-                Proposition tautologyOrContradiction = CreateContradiction(uniqueVariablesSet[0]);
+                Proposition tautologyOrContradiction = PropositionGenerator.CreateContradictionFromProposition(uniqueVariablesSet[0]);
                 tautologyOrContradiction.UniqueVariableSet = uniqueVariablesSet;
                 disjunctiveProposition = tautologyOrContradiction;
             }
@@ -180,12 +181,12 @@ namespace LogicAndSetTheoryApplication
                 if (tautOrContra == 1)
                 {
                     // Create a tautology but it should hold the same variable set as the original proposition.
-                    tautologyOrContradiction = CreateTautology(uniqueVariablesSet[0]);
+                    tautologyOrContradiction = PropositionGenerator.CreateTautologyFromProposition(uniqueVariablesSet[0]);
                 }
                 else
                 {
                     // Create a contradiction
-                    tautologyOrContradiction = CreateContradiction(uniqueVariablesSet[0]);
+                    tautologyOrContradiction = PropositionGenerator.CreateContradictionFromProposition(uniqueVariablesSet[0]);
                 }
                 tautologyOrContradiction.UniqueVariableSet = uniqueVariablesSet;
                 simplifiedDisjunctiveProposition = tautologyOrContradiction;
@@ -210,12 +211,12 @@ namespace LogicAndSetTheoryApplication
                     if (tautOrContra == 1)
                     {
                         // Create a tautology but it should hold the same variable set as the original proposition.
-                        tautologyOrContradiction = CreateTautology(uniqueVariablesSet[0]);
+                        tautologyOrContradiction = PropositionGenerator.CreateTautologyFromProposition(uniqueVariablesSet[0]);
                     }
                     else
                     {
                         // Create a contradiction
-                        tautologyOrContradiction = CreateContradiction(uniqueVariablesSet[0]);
+                        tautologyOrContradiction = PropositionGenerator.CreateContradictionFromProposition(uniqueVariablesSet[0]);
                     }
                     tautologyOrContradiction.UniqueVariableSet = uniqueVariablesSet;
                     AddHashCodeInfo(tautologyOrContradiction, "Simplified NAND Normal", 16);
@@ -241,7 +242,6 @@ namespace LogicAndSetTheoryApplication
                 nandifiedTbx.Text = string.Empty;
             }
 
-            Console.WriteLine(hashList.Count);
             // Test if all hashcodes are equal.
             if (hashCodesMatched(hashList, hashList.Count - 1))
             {
@@ -279,24 +279,6 @@ namespace LogicAndSetTheoryApplication
                     truthTableLbx.Items.Add(row);
                 }
             }
-        }
-
-        private Proposition CreateTautology(Proposition variable)
-        {
-            Conjunction conjunction = new Conjunction();
-            Disjunction tautology = new Disjunction();
-            tautology.LeftSuccessor = variable; // A
-            Negation negatedVariable = new Negation();
-            negatedVariable.LeftSuccessor = variable;
-            tautology.RightSuccessor = negatedVariable; // A | ~(A) == 1
-            return tautology;
-        }
-
-        private Proposition CreateContradiction(Proposition variable)
-        {
-            Negation negation = new Negation();
-            negation.LeftSuccessor = CreateTautology(variable);
-            return negation;
         }
 
         private void ResetHashRelatedItems()
