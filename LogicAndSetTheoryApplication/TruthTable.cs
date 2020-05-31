@@ -219,31 +219,9 @@ namespace LogicAndSetTheoryApplication
 
         public Proposition GetSimplifiedExpression()
         {
-            List<Proposition> propositionList = new List<Proposition>();
-
-            foreach (TruthTableRow row in Rows)
-            {
-                if (row.Result == true)
-                {
-                    propositionList.Add(row.GetDisjunctiveNormalFormEquivalent());
-                }
-            }
-
-            while (propositionList.Count > 1)
-            {
-                // take vriable at pos 0 and 1 and create a disjunct between them.
-                // Insert them back in the first position of the list.
-                Disjunction disjunct = new Disjunction();
-                // We do not need to create copies of variables since we did that beforehand.
-                disjunct.LeftSuccessor = propositionList[0];
-                disjunct.RightSuccessor = propositionList[1];
-                // Remove the individual variables from the list.
-                propositionList.RemoveAt(1);
-                propositionList.RemoveAt(0);
-                // Insert the conjunct into the list.
-                propositionList.Add(disjunct);
-            }
-
+            List<Proposition> propositionList = GenerateDisjunctiveNormalFormEquivalentPropositions();
+            propositionList = CreateCorrespondingDisjuncts(propositionList);
+            
             if (propositionList.Count > 0)
             {
                 return propositionList[0];
@@ -252,8 +230,26 @@ namespace LogicAndSetTheoryApplication
             return new False();
         }
 
-        #region Disjunctive Normal Form
-        public Proposition CreateDisjunctiveNormalForm()
+        private List<Proposition> CreateCorrespondingDisjuncts(List<Proposition> propositionList)
+        {
+            while (propositionList.Count > 1)
+            {
+
+                Disjunction disjunct = new Disjunction();
+
+                disjunct.LeftSuccessor = propositionList[0];
+                disjunct.RightSuccessor = propositionList[1];
+
+                propositionList.RemoveAt(1);
+                propositionList.RemoveAt(0);
+
+                propositionList.Add(disjunct);
+            }
+
+            return propositionList;
+        }
+
+        private List<Proposition> GenerateDisjunctiveNormalFormEquivalentPropositions()
         {
             List<Proposition> propositionList = new List<Proposition>();
 
@@ -264,6 +260,14 @@ namespace LogicAndSetTheoryApplication
                     propositionList.Add(row.GetDisjunctiveNormalFormEquivalent());
                 }
             }
+
+            return propositionList;
+        }
+
+        #region Disjunctive Normal Form
+        public Proposition CreateDisjunctiveNormalForm()
+        {
+            List<Proposition> propositionList = GenerateDisjunctiveNormalFormEquivalentPropositions();
 
             // Check for missing variables.
             HashSet<Proposition> missingVariables = GetMissingVariables(propositionList);
@@ -309,18 +313,7 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
-            while (propositionList.Count > 1)
-            {
-                Disjunction disjunct = new Disjunction();
-
-                disjunct.LeftSuccessor = propositionList[0];
-                disjunct.RightSuccessor = propositionList[1];
-
-                propositionList.RemoveAt(1);
-                propositionList.RemoveAt(0);
-
-                propositionList.Add(disjunct);
-            }
+            propositionList = CreateCorrespondingDisjuncts(propositionList);
 
             return propositionList[0];
         }
