@@ -51,6 +51,7 @@ namespace LogicAndSetTheoryApplication
         {
             // We dont want to compare by reference
             // only by connectives and variables.
+            if (obj == null) return false;
             if (GetType() != obj.GetType()) return false;
 
             Proposition proposition = (Proposition)obj;

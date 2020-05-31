@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constant.cs" />
     <Compile Include="IDotFile.cs" />
     <Compile Include="LogicApp.cs" />
     <Compile Include="LogicAppBase.cs" />

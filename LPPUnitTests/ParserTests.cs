@@ -37,7 +37,7 @@ namespace LPPUnitTests
         {
             // Arrange
             char randomSymbol = PropositionGenerator.GetRandomVariableLetter();
-            char randomConnective = PropositionGenerator.GetRandomConnective();
+            char randomConnective = PropositionGenerator.GetRandomConnectiveSymbol();
 
             string proposition = $"{randomConnective}({randomSymbol}, {randomSymbol})";
             int expectedNumberOfVariables = 1;

@@ -13,6 +13,11 @@ namespace LogicAndSetTheoryApplication
 
         public static Proposition CreateTautologyFromProposition(Proposition variable)
         {
+            if (variable == null)
+            {
+                throw new NullReferenceException("A proposition is required to create a tautology from it!");
+            }
+
             Disjunction tautology = new Disjunction();
             tautology.LeftSuccessor = variable; // A
             Negation negatedVariable = new Negation();
@@ -24,6 +29,11 @@ namespace LogicAndSetTheoryApplication
 
         public static Proposition CreateContradictionFromProposition(Proposition variable)
         {
+            if (variable == null)
+            {
+                throw new NullReferenceException("A proposition is required to create a contradiction from it!");
+            }
+
             Negation negation = new Negation();
             negation.LeftSuccessor = CreateTautologyFromProposition(variable);
             
@@ -96,7 +106,7 @@ namespace LogicAndSetTheoryApplication
             return new Proposition(GetRandomVariableLetter());
         }
 
-        public static char GetRandomConnective()
+        public static char GetRandomConnectiveSymbol()
         {
             rng = new Random();
             int randomIndexOfConnectivesString = rng.Next(0, Parser.CONNECTIVES.Length);
@@ -121,49 +131,45 @@ namespace LogicAndSetTheoryApplication
             return GenerateExpressionRecursively(root, startLevel + 1);
         }
 
-        public static Proposition GenerateProposition(int currentLevel)
+        private static Proposition GenerateProposition(int currentLevel)
         {
-            Proposition generatedProposition = null;
             int choice = rng.Next(7 + currentLevel);
 
-            switch(choice)
+            return GeneratePropositionByRandomChoice(choice);
+        }
+
+        public static Proposition GeneratePropositionByRandomChoice(int choice)
+        {
+            switch (choice)
             {
                 case 0:
-                    generatedProposition = new Negation();
-                    break;
+                    return new Negation();
                 case 1:
-                    generatedProposition = new Disjunction();
-                    break;
+                    return new Disjunction();
                 case 2:
-                    generatedProposition = new Conjunction();
-                    break;
+                    return new Conjunction();
                 case 3:
-                    generatedProposition = new Implication();
-                    break;
+                    return new Implication();
                 case 4:
-                    generatedProposition = new BiImplication();
-                    break;
+                    return new BiImplication();
                 case 5:
-                    generatedProposition = new Nand();
-                    break;
+                    return new Nand();
                 case 6:
                     // throw a coin for True of False constant.
-                    if (rng.Next(2) == 0)
-                    {
-                        generatedProposition = new True();
-                    }
-                    else
-                    {
-                        generatedProposition = new False();
-                    }
-
-                    break;
+                    return GenerateRandomConstant(rng.Next(2));
                 default:
-                    generatedProposition = GetRandomProposition();
-                    break;
+                    return GetRandomProposition();
+            }
+        }
+
+        public static Proposition GenerateRandomConstant(int coinToss)
+        {
+            if (coinToss == 0)
+            {
+                return new True();
             }
 
-            return generatedProposition;
+            return new False();
         }
 
         private static Proposition GenerateExpressionRecursively(Proposition result, int level)
@@ -174,6 +180,11 @@ namespace LogicAndSetTheoryApplication
             }
 
             int newLevel = level + 1;
+
+            if (level >= 5)
+            {
+                newLevel = level + 4;
+            }
 
             if (result is UnaryConnective)
             {

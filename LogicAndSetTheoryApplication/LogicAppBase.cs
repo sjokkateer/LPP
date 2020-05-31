@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LogicAndSetTheoryApplication
 {
@@ -21,6 +22,7 @@ namespace LogicAndSetTheoryApplication
 
         abstract protected string DotFileName();
 
+        [ExcludeFromCodeCoverage]
         public virtual void CreateGraphImage()
         {
             Process.Start($"{DotFileName()}.png");
@@ -35,6 +37,15 @@ namespace LogicAndSetTheoryApplication
                 Root = parser.Parse(propositionExpression);
                 ExecuteParsingActivities();
                 parsedExpression = propositionExpression;
+            }
+        }
+
+        public void Parse(Proposition expression)
+        {
+            if (!expression.Equals(Root))
+            {
+                Root = expression;
+                ExecuteParsingActivities();
             }
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    public class False : Proposition
+    public class False : Constant
     {
         public const char SYMBOL = '0';
 
