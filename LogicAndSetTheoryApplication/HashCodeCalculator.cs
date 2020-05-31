@@ -25,12 +25,22 @@ namespace LogicAndSetTheoryApplication
                 }
             }
         }
-        public string HashCode { get; }
+        public string HashCode { get; private set;  }
 
-        public HashCodeCalculator(List<int> convertedResultColumn, int hashBase)
+        public HashCodeCalculator(int hashBase)
+        {
+            HashBase = hashBase;
+        }
+
+        public HashCodeCalculator(List<int> convertedResultColumn, int hashBase): this(hashBase)
+        {
+            GenerateHashCode(convertedResultColumn);
+        }
+
+        public void GenerateHashCode(List<int> convertedResultColumn)
         {
             this.convertedResultColumn = convertedResultColumn;
-            HashBase = hashBase;
+
             HashCode = RecursiveHashCode(1);
         }
 

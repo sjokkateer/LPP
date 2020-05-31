@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace LogicAndSetTheoryApplication
         private Proposition propositionRoot;
         private List<Proposition> propositionVariablesSet;
         public List<ITruthTableRow> Rows { get; }
+
+        public List<int> OriginalResultColumn;
 
         public TruthTable(Proposition propositionRoot)
         {
@@ -107,7 +110,10 @@ namespace LogicAndSetTheoryApplication
 
         public TruthTable Simplify()
         {
-            return new TruthTable(propositionRoot, propositionVariablesSet, SimplifyRowsIteratively(Rows));
+            TruthTable simplifiedTt = new TruthTable(propositionRoot, propositionVariablesSet, SimplifyRowsIteratively(Rows));
+            simplifiedTt.OriginalResultColumn = GetConvertedResultColumn();
+
+            return simplifiedTt;
         }
 
         private bool EqualSets(List<ITruthTableRow> set1, List<ITruthTableRow> set2)
@@ -140,6 +146,7 @@ namespace LogicAndSetTheoryApplication
                 oldSet = simplifiedRowSet;
                 simplifiedRowSet = SimplifiyRowSet(simplifiedRowSet);
             } while (!(EqualSets(oldSet, simplifiedRowSet)));
+            
             return simplifiedRowSet;
         }
 
@@ -176,10 +183,9 @@ namespace LogicAndSetTheoryApplication
                             {
                                 // Only assign is simplified to row i since that's the one under inspection.
                                 rowSet[i].IsSimplified = true;
-                                //rowSet[j].IsSimplified = true;
 
                                 // Here we ensure that we only return unique rows,
-                                // that means rows with all different symbols in the cells.1
+                                // that means rows with all different symbols in the cells.
                                 if (IsRowInSet(simplifiedRow, simplifiedSet) == false)
                                 {
                                     simplifiedSet.Add(simplifiedRow);
@@ -214,6 +220,7 @@ namespace LogicAndSetTheoryApplication
         public Proposition CreateDisjunctiveNormalForm()
         {
             List<Proposition> propositionList = new List<Proposition>();
+
             foreach (TruthTableRow row in Rows)
             {
                 // if and only if the row has a result of 1.
@@ -224,6 +231,51 @@ namespace LogicAndSetTheoryApplication
                     propositionList.Add(row.GetDisjunctiveNormalFormEquivalent());
                 }
             }
+
+            // Check for missing variables.
+            HashSet<Proposition> missingVariables = GetMissingVariables(propositionList);
+            
+            // If all are missing we got a constant returned indicating 1 or 0
+            // thus Tautology or Contradiction respectively.
+            if (missingVariables.Count == propositionVariablesSet.Count)
+            {
+                Proposition p = propositionList[0];
+                propositionList.Remove(p);
+
+                if (p.GetType() == typeof(True))
+                {
+                    // Create tautologies.
+                    foreach (Proposition variable in missingVariables)
+                    {
+                        propositionList.Add(PropositionGenerator.CreateTautologyFromProposition(variable));
+                    }
+                }
+
+                if (p.GetType() == typeof(False))
+                {
+                    // Create contradictions.
+                    foreach (Proposition variable in missingVariables)
+                    {
+                        propositionList.Add(PropositionGenerator.CreateContradictionFromProposition(variable));
+                    }
+                }
+            }
+
+            // If we miss one or more variables but not all, this indicates that those variables
+            // had no meaning in the original expression. Thus by logical equivalence we can say that 
+            // the expression would be equivalent to for ex: A & (B | ~(B)), the truth value of B
+            // does not matter thus we can restate this as A | 0 which means we are totally reliant
+            // on the truth value of A which can be obtained by creating a contradiction of 
+            // the variable that does not matter (B) in this case to keep the result column of equal
+            // length, this would result in A | (B & ~(B)) which IS in DNF
+            if (missingVariables.Count > 0 && missingVariables.Count < propositionVariablesSet.Count)
+            {
+                foreach(Proposition missingVariable in missingVariables)
+                {
+                    propositionList.Add(PropositionGenerator.CreateContradictionFromProposition(missingVariable));
+                }
+            }
+
             while (propositionList.Count > 1)
             {
                 // take vriable at pos 0 and 1 and create a disjunct between them.
@@ -238,12 +290,47 @@ namespace LogicAndSetTheoryApplication
                 // Insert the conjunct into the list.
                 propositionList.Add(disjunct);
             }
+
             if (propositionList.Count > 0)
             {
                 return propositionList[0];
             }
             
+            // This statement will never be reached with the new logic.
+            // All false returned
             return new False();
+        }
+
+        private HashSet<Proposition> GetMissingVariables(List<Proposition> propositionList)
+        {
+            HashSet<Proposition> allExpressionVariables = new HashSet<Proposition>();
+            HashSet<Proposition> existingPropositionVariables = new HashSet<Proposition>();
+
+            List<Proposition> propositionSubList;
+            foreach (Proposition proposition in propositionList)
+            {
+                propositionSubList = proposition.GetVariables();
+                foreach (Proposition p in propositionSubList)
+                {
+                    existingPropositionVariables.Add(p);
+                }
+            }
+
+            foreach (Proposition p in propositionVariablesSet)
+            {
+                allExpressionVariables.Add(p);
+            }
+
+            IEnumerable<Proposition> query = from p in allExpressionVariables.Except(existingPropositionVariables) select p;
+
+            HashSet<Proposition> missingVariables = new HashSet<Proposition>();
+
+            foreach (Proposition p in query)
+            {
+                missingVariables.Add(p);
+            }
+
+            return missingVariables;
         }
         #endregion
 

@@ -68,7 +68,7 @@ namespace LogicAndSetTheoryApplication
 
             // DisplayNandifiedInformation();
 
-            // Test if all hashcodes are equal.
+            // Test if all hashcodes are equal. (MOVE TO LOGIC APP).
             if (hashCodesMatched(hashList, hashList.Count - 1))
             {
                 hashCodeValidationTbx.Text = "Succes! All hashes match.";
@@ -181,9 +181,11 @@ namespace LogicAndSetTheoryApplication
         private void AddTruthTable(ListBox truthTableLbx, TruthTable truthTable)
         {
             truthTableLbx.Items.Clear();
+
             if (truthTable != null)
             {
                 truthTableLbx.Items.Add(truthTable.TableHeader());
+
                 foreach (TruthTableRow row in truthTable.Rows)
                 {
                     truthTableLbx.Items.Add(row);

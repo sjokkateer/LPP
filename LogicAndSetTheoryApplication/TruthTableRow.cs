@@ -64,6 +64,7 @@ namespace LogicAndSetTheoryApplication
         public Proposition GetDisjunctiveNormalFormEquivalent()
         {
             List<Proposition> propositionList = new List<Proposition>();
+            
             for (int i = 0; i < Cells.Length; i++)
             {
                 // return value is null if cell held *
@@ -90,15 +91,17 @@ namespace LogicAndSetTheoryApplication
                 // Insert the conjunct into the list.
                 propositionList.Add(conjunct);
             }
+
             if (propositionList.Count > 0)
             {
                 return propositionList[0];
             }
-            Console.WriteLine($"Result: {Result}");
+            
             if (Result == true)
             {
                 return new True();
             }
+
             return new False();
         }
 

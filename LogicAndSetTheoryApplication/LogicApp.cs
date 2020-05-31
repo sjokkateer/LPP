@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,20 @@ namespace LogicAndSetTheoryApplication
 {
     public class LogicApp: LogicAppBase
     {
+        private const int HASH_CODE_BASE = 16;
+
         private List<Conjunction> missingVariableList;
+        private HashCodeCalculator hashCodeCalculator;
+        private List<string> hashCodes;
+
+        public List<string> HashCodes
+        {
+            get
+            {
+                // return a copy of the original list.
+                return new List<string>(hashCodes);
+            }
+        }
 
         public List<Proposition> Variables
         {
@@ -29,71 +43,50 @@ namespace LogicAndSetTheoryApplication
         public Proposition Nandified { get; private set; }
 
         public LogicApp(Parser parser): base(parser)
-        { }
+        {
+            hashCodeCalculator = new HashCodeCalculator(HASH_CODE_BASE);
+        }
 
         protected override void ExecuteParsingActivities()
         { 
+            // New list of all the required hashcodes.
+            hashCodes = new List<string>();
+
+            // 1
             TruthTable = new TruthTable(Root);
-            DisjunctiveNormalForm = CreateDisjunctiveNormalForm();
+            hashCodeCalculator.GenerateHashCode(TruthTable.GetConvertedResultColumn());
+            hashCodes.Add(hashCodeCalculator.HashCode);
+
+            // 2
             SimplifiedTruthTable = CreateSimplifiedTruthTable();
+            hashCodeCalculator.GenerateHashCode(SimplifiedTruthTable.OriginalResultColumn);
+            hashCodes.Add(hashCodeCalculator.HashCode);
 
-            // TODO: Add all other additional activities
-           // SimplifiedDisjunctiveNormalForm = CreateSimplifiedDisjunctiveNormalForm();
+            // 3 
+            Nandified = Root.Nandify();
+            TruthTable nandifiedTruthTable = new TruthTable(Nandified);
+            TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
+            hashCodeCalculator.GenerateHashCode(nandifiedSimplified.OriginalResultColumn);
+            hashCodes.Add(hashCodeCalculator.HashCode);
 
-            // Regular NANDIFY
-            //Nandified = CreateNandified();
+            // 4 
+            DisjunctiveNormalForm = CreateDisjunctiveNormalForm();
+            TruthTable disjunctiveTruthTable = new TruthTable(DisjunctiveNormalForm);
+            hashCodeCalculator.GenerateHashCode(disjunctiveTruthTable.GetConvertedResultColumn());
+            hashCodes.Add(hashCodeCalculator.HashCode);
 
-            // NANDIFY 5 and eval to get 6
-            //Proposition nandifiedFive = simplifiedDisjunctiveProposition.Nandify();
+            // 5
+            Proposition simplifiedDisjunctiveNormal = CreateSimplifiedDisjunctiveNormalForm();
+            TruthTable simplifiedDisjunctiveNormalTruthTable = new TruthTable(simplifiedDisjunctiveNormal);
+            hashCodeCalculator.GenerateHashCode(simplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
+            hashCodes.Add(hashCodeCalculator.HashCode);
+
+            // 6
+            Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Nandify();
+            TruthTable nandifiedSimplifiedDisjunctiveNormalTruthTable = new TruthTable(nandifiedSimplifiedDisjunctiveNormal);
+            hashCodeCalculator.GenerateHashCode(nandifiedSimplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
+            hashCodes.Add(hashCodeCalculator.HashCode);
         }
-
-        //private Proposition CreateNandified()
-        //{
-        //    // Need original nandified -> simplified
-        //    Proposition nandified = Root.Nandify();
-        //    if (nandified != null)
-        //    {
-        //        nandifiedTbx.Text = nandified.ToString();
-        //        TruthTable tt = new TruthTable(nandified);
-        //        AddHashCodeInfo(nandified, "NAND", 16, tt); // ORIGINAL + NAND + EVALUATE 
-
-        //        TruthTable simplifiedNandTt = tt.Simplify();
-        //        Proposition simplifiedNandDnf = simplifiedNandTt.CreateDisjunctiveNormalForm();
-        //        // If it is null we deal with a tautology or contradiction!
-        //        if (simplifiedNandDnf == null)
-        //        {
-        //            // This should mean we only have 1 result value in the result column, either a 1 or 0
-        //            int tautOrContra = simplifiedNandTt.GetConvertedResultColumn()[0];
-        //            Proposition tautologyOrContradiction = null;
-        //            if (tautOrContra == 1)
-        //            {
-        //                // Create a tautology but it should hold the same variable set as the original proposition.
-        //                tautologyOrContradiction = PropositionGenerator.CreateTautologyFromProposition(logicApp.Variables[0]);
-        //            }
-        //            else
-        //            {
-        //                // Create a contradiction
-        //                tautologyOrContradiction = PropositionGenerator.CreateContradictionFromProposition(logicApp.Variables[0]);
-        //            }
-        //            tautologyOrContradiction.UniqueVariableSet = logicApp.Variables;
-        //            AddHashCodeInfo(tautologyOrContradiction, "Simplified NAND Normal", 16);
-        //        }
-        //        else
-        //        {
-
-        //            if (missingVariableList.Count > 0)
-        //            {
-        //                missingVariableList[missingVariableList.Count - 1].RightSuccessor = simplifiedNandDnf;
-        //                AddHashCodeInfo(missingVariableList[0], "Simplified NAND Normal", 16);
-        //            }
-        //            else
-        //            {
-        //                // Keeping the original the original.
-        //                AddHashCodeInfo(simplifiedNandDnf, "Simplified NAND Normal", 16); // 3. ORIGINAL + NAND + EVALUATE + SIMPLIFY + NORMALIZE
-        //            }
-        //        }
-        //    }
-        //}
 
         private Proposition CreateDisjunctiveNormalForm()
         {
