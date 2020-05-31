@@ -7,9 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LogicAndSetTheoryApplication
 {
+    [ExcludeFromCodeCoverage]
     public partial class LogicForm : Form
     {
         private LogicAppBase selectedApp;

@@ -11,7 +11,6 @@ namespace LogicAndSetTheoryApplication
     {
         private const int HASH_CODE_BASE = 16;
 
-        private List<Conjunction> missingVariableList;
         private HashCodeCalculator hashCodeCalculator;
         
         private List<string> hashCodes;
@@ -89,13 +88,14 @@ namespace LogicAndSetTheoryApplication
             hashCodes.Add(hashCodeCalculator.HashCode);
 
             // 4 
-            DisjunctiveNormalForm = CreateDisjunctiveNormalForm();
+            // DisjunctiveNormalForm = CreateDisjunctiveNormalForm();
+            DisjunctiveNormalForm = TruthTable.CreateDisjunctiveNormalForm();
             TruthTable disjunctiveTruthTable = new TruthTable(DisjunctiveNormalForm);
             hashCodeCalculator.GenerateHashCode(disjunctiveTruthTable.GetConvertedResultColumn());
             hashCodes.Add(hashCodeCalculator.HashCode);
 
             // 5
-            Proposition simplifiedDisjunctiveNormal = CreateSimplifiedDisjunctiveNormalForm();
+            Proposition simplifiedDisjunctiveNormal = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
             TruthTable simplifiedDisjunctiveNormalTruthTable = new TruthTable(simplifiedDisjunctiveNormal);
             hashCodeCalculator.GenerateHashCode(simplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
             hashCodes.Add(hashCodeCalculator.HashCode);
@@ -107,114 +107,16 @@ namespace LogicAndSetTheoryApplication
             hashCodes.Add(hashCodeCalculator.HashCode);
         }
 
-        private Proposition CreateDisjunctiveNormalForm()
-        {
-            Proposition disjunctiveProposition = TruthTable.CreateDisjunctiveNormalForm();
-            
-            if (disjunctiveProposition == null)
-            {
-                // This should mean we only have 1 result value in the result column, a 0 for DNF
-                // Create a contradiction
-                Proposition tautologyOrContradiction = PropositionGenerator.CreateContradictionFromProposition(Variables[0]);
-                tautologyOrContradiction.UniqueVariableSet = Variables;
-                disjunctiveProposition = tautologyOrContradiction;
-            }
-
-            return disjunctiveProposition;
-        }
-
         private TruthTable CreateSimplifiedTruthTable()
         {
             return TruthTable.Simplify();
-        }
-
-        private Proposition CreateSimplifiedDisjunctiveNormalForm()
-        {
-            missingVariableList = new List<Conjunction>();
-            Proposition simplifiedDisjunctiveProposition = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
-
-            // If the returned proposition is not null, we check if we are not missing any variables that got 
-            // left out by us simplifying a proposition.
-            if (simplifiedDisjunctiveProposition != null)
-            {
-                // Create truth table of the simplified disjunctive
-                // Create a new hash calculator with the result column, base 16.
-                // Add hash and bcde to the list boxes.
-                List<Proposition> simplifiedDisjunctiveUniqueVariables = simplifiedDisjunctiveProposition.GetVariables();
-                int addedVariables = 0;
-                while (simplifiedDisjunctiveUniqueVariables.Count + addedVariables < Variables.Count)
-                {
-                    // Create an extra placeholder variable on the proposition to fill up the left out variable spot.
-                    // Important that the variabel IS unique, such that it adds to the number of combinations of truth values.
-                    foreach (char alphabetCharacter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-                    {
-                        foreach (Proposition uniqueVariable in Variables)
-                        {
-                            if (alphabetCharacter == uniqueVariable.Data)
-                            {
-                                break;
-                            }
-                        }
-                        // Exhausted without breaking out of the loop thus we are looking at a unique variable.
-                        Proposition newVariable = new Proposition(alphabetCharacter);
-                        // Since this # of variables resulted in no changes in the outcome of the result
-                        // it should not matter too much on what binary operator is applied.
-                        Conjunction conjunction = new Conjunction();
-                        
-                        Disjunction tautology = (Disjunction)PropositionGenerator.CreateTautologyFromProposition(newVariable);
-                        conjunction.LeftSuccessor = tautology;
-                        missingVariableList.Add(conjunction);
-
-                        // So if we add a tautology with the original expression, we take the old variable into consideration
-                        // in the truth table but this variable will not change the result values of the truth table but will
-                        // ensure that our hash codes will line up with the same number of bits.
-                        addedVariables++;
-                        break;
-                    }
-                }
-                // Now we have all missing variables in the list of missing variables.
-                // Thus we can add to the right successor of each index, the previous or the root expression.
-                int lastIndex = missingVariableList.Count - 1;
-                Proposition propositionToAppend = null;
-                for (int i = lastIndex; i >= 0; i--)
-                {
-                    if (i == lastIndex)
-                    {
-                        propositionToAppend = simplifiedDisjunctiveProposition;
-                    }
-
-                    missingVariableList[i].RightSuccessor = propositionToAppend;
-                    propositionToAppend = missingVariableList[i];
-                }               
-            }
-            else
-            {
-                // Otherwise we are dealing with a tautology or contradiction.
-                int tautOrContra = SimplifiedTruthTable.GetConvertedResultColumn()[0];
-                Proposition tautologyOrContradiction = null;
-                
-                if (tautOrContra == 1)
-                {
-                    // Create a tautology but it should hold the same variable set as the original proposition.
-                    tautologyOrContradiction = PropositionGenerator.CreateTautologyFromProposition(Variables[0]);
-                }
-                else
-                {
-                    // Create a contradiction
-                    tautologyOrContradiction = PropositionGenerator.CreateContradictionFromProposition(Variables[0]);
-                }
-
-                tautologyOrContradiction.UniqueVariableSet = Variables;
-                simplifiedDisjunctiveProposition = tautologyOrContradiction;
-            }
-
-            return simplifiedDisjunctiveProposition;
         }
         
         public bool HashCodesMatched()
         {
             return HashCodesMatched(HashCodes, HashCodes.Count - 1);
         }
+       
         private bool HashCodesMatched(List<string> hashList, int index)
         {
             if (index == 0)
