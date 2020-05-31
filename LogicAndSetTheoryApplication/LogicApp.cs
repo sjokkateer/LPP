@@ -13,8 +13,17 @@ namespace LogicAndSetTheoryApplication
 
         private List<Conjunction> missingVariableList;
         private HashCodeCalculator hashCodeCalculator;
+        
         private List<string> hashCodes;
-
+        public static readonly List<string> hashCodeLabels = new List<string>()
+        { 
+            "Original",
+            "Simplified",
+            "Nand Simplified",
+            "Original DNF",
+            "Original Simplified DNF",
+            "Original Simplified DNF Nand"
+        };
         public List<string> HashCodes
         {
             get
@@ -59,14 +68,24 @@ namespace LogicAndSetTheoryApplication
 
             // 2
             SimplifiedTruthTable = CreateSimplifiedTruthTable();
-            hashCodeCalculator.GenerateHashCode(SimplifiedTruthTable.OriginalResultColumn);
+            
+            // Convert the table to DNF such that we have a proposition to work with.
+            Proposition simplified = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
+            TruthTable simplifiedTt = new TruthTable(simplified);
+            // Check the hash code for the proposition.
+            hashCodeCalculator.GenerateHashCode(simplifiedTt.GetConvertedResultColumn());
             hashCodes.Add(hashCodeCalculator.HashCode);
 
             // 3 
             Nandified = Root.Nandify();
             TruthTable nandifiedTruthTable = new TruthTable(Nandified);
             TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
-            hashCodeCalculator.GenerateHashCode(nandifiedSimplified.OriginalResultColumn);
+            
+            // Same as for simplified truth table.
+            Proposition nandSimpleDnf = nandifiedSimplified.CreateDisjunctiveNormalForm();
+            TruthTable nandSimpleDnfTt = new TruthTable(nandSimpleDnf);
+
+            hashCodeCalculator.GenerateHashCode(nandSimpleDnfTt.GetConvertedResultColumn());
             hashCodes.Add(hashCodeCalculator.HashCode);
 
             // 4 
@@ -190,6 +209,23 @@ namespace LogicAndSetTheoryApplication
             }
 
             return simplifiedDisjunctiveProposition;
+        }
+        
+        public bool HashCodesMatched()
+        {
+            return HashCodesMatched(HashCodes, HashCodes.Count - 1);
+        }
+        private bool HashCodesMatched(List<string> hashList, int index)
+        {
+            if (index == 0)
+            {
+                return true;
+            }
+            else
+            {
+                // Compare the two adjacent hashcodes and make a call downwards.
+                return hashList[index] == hashList[index - 1] && HashCodesMatched(hashList, index - 1);
+            }
         }
 
         protected override string DotFileName()

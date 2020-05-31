@@ -13,6 +13,7 @@ namespace LogicAndSetTheoryApplication
         private List<Proposition> propositionVariablesSet;
         public List<ITruthTableRow> Rows { get; }
 
+
         public List<int> OriginalResultColumn;
 
         public TruthTable(Proposition propositionRoot)
@@ -216,6 +217,41 @@ namespace LogicAndSetTheoryApplication
             return simplifiedSet;
         }
 
+        public Proposition GetSimplifiedExpression()
+        {
+            List<Proposition> propositionList = new List<Proposition>();
+
+            foreach (TruthTableRow row in Rows)
+            {
+                if (row.Result == true)
+                {
+                    propositionList.Add(row.GetDisjunctiveNormalFormEquivalent());
+                }
+            }
+
+            while (propositionList.Count > 1)
+            {
+                // take vriable at pos 0 and 1 and create a disjunct between them.
+                // Insert them back in the first position of the list.
+                Disjunction disjunct = new Disjunction();
+                // We do not need to create copies of variables since we did that beforehand.
+                disjunct.LeftSuccessor = propositionList[0];
+                disjunct.RightSuccessor = propositionList[1];
+                // Remove the individual variables from the list.
+                propositionList.RemoveAt(1);
+                propositionList.RemoveAt(0);
+                // Insert the conjunct into the list.
+                propositionList.Add(disjunct);
+            }
+
+            if (propositionList.Count > 0)
+            {
+                return propositionList[0];
+            }
+
+            return new False();
+        }
+
         #region Disjunctive Normal Form
         public Proposition CreateDisjunctiveNormalForm()
         {
@@ -223,11 +259,8 @@ namespace LogicAndSetTheoryApplication
 
             foreach (TruthTableRow row in Rows)
             {
-                // if and only if the row has a result of 1.
                 if (row.Result == true)
                 {
-                    // Then we want to convert that row into a new expression.
-                    // and use it to construct a disjunct until the end.
                     propositionList.Add(row.GetDisjunctiveNormalFormEquivalent());
                 }
             }
@@ -235,23 +268,23 @@ namespace LogicAndSetTheoryApplication
             // Check for missing variables.
             HashSet<Proposition> missingVariables = GetMissingVariables(propositionList);
             
-            // If all are missing we got a constant returned indicating 1 or 0
-            // thus Tautology or Contradiction respectively.
             if (missingVariables.Count == propositionVariablesSet.Count)
             {
-                Proposition p = propositionList[0];
-                propositionList.Remove(p);
-
-                if (p.GetType() == typeof(True))
+                if (propositionList.Count > 0)
                 {
-                    // Create tautologies.
-                    foreach (Proposition variable in missingVariables)
+                    Proposition p = propositionList[0];
+                    propositionList.Remove(p);
+
+                    if (p.GetType() == typeof(True))
                     {
-                        propositionList.Add(PropositionGenerator.CreateTautologyFromProposition(variable));
+                        // Create tautologies.
+                        foreach (Proposition variable in missingVariables)
+                        {
+                            propositionList.Add(PropositionGenerator.CreateTautologyFromProposition(variable));
+                        }
                     }
                 }
-
-                if (p.GetType() == typeof(False))
+                else
                 {
                     // Create contradictions.
                     foreach (Proposition variable in missingVariables)
@@ -278,27 +311,18 @@ namespace LogicAndSetTheoryApplication
 
             while (propositionList.Count > 1)
             {
-                // take vriable at pos 0 and 1 and create a disjunct between them.
-                // Insert them back in the first position of the list.
                 Disjunction disjunct = new Disjunction();
-                // We do not need to create copies of variables since we did that beforehand.
+
                 disjunct.LeftSuccessor = propositionList[0];
                 disjunct.RightSuccessor = propositionList[1];
-                // Remove the individual variables from the list.
+
                 propositionList.RemoveAt(1);
                 propositionList.RemoveAt(0);
-                // Insert the conjunct into the list.
+
                 propositionList.Add(disjunct);
             }
 
-            if (propositionList.Count > 0)
-            {
-                return propositionList[0];
-            }
-            
-            // This statement will never be reached with the new logic.
-            // All false returned
-            return new False();
+            return propositionList[0];
         }
 
         private HashSet<Proposition> GetMissingVariables(List<Proposition> propositionList)
