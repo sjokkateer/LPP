@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,7 +48,6 @@ namespace LogicAndSetTheoryApplication
         public TruthTable TruthTable { get; private set; }
         public Proposition DisjunctiveNormalForm { get; private set; }
         public TruthTable SimplifiedTruthTable { get; private set; }
-        public Proposition SimplifiedDisjunctiveNormalForm { get; private set; }
         public Proposition Nandified { get; private set; }
 
         public LogicApp(Parser parser): base(parser)
@@ -66,7 +66,7 @@ namespace LogicAndSetTheoryApplication
             hashCodes.Add(hashCodeCalculator.HashCode);
 
             // 2
-            SimplifiedTruthTable = CreateSimplifiedTruthTable();
+            SimplifiedTruthTable = TruthTable.Simplify();
             
             // Convert the table to DNF such that we have a proposition to work with.
             Proposition simplified = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
@@ -106,11 +106,6 @@ namespace LogicAndSetTheoryApplication
             hashCodeCalculator.GenerateHashCode(nandifiedSimplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
             hashCodes.Add(hashCodeCalculator.HashCode);
         }
-
-        private TruthTable CreateSimplifiedTruthTable()
-        {
-            return TruthTable.Simplify();
-        }
         
         public bool HashCodesMatched()
         {
@@ -135,6 +130,7 @@ namespace LogicAndSetTheoryApplication
             return "Proposition";
         }
 
+        [ExcludeFromCodeCoverage]
         public override void CreateGraphImage()
         {
             Grapher.CreateGraphOfProposition(Root.Copy(), DotFileName());
