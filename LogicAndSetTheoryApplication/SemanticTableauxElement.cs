@@ -79,7 +79,12 @@ namespace LogicAndSetTheoryApplication
 
             if (negatedProposition != null)
             {
-                return negatedProposition.LeftSuccessor.Equals(targetLiteral);
+                // Only variables I presume, else ~1 and 1 will result in contradiction?
+                Proposition negatedSuccessor = negatedProposition.LeftSuccessor;
+
+                 //negatedSuccessor.GetType() == typeof(Proposition) 
+                 //   && targetLiteral.GetType() == typeof(Proposition)
+                return negatedSuccessor.Equals(targetLiteral);
             }
 
             return false;
@@ -352,7 +357,9 @@ namespace LogicAndSetTheoryApplication
             {
                 Negation n = (Negation)proposition;
 
-                return n.LeftSuccessor.GetType() == typeof(Disjunction) || n.LeftSuccessor.GetType() == typeof(Implication);
+                return n.LeftSuccessor.GetType() == typeof(Disjunction) 
+                    || n.LeftSuccessor.GetType() == typeof(Implication) 
+                    || n.LeftSuccessor.GetType() == typeof(Nand);
             }
 
             return false;
@@ -372,10 +379,10 @@ namespace LogicAndSetTheoryApplication
 
             if (proposition.GetType() == typeof(Conjunction))
             {
-                Conjunction conjunction = (Conjunction)proposition;
+                BinaryConnective connective = (BinaryConnective)proposition;
 
-                childPropositions.Add(conjunction.LeftSuccessor);
-                childPropositions.Add(conjunction.RightSuccessor);
+                childPropositions.Add(connective.LeftSuccessor);
+                childPropositions.Add(connective.RightSuccessor);
             }
 
             if (proposition.GetType() == typeof(Negation))
@@ -383,26 +390,36 @@ namespace LogicAndSetTheoryApplication
                 Negation negation = (Negation)proposition;
                 BinaryConnective nestedConnective = (BinaryConnective)negation.LeftSuccessor;
 
-                // Both cases have a negation of the right successor.
-                Negation negatedRight = new Negation();
-                negatedRight.LeftSuccessor = nestedConnective.RightSuccessor;
-
-                // Only disjunction results in a left side negated as well.
-                if (nestedConnective.GetType() == typeof(Disjunction))
+                if (nestedConnective.GetType() != typeof(Nand))
                 {
-                    Negation negatedLeft = new Negation();
-                    negatedLeft.LeftSuccessor = nestedConnective.LeftSuccessor;
-                    
-                    childPropositions.Add(negatedLeft);
+                    // Both cases have a negation of the right successor.
+                    Negation negatedRight = new Negation();
+                    negatedRight.LeftSuccessor = nestedConnective.RightSuccessor;
+
+                    // Only disjunction results in a left side negated as well.
+                    if (nestedConnective.GetType() == typeof(Disjunction))
+                    {
+                        Negation negatedLeft = new Negation();
+                        negatedLeft.LeftSuccessor = nestedConnective.LeftSuccessor;
+
+                        childPropositions.Add(negatedLeft);
+                    }
+
+                    // Should not forget to add the implication's left successor
+                    if (nestedConnective.GetType() == typeof(Implication))
+                    {
+                        childPropositions.Add(nestedConnective.LeftSuccessor);
+                    }
+
+                    childPropositions.Add(negatedRight);
                 }
-
-                // Should not forget to add the implication's left successor
-                if (nestedConnective.GetType() == typeof(Implication))
+                else
                 {
+                    // It's a negated Nand and we can add left and right to the set
                     childPropositions.Add(nestedConnective.LeftSuccessor);
+                    childPropositions.Add(nestedConnective.RightSuccessor);
                 }
 
-                childPropositions.Add(negatedRight);
             }
 
             LeftChild = new SemanticTableauxElement(childPropositions);

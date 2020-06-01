@@ -192,7 +192,33 @@ namespace LPPUnitTests
             };
 
             SemanticTableauxElement alphaRuleElement = new SemanticTableauxElement(propositions);
-            SemanticTableauxElement child = (SemanticTableauxElement) alphaRuleElement.LeftChild;
+            SemanticTableauxElement child = alphaRuleElement.LeftChild;
+
+            // Act
+            HashSet<Proposition> childPropositions = child.Propositions;
+
+            int actualNumberOfLiterals = childPropositions.Count;
+            int expectedNumberOfLiterals = 2;
+
+            // Assert
+            actualNumberOfLiterals.Should().Be(expectedNumberOfLiterals, "Because a conjunction of two literals was given");
+        }
+
+        [Fact]
+        public void Constructor_CreateAlphaRuleFromNegatedNandOfLiterals_SetOfLengthTwoReturnedWithTwoLiterals()
+        {
+            // Arrange
+            Nand nand = (Nand)PropositionGenerator.CreateBinaryConnectiveWithRandomSymbols(Nand.SYMBOL);
+            Negation negatedNand = new Negation();
+            negatedNand.LeftSuccessor = nand;
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                negatedNand
+            };
+
+            SemanticTableauxElement alphaRuleElement = new SemanticTableauxElement(propositions);
+            SemanticTableauxElement child = alphaRuleElement.LeftChild;
 
             // Act
             HashSet<Proposition> childPropositions = child.Propositions;
@@ -219,7 +245,7 @@ namespace LPPUnitTests
             };
 
             SemanticTableauxElement alphaRuleElement = new SemanticTableauxElement(propositions);
-            SemanticTableauxElement child = (SemanticTableauxElement)alphaRuleElement.LeftChild;
+            SemanticTableauxElement child = alphaRuleElement.LeftChild;
 
             // Act
             HashSet<Proposition> childPropositions = child.Propositions;
