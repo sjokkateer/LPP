@@ -160,8 +160,11 @@ namespace LPPUnitTests
         [InlineData(198, typeof(Proposition))]
         public void GeneratePropositionByRandomChoice_PositiveIntegerGiven_ExpectedCorrespondingObjectReturned(int choice, Type type)
         {
-            // Arrange // Act
-            Proposition generatedProposition = PropositionGenerator.GeneratePropositionByRandomChoice(choice);
+            // Arrange 
+            PropositionGenerator propositionGenerator = new PropositionGenerator();
+
+            // Act
+            Proposition generatedProposition = propositionGenerator.GeneratePropositionByRandomChoice(choice);
 
             // Assert
             generatedProposition.GetType().Should().Be(type, "Because based on that generated integer a specific proposition should be returned");
@@ -170,9 +173,12 @@ namespace LPPUnitTests
         [Fact]
         public void GeneratePropositionByRandomChoice_IntegerForConstantGiven_ExpectedConstantReturned()
         {
-            // Arrange // Act
+            // Arrange 
+            PropositionGenerator propositionGenerator = new PropositionGenerator();
+
+            // Act
             int constantChoice = 6;
-            Proposition generatedProposition = PropositionGenerator.GeneratePropositionByRandomChoice(constantChoice);
+            Proposition generatedProposition = propositionGenerator.GeneratePropositionByRandomChoice(constantChoice);
 
             // Assert
             (generatedProposition is Constant).Should().BeTrue("Because based on that integer one of the constants should be returned.");
@@ -196,9 +202,10 @@ namespace LPPUnitTests
             // Arrange
             // re-use logic app for not repeating large procedure and for all the hash codes.
             LogicApp logicApp = new LogicApp(new Parser());
+            PropositionGenerator propositionGenerator = new PropositionGenerator();
 
             // Act
-            Proposition randomExpression = PropositionGenerator.GenerateExpression();
+            Proposition randomExpression = propositionGenerator.GenerateExpression();
             logicApp.Parse(randomExpression);
 
             bool hashCodesMatched = logicApp.HashCodesMatched();

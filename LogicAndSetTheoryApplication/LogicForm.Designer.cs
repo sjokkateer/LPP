@@ -56,6 +56,7 @@ namespace LogicAndSetTheoryApplication
             this.nandifiedLb = new System.Windows.Forms.Label();
             this.hashCodeValidationTbx = new System.Windows.Forms.TextBox();
             this.semanticTableauxBtn = new System.Windows.Forms.Button();
+            this.randomPropositionBtn = new System.Windows.Forms.Button();
             this.truthTableTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.simplifiedTruthTableTab.SuspendLayout();
@@ -63,7 +64,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // propositionTbx
             // 
-            this.propositionTbx.Location = new System.Drawing.Point(108, 12);
+            this.propositionTbx.Location = new System.Drawing.Point(149, 12);
             this.propositionTbx.Name = "propositionTbx";
             this.propositionTbx.Size = new System.Drawing.Size(347, 20);
             this.propositionTbx.TabIndex = 0;
@@ -72,7 +73,7 @@ namespace LogicAndSetTheoryApplication
             // 
             this.parseBtn.Location = new System.Drawing.Point(12, 12);
             this.parseBtn.Name = "parseBtn";
-            this.parseBtn.Size = new System.Drawing.Size(75, 23);
+            this.parseBtn.Size = new System.Drawing.Size(131, 23);
             this.parseBtn.TabIndex = 1;
             this.parseBtn.Text = "Parse";
             this.parseBtn.UseVisualStyleBackColor = true;
@@ -81,7 +82,7 @@ namespace LogicAndSetTheoryApplication
             // infixTbxLb
             // 
             this.infixTbxLb.AutoSize = true;
-            this.infixTbxLb.Location = new System.Drawing.Point(12, 41);
+            this.infixTbxLb.Location = new System.Drawing.Point(32, 69);
             this.infixTbxLb.Name = "infixTbxLb";
             this.infixTbxLb.Size = new System.Drawing.Size(85, 13);
             this.infixTbxLb.TabIndex = 2;
@@ -90,7 +91,7 @@ namespace LogicAndSetTheoryApplication
             // uniqueVariablesLb
             // 
             this.uniqueVariablesLb.AutoSize = true;
-            this.uniqueVariablesLb.Location = new System.Drawing.Point(12, 67);
+            this.uniqueVariablesLb.Location = new System.Drawing.Point(32, 95);
             this.uniqueVariablesLb.Name = "uniqueVariablesLb";
             this.uniqueVariablesLb.Size = new System.Drawing.Size(90, 13);
             this.uniqueVariablesLb.TabIndex = 3;
@@ -98,7 +99,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // viewTreeBtn
             // 
-            this.viewTreeBtn.Location = new System.Drawing.Point(470, 10);
+            this.viewTreeBtn.Location = new System.Drawing.Point(509, 10);
             this.viewTreeBtn.Name = "viewTreeBtn";
             this.viewTreeBtn.Size = new System.Drawing.Size(75, 23);
             this.viewTreeBtn.TabIndex = 4;
@@ -108,7 +109,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // infixTbx
             // 
-            this.infixTbx.Location = new System.Drawing.Point(108, 38);
+            this.infixTbx.Location = new System.Drawing.Point(149, 66);
             this.infixTbx.Name = "infixTbx";
             this.infixTbx.Size = new System.Drawing.Size(347, 20);
             this.infixTbx.TabIndex = 5;
@@ -124,7 +125,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // hashCodeTbx
             // 
-            this.hashCodeTbx.Location = new System.Drawing.Point(252, 64);
+            this.hashCodeTbx.Location = new System.Drawing.Point(292, 92);
             this.hashCodeTbx.Name = "hashCodeTbx";
             this.hashCodeTbx.ReadOnly = true;
             this.hashCodeTbx.Size = new System.Drawing.Size(100, 20);
@@ -132,7 +133,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // uniqueVariablesTbx
             // 
-            this.uniqueVariablesTbx.Location = new System.Drawing.Point(108, 64);
+            this.uniqueVariablesTbx.Location = new System.Drawing.Point(149, 92);
             this.uniqueVariablesTbx.Name = "uniqueVariablesTbx";
             this.uniqueVariablesTbx.ReadOnly = true;
             this.uniqueVariablesTbx.Size = new System.Drawing.Size(100, 20);
@@ -141,7 +142,7 @@ namespace LogicAndSetTheoryApplication
             // hashCodeLb
             // 
             this.hashCodeLb.AutoSize = true;
-            this.hashCodeLb.Location = new System.Drawing.Point(214, 67);
+            this.hashCodeLb.Location = new System.Drawing.Point(254, 95);
             this.hashCodeLb.Name = "hashCodeLb";
             this.hashCodeLb.Size = new System.Drawing.Size(35, 13);
             this.hashCodeLb.TabIndex = 9;
@@ -151,7 +152,7 @@ namespace LogicAndSetTheoryApplication
             // 
             this.truthTableTab.Controls.Add(this.tabPage1);
             this.truthTableTab.Controls.Add(this.simplifiedTruthTableTab);
-            this.truthTableTab.Location = new System.Drawing.Point(12, 171);
+            this.truthTableTab.Location = new System.Drawing.Point(12, 199);
             this.truthTableTab.Name = "truthTableTab";
             this.truthTableTab.SelectedIndex = 0;
             this.truthTableTab.Size = new System.Drawing.Size(340, 377);
@@ -190,7 +191,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // disjunctiveFormTbx
             // 
-            this.disjunctiveFormTbx.Location = new System.Drawing.Point(108, 90);
+            this.disjunctiveFormTbx.Location = new System.Drawing.Point(149, 118);
             this.disjunctiveFormTbx.Name = "disjunctiveFormTbx";
             this.disjunctiveFormTbx.Size = new System.Drawing.Size(347, 20);
             this.disjunctiveFormTbx.TabIndex = 12;
@@ -198,7 +199,7 @@ namespace LogicAndSetTheoryApplication
             // disjunctiveFormLb
             // 
             this.disjunctiveFormLb.AutoSize = true;
-            this.disjunctiveFormLb.Location = new System.Drawing.Point(12, 93);
+            this.disjunctiveFormLb.Location = new System.Drawing.Point(32, 121);
             this.disjunctiveFormLb.Name = "disjunctiveFormLb";
             this.disjunctiveFormLb.Size = new System.Drawing.Size(98, 13);
             this.disjunctiveFormLb.TabIndex = 11;
@@ -207,7 +208,7 @@ namespace LogicAndSetTheoryApplication
             // hashesListBox
             // 
             this.hashesListBox.FormattingEnabled = true;
-            this.hashesListBox.Location = new System.Drawing.Point(353, 195);
+            this.hashesListBox.Location = new System.Drawing.Point(353, 223);
             this.hashesListBox.Margin = new System.Windows.Forms.Padding(2);
             this.hashesListBox.Name = "hashesListBox";
             this.hashesListBox.Size = new System.Drawing.Size(158, 342);
@@ -215,7 +216,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // simplifiedDisjunctiveFormTbx
             // 
-            this.simplifiedDisjunctiveFormTbx.Location = new System.Drawing.Point(108, 116);
+            this.simplifiedDisjunctiveFormTbx.Location = new System.Drawing.Point(149, 144);
             this.simplifiedDisjunctiveFormTbx.Name = "simplifiedDisjunctiveFormTbx";
             this.simplifiedDisjunctiveFormTbx.Size = new System.Drawing.Size(347, 20);
             this.simplifiedDisjunctiveFormTbx.TabIndex = 14;
@@ -223,7 +224,7 @@ namespace LogicAndSetTheoryApplication
             // hashCodesListbox
             // 
             this.hashCodesListbox.FormattingEnabled = true;
-            this.hashCodesListbox.Location = new System.Drawing.Point(515, 195);
+            this.hashCodesListbox.Location = new System.Drawing.Point(515, 223);
             this.hashCodesListbox.Margin = new System.Windows.Forms.Padding(2);
             this.hashCodesListbox.Name = "hashCodesListbox";
             this.hashCodesListbox.Size = new System.Drawing.Size(209, 342);
@@ -233,7 +234,7 @@ namespace LogicAndSetTheoryApplication
             // 
             this.simplifiedDisjunctiveFormLb.AutoSize = true;
             this.simplifiedDisjunctiveFormLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.simplifiedDisjunctiveFormLb.Location = new System.Drawing.Point(12, 119);
+            this.simplifiedDisjunctiveFormLb.Location = new System.Drawing.Point(32, 147);
             this.simplifiedDisjunctiveFormLb.Name = "simplifiedDisjunctiveFormLb";
             this.simplifiedDisjunctiveFormLb.Size = new System.Drawing.Size(52, 13);
             this.simplifiedDisjunctiveFormLb.TabIndex = 16;
@@ -241,7 +242,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // nandifiedTbx
             // 
-            this.nandifiedTbx.Location = new System.Drawing.Point(108, 145);
+            this.nandifiedTbx.Location = new System.Drawing.Point(149, 173);
             this.nandifiedTbx.Name = "nandifiedTbx";
             this.nandifiedTbx.Size = new System.Drawing.Size(347, 20);
             this.nandifiedTbx.TabIndex = 18;
@@ -249,7 +250,7 @@ namespace LogicAndSetTheoryApplication
             // nandifiedLb
             // 
             this.nandifiedLb.AutoSize = true;
-            this.nandifiedLb.Location = new System.Drawing.Point(12, 148);
+            this.nandifiedLb.Location = new System.Drawing.Point(32, 176);
             this.nandifiedLb.Name = "nandifiedLb";
             this.nandifiedLb.Size = new System.Drawing.Size(41, 13);
             this.nandifiedLb.TabIndex = 17;
@@ -257,7 +258,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // hashCodeValidationTbx
             // 
-            this.hashCodeValidationTbx.Location = new System.Drawing.Point(515, 170);
+            this.hashCodeValidationTbx.Location = new System.Drawing.Point(515, 198);
             this.hashCodeValidationTbx.Name = "hashCodeValidationTbx";
             this.hashCodeValidationTbx.ReadOnly = true;
             this.hashCodeValidationTbx.Size = new System.Drawing.Size(209, 20);
@@ -265,7 +266,7 @@ namespace LogicAndSetTheoryApplication
             // 
             // semanticTableauxBtn
             // 
-            this.semanticTableauxBtn.Location = new System.Drawing.Point(470, 36);
+            this.semanticTableauxBtn.Location = new System.Drawing.Point(509, 64);
             this.semanticTableauxBtn.Name = "semanticTableauxBtn";
             this.semanticTableauxBtn.Size = new System.Drawing.Size(75, 23);
             this.semanticTableauxBtn.TabIndex = 20;
@@ -273,11 +274,22 @@ namespace LogicAndSetTheoryApplication
             this.semanticTableauxBtn.UseVisualStyleBackColor = true;
             this.semanticTableauxBtn.Click += new System.EventHandler(this.semanticTableauxBtn_Click);
             // 
+            // randomPropositionBtn
+            // 
+            this.randomPropositionBtn.Location = new System.Drawing.Point(12, 41);
+            this.randomPropositionBtn.Name = "randomPropositionBtn";
+            this.randomPropositionBtn.Size = new System.Drawing.Size(131, 23);
+            this.randomPropositionBtn.TabIndex = 21;
+            this.randomPropositionBtn.Text = "Generate Proposition";
+            this.randomPropositionBtn.UseVisualStyleBackColor = true;
+            this.randomPropositionBtn.Click += new System.EventHandler(this.randomPropositionBtn_Click);
+            // 
             // LogicForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 552);
+            this.ClientSize = new System.Drawing.Size(740, 638);
+            this.Controls.Add(this.randomPropositionBtn);
             this.Controls.Add(this.semanticTableauxBtn);
             this.Controls.Add(this.hashCodeValidationTbx);
             this.Controls.Add(this.nandifiedTbx);
@@ -334,6 +346,7 @@ namespace LogicAndSetTheoryApplication
         private System.Windows.Forms.Label nandifiedLb;
         private System.Windows.Forms.TextBox hashCodeValidationTbx;
         private System.Windows.Forms.Button semanticTableauxBtn;
+        private System.Windows.Forms.Button randomPropositionBtn;
     }
 }
 

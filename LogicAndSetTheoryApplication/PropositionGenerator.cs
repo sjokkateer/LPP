@@ -6,10 +6,17 @@ namespace LogicAndSetTheoryApplication
 {
     public class PropositionGenerator
     {
+        private static int MAX_UNIQUE_VARIABLES = 8;
+
         private static int CAPITAL_A = 65;
         private static int CAPITAL_Z = 90;
 
         private static Random rng;
+
+        private HashSet<Proposition> generatedPropositionVariables;
+
+        public PropositionGenerator()
+        { }
 
         public static Proposition CreateTautologyFromProposition(Proposition variable)
         {
@@ -119,11 +126,19 @@ namespace LogicAndSetTheoryApplication
             return new Proposition(GetRandomVariableLetter());
         }
 
-        public static Proposition GenerateExpression()
+        public Proposition GenerateExpression()
         {
             if (rng == null)
             {
                 rng = new Random();
+            }
+
+            generatedPropositionVariables = new HashSet<Proposition>();
+            int numberOfVariables = rng.Next(4, MAX_UNIQUE_VARIABLES + 1);
+
+            while (generatedPropositionVariables.Count < numberOfVariables)
+            {
+                generatedPropositionVariables.Add(GetRandomProposition());
             }
 
             int startLevel = 0;
@@ -131,14 +146,14 @@ namespace LogicAndSetTheoryApplication
             return GenerateExpressionRecursively(root, startLevel + 1);
         }
 
-        private static Proposition GenerateProposition(int currentLevel)
+        private Proposition GenerateProposition(int currentLevel)
         {
             int choice = rng.Next(7 + currentLevel);
 
             return GeneratePropositionByRandomChoice(choice);
         }
 
-        public static Proposition GeneratePropositionByRandomChoice(int choice)
+        public Proposition GeneratePropositionByRandomChoice(int choice)
         {
             switch (choice)
             {
@@ -158,8 +173,25 @@ namespace LogicAndSetTheoryApplication
                     // throw a coin for True of False constant.
                     return GenerateRandomConstant(rng.Next(2));
                 default:
-                    return GetRandomProposition();
+                    return GetPropositionFromSet();
             }
+        }
+
+        private Proposition GetPropositionFromSet()
+        {
+            int index = rng.Next(generatedPropositionVariables.Count);
+            
+            foreach (Proposition p in generatedPropositionVariables)
+            {
+                if (index == 0)
+                {
+                    return p;
+                }
+
+                index--;
+            }
+
+            throw new Exception("Impossible to reach code reached");
         }
 
         public static Proposition GenerateRandomConstant(int coinToss)
@@ -172,7 +204,7 @@ namespace LogicAndSetTheoryApplication
             return new False();
         }
 
-        private static Proposition GenerateExpressionRecursively(Proposition result, int level)
+        private Proposition GenerateExpressionRecursively(Proposition result, int level)
         {
             if (!(result is UnaryConnective))
             {

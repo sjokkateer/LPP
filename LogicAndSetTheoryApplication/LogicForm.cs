@@ -19,12 +19,16 @@ namespace LogicAndSetTheoryApplication
         private LogicApp logicApp;
         private SemanticTableauxApp semanticTableauxApp;
 
+        private PropositionGenerator propositionGenerator;
+        private Proposition generatedProposition;
+
         public LogicForm()
         {
             InitializeComponent();
             
             logicApp = new LogicApp(new Parser());
             semanticTableauxApp = new SemanticTableauxApp(new Parser());
+            propositionGenerator = new PropositionGenerator();
         }
 
         private void parseBtn_Click(object sender, EventArgs e)
@@ -60,7 +64,18 @@ namespace LogicAndSetTheoryApplication
         private void Parse()
         {
             string proposition = propositionTbx.Text;
-            selectedApp.Parse(proposition);
+
+            if (proposition != string.Empty)
+            {
+                generatedProposition = null;
+                selectedApp.Parse(proposition);
+            }
+
+            if (generatedProposition != null)
+            {
+                propositionTbx.Text = "";
+                selectedApp.Parse(generatedProposition);
+            }
         }
 
         private void DisplayProposition()
@@ -175,6 +190,12 @@ namespace LogicAndSetTheoryApplication
                 semanticTableauxBtn.BackColor = Color.Red;
                 semanticTableauxBtn.ForeColor = Color.White;
             }
+        }
+
+        private void randomPropositionBtn_Click(object sender, EventArgs e)
+        {
+            generatedProposition = propositionGenerator.GenerateExpression();
+            infixTbx.Text = generatedProposition.ToString();
         }
     }
 }

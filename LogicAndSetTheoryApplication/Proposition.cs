@@ -47,6 +47,11 @@ namespace LogicAndSetTheoryApplication
             return $"\tnode{NodeNumber} [ label = \"{Data}\" ]\n";
         }
 
+        public override int GetHashCode()
+        {
+            return Data.GetHashCode();
+        }
+
         public override bool Equals(object obj)
         {
             // We dont want to compare by reference
