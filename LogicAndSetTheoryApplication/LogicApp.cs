@@ -67,46 +67,54 @@ namespace LogicAndSetTheoryApplication
 
             // 2
             SimplifiedTruthTable = TruthTable.Simplify();
-            
-            // Convert the table to DNF such that we have a proposition to work with.
-            Proposition simplified = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
-            TruthTable simplifiedTt = new TruthTable(simplified);
-            // Check the hash code for the proposition.
-            hashCodeCalculator.GenerateHashCode(simplifiedTt.GetConvertedResultColumn());
-            hashCodes.Add(hashCodeCalculator.HashCode);
 
-            // 3 
-            Nandified = Root.Nandify();
-            TruthTable nandifiedTruthTable = new TruthTable(Nandified);
-            TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
-            
-            // Same as for simplified truth table.
-            Proposition nandSimpleDnf = nandifiedSimplified.CreateDisjunctiveNormalForm();
-            TruthTable nandSimpleDnfTt = new TruthTable(nandSimpleDnf);
+            if (NonConstantExpressionWasParsed())
+            {
+                // Convert the table to DNF such that we have a proposition to work with.
+                Proposition simplified = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
+                TruthTable simplifiedTt = new TruthTable(simplified);
+                // Check the hash code for the proposition.
+                hashCodeCalculator.GenerateHashCode(simplifiedTt.GetConvertedResultColumn());
+                hashCodes.Add(hashCodeCalculator.HashCode);
 
-            hashCodeCalculator.GenerateHashCode(nandSimpleDnfTt.GetConvertedResultColumn());
-            hashCodes.Add(hashCodeCalculator.HashCode);
+                // 3 
+                Nandified = Root.Nandify();
+                TruthTable nandifiedTruthTable = new TruthTable(Nandified);
+                TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
 
-            // 4 
-            // DisjunctiveNormalForm = CreateDisjunctiveNormalForm();
-            DisjunctiveNormalForm = TruthTable.CreateDisjunctiveNormalForm();
-            TruthTable disjunctiveTruthTable = new TruthTable(DisjunctiveNormalForm);
-            hashCodeCalculator.GenerateHashCode(disjunctiveTruthTable.GetConvertedResultColumn());
-            hashCodes.Add(hashCodeCalculator.HashCode);
+                // Same as for simplified truth table.
+                Proposition nandSimpleDnf = nandifiedSimplified.CreateDisjunctiveNormalForm();
+                TruthTable nandSimpleDnfTt = new TruthTable(nandSimpleDnf);
 
-            // 5
-            Proposition simplifiedDisjunctiveNormal = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
-            TruthTable simplifiedDisjunctiveNormalTruthTable = new TruthTable(simplifiedDisjunctiveNormal);
-            hashCodeCalculator.GenerateHashCode(simplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
-            hashCodes.Add(hashCodeCalculator.HashCode);
+                hashCodeCalculator.GenerateHashCode(nandSimpleDnfTt.GetConvertedResultColumn());
+                hashCodes.Add(hashCodeCalculator.HashCode);
 
-            // 6
-            Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Nandify();
-            TruthTable nandifiedSimplifiedDisjunctiveNormalTruthTable = new TruthTable(nandifiedSimplifiedDisjunctiveNormal);
-            hashCodeCalculator.GenerateHashCode(nandifiedSimplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
-            hashCodes.Add(hashCodeCalculator.HashCode);
+                // 4 
+                // DisjunctiveNormalForm = CreateDisjunctiveNormalForm();
+                DisjunctiveNormalForm = TruthTable.CreateDisjunctiveNormalForm();
+                TruthTable disjunctiveTruthTable = new TruthTable(DisjunctiveNormalForm);
+                hashCodeCalculator.GenerateHashCode(disjunctiveTruthTable.GetConvertedResultColumn());
+                hashCodes.Add(hashCodeCalculator.HashCode);
+
+                // 5
+                Proposition simplifiedDisjunctiveNormal = SimplifiedTruthTable.CreateDisjunctiveNormalForm();
+                TruthTable simplifiedDisjunctiveNormalTruthTable = new TruthTable(simplifiedDisjunctiveNormal);
+                hashCodeCalculator.GenerateHashCode(simplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
+                hashCodes.Add(hashCodeCalculator.HashCode);
+
+                // 6
+                Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Nandify();
+                TruthTable nandifiedSimplifiedDisjunctiveNormalTruthTable = new TruthTable(nandifiedSimplifiedDisjunctiveNormal);
+                hashCodeCalculator.GenerateHashCode(nandifiedSimplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
+                hashCodes.Add(hashCodeCalculator.HashCode);
+            }
         }
         
+        public bool NonConstantExpressionWasParsed()
+        {
+            return Root.GetVariables().Count > 0;
+        }
+
         public bool HashCodesMatched()
         {
             return HashCodesMatched(HashCodes, HashCodes.Count - 1);

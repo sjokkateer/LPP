@@ -45,16 +45,25 @@ namespace LPPUnitTests
 
         // Constants only
         [Theory]
-        [InlineData("|(&(1, 0), 1)", 0)]
-        [InlineData("&(&(>(1, 1), |(0, 1)), ~(>(|(1, >(0, 1)), |(&(1, 1), 0))))", 0)]
-        [InlineData("0", 0)]
-        public void Parse_ValidPropositionsWithConstantsOnly_NotSureYet(string propositionExpression, int expectedNumberOfVariables)
+        [InlineData("|(&(1, 0), 1)")]
+        [InlineData("&(&(>(1, 1), |(0, 1)), ~(>(|(1, >(0, 1)), |(&(1, 1), 0))))")]
+        [InlineData("0")]
+        [InlineData("1")]
+        [InlineData("~(0)")]
+        public void Parse_ValidPropositionsWithConstantsOnly_LogicAppShouldHaveRootAndTruthTablesAssigned(string constantPropositionExpression)
         {
             // Arrange // Act
-            logicApp.Parse(propositionExpression);
+            logicApp.Parse(constantPropositionExpression);
             int actualNumberOfVariables = logicApp.Variables.Count;
+            int expectedNumberOfVariables = 0;
 
-            true.Should().BeFalse("Because don't know how to approach this one yet.");
+            // Assert
+            actualNumberOfVariables.Should().Be(expectedNumberOfVariables, "Because the expression contains no proposition variables");
+            logicApp.Root.Should().NotBeNull("Because the constant proposition should be successfully parsed an assigned");
+            
+            string truthTableRelatedMessage = "Because the truthtables should be successfully created and assigned after parsing";
+            logicApp.TruthTable.Should().NotBeNull(truthTableRelatedMessage);
+            logicApp.SimplifiedTruthTable.Should().NotBeNull(truthTableRelatedMessage);
         }
 
         // Mix of constants and variable

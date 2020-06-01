@@ -43,9 +43,14 @@ namespace LogicAndSetTheoryApplication
             DisplayUniqueVariables();
             DisplayTruthTableInformation();
             DisplaySimplifiedTruthTable();
-            DisplaySimplifiedDnfExpression();
-            DisplayDisjunctiveNormalFormInformation();
-            DisplayNandifiedInformation();
+
+            if (logicApp.NonConstantExpressionWasParsed())
+            {
+                DisplaySimplifiedDnfExpression();
+                DisplayDisjunctiveNormalFormInformation();
+                DisplayNandifiedInformation();
+            }
+
             DisplayHashCodes();
             DisplayIfAllCodesMatched();
         }

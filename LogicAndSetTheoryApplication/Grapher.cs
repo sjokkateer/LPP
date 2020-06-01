@@ -106,7 +106,7 @@ namespace LogicAndSetTheoryApplication
                 {
                     sw.WriteLine("graph logic {");
                     
-                    if (shape == String.Empty)
+                    if (shape == string.Empty)
                     { 
                         sw.WriteLine("\tnode [ fontname = \"Arial\" ]");
                     }
