@@ -20,6 +20,7 @@ namespace LogicAndSetTheoryApplication
             this.parser = parser;
         }
 
+        [ExcludeFromCodeCoverage]
         abstract protected string DotFileName();
 
         [ExcludeFromCodeCoverage]
@@ -32,6 +33,11 @@ namespace LogicAndSetTheoryApplication
 
         public void Parse(string propositionExpression)
         {
+            if (propositionExpression == null || propositionExpression == string.Empty)
+            {
+                throw new ArgumentException("Proposition expression may not be null or empty string");
+            }
+
             if (!propositionExpression.Equals(parsedExpression))
             {
                 Root = parser.Parse(propositionExpression);
@@ -42,6 +48,11 @@ namespace LogicAndSetTheoryApplication
 
         public void Parse(Proposition expression)
         {
+            if (expression == null)
+            {
+                throw new ArgumentException("Proposition may not be null");
+            }
+
             if (!expression.Equals(Root))
             {
                 Root = expression;

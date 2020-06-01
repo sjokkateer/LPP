@@ -45,6 +45,7 @@ namespace LogicAndSetTheoryApplication
             Reset();
             ParseHelper(proposition);
 
+            // Check if symbold.Count > 0
             return symbols[0];
         }
 

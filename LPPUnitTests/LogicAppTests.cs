@@ -81,6 +81,18 @@ namespace LPPUnitTests
         }
 
         [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void Parse_InvalidExpressionGiven_ExpectedArgumentExceptionThrown(string propositionExpression)
+        {
+            // Arrange
+            Action act = () => logicApp.Parse(propositionExpression);
+
+            // Act // Assert
+            act.Should().Throw<ArgumentException>("Because an invalid argument is given");
+        }
+
+        [Theory]
         [InlineData("=(>(A, A), ~(A))")]
         [InlineData(">(&(&(|(P, Q), >(P, R)), >(Q, R)), R)")]
         [InlineData("&(Z, ~(Z))")]

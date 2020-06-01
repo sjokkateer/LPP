@@ -125,6 +125,7 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
+        [ExcludeFromCodeCoverage]
         protected override string DotFileName()
         {
             return "Proposition";
