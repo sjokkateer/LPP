@@ -8,6 +8,8 @@ namespace LogicAndSetTheoryApplication
 {
     public class HashCodeCalculator
     {
+        public const int HEXADECIMAL = 16;
+
         private int hashBase;
         private List<int> convertedResultColumn;
         public int HashBase
@@ -15,13 +17,13 @@ namespace LogicAndSetTheoryApplication
             get { return hashBase; }
             set
             {
-                if (value != 0 && value % 2 == 0)
+                if (value > 0 && value % 2 == 0)
                 {
                     hashBase = value;
                 }
                 else
                 {
-                    throw new Exception("The hash base must be a power of 2.");
+                    throw new ArgumentException("The hash base must be a power of 2 and > 0.");
                 }
             }
         }
@@ -39,6 +41,11 @@ namespace LogicAndSetTheoryApplication
 
         public void GenerateHashCode(List<int> convertedResultColumn)
         {
+            if (convertedResultColumn == null)
+            {
+                throw new ArgumentException("Need a list of integers representing bits to calculate the hashcode");
+            }
+
             this.convertedResultColumn = convertedResultColumn;
 
             HashCode = RecursiveHashCode(1);
@@ -47,6 +54,7 @@ namespace LogicAndSetTheoryApplication
         private string RecursiveHashCode(int index)
         {
             int sum = 0;
+
             // Continue off from index, initially index will be 0.
             for (int i = index; i <= convertedResultColumn.Count; i++)
             {
@@ -67,7 +75,8 @@ namespace LogicAndSetTheoryApplication
                     return RecursiveHashCode(i + 1) + DetermineCharacter(sum);
                 }
             }
-            return null;
+
+            return "";
         }
 
         private string DetermineCharacter(int value)
@@ -89,22 +98,6 @@ namespace LogicAndSetTheoryApplication
                 default:
                     return Convert.ToString(value);
             }
-        }
-
-        public override string ToString()
-        {
-            string result = string.Empty;
-            string line = string.Empty;
-            for (int i = 0; i < convertedResultColumn.Count; i++)
-            {
-                line = $"row {i}: {convertedResultColumn[i]}\n";
-                if (i == convertedResultColumn.Count - 1)
-                {
-                    line = $"row {i}: {convertedResultColumn[i]}";
-                }
-                result += line;
-            }
-            return result;
         }
     }
 }
