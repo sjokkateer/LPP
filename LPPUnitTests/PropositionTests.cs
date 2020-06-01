@@ -28,6 +28,23 @@ namespace LPPUnitTests
             actualToString.Should().Be(expectedToString, "Because for a proposition only the symbol itself is returned.");
         }
 
+        [Theory]
+        [InlineData('A', 5, "node5 [ label = \"A\" ]")]
+        [InlineData('L', 10, "node10 [ label = \"L\" ]")]
+        [InlineData('X', 1762738, "node1762738 [ label = \"X\" ]")]
+        public void NodeLabel_ValidPropositionWithSpecificSymbol_ExpectedDataAsString(char symbol, int nodeNumber, string expectedNodeLabel)
+        {
+            // Arrange
+            Proposition proposition = new Proposition(symbol);
+            proposition.NodeNumber = nodeNumber;
+
+            // Act
+            string actualNodeLabel = proposition.NodeLabel();
+
+            // Assert
+            actualNodeLabel.Should().Be(expectedNodeLabel + "\n", "Because GraphViz requires this format.");
+        }
+
         [Fact]
         public void Constructor_ConstructPropositionWithValidCharacterRepresentingVariable_ExpectedObjectToHoldCharacterAsVariable()
         {

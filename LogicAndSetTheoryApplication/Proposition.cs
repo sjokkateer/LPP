@@ -41,10 +41,9 @@ namespace LogicAndSetTheoryApplication
             return Data.ToString();
         }
 
-        [ExcludeFromCodeCoverage]
         public virtual string NodeLabel()
         {
-            return $"\tnode{NodeNumber} [ label = \"{Data}\" ]\n";
+            return $"node{NodeNumber} [ label = \"{Data}\" ]\n";
         }
 
         public override int GetHashCode()
