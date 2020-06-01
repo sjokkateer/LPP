@@ -50,6 +50,17 @@ namespace LPPUnitTests
         }
 
         [Fact]
+        public void Parse_NullGiven_ExpectedArgumentExceptionThrown()
+        {
+            // Arrange
+            Proposition invalidProposition = null;
+            Action act = () => semanticTableauxApp.Parse(invalidProposition);
+
+            // Act // Assert
+            act.Should().Throw<ArgumentException>("Because an invalid argument is given");
+        }
+
+        [Fact]
         public void IsTautology_TautologyParsedThrough_ExpectedTrueReturned()
         {
             // Arrange

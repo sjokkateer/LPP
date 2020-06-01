@@ -308,6 +308,7 @@ namespace LPPUnitTests
     
         [Theory]
         [InlineData("|(&(A, &(B, ~(B))), C)", 2)]
+        [InlineData("&(F, ~(F))", 1)]
         public void GetSimplifiedExpression_ExpressionWithDoNotCareVariableGiven_ExpectedDoNoCareVariableToBeRemovedFromProposition(string simplifiableExpression, int numberOfDoNotCareVariables)
         {
             // Arrange
@@ -330,6 +331,7 @@ namespace LPPUnitTests
         
         [Theory]
         [InlineData("&(A, &(B, C))")]
+        [InlineData("U")]
         public void GetSimplifiedExpression_ExpressionWithoutDoNotCareVariableGiven_ExpectedEqualNumberOfVariablesInProposition(string nonSimplifiableExpression)
         {
             // Arrange
