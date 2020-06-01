@@ -19,7 +19,7 @@ namespace LPPUnitTests
         [InlineData("A", 2)] // 1 ^ 2
         [InlineData("|(A, B)", 4)] // n ^ 2 rows
         [InlineData("|(A, &(B, C))", 8)]
-        public void Constructor_ConstructWithVariablesAlreadySetOnProposition_ShouldResultInAProperlyConstructedObjectWithANumberOfRowsEqualToNumberOfVariablesToThePowerOfTwo(String toParseExpression, int expectedNumberOfRows)
+        public void Constructor_ConstructWithVariablesAlreadySetOnProposition_ShouldResultInAProperlyConstructedObjectWithANumberOfRowsEqualToNumberOfVariablesToThePowerOfTwo(string toParseExpression, int expectedNumberOfRows)
         {
             // Arrange
             parser = new Parser(toParseExpression);
@@ -38,7 +38,7 @@ namespace LPPUnitTests
         [InlineData("A")]
         [InlineData("1")]
         [InlineData("=(A,B)")]
-        public void Simplify_NonSimplifiablTruthTable_ShouldResultInTheOriginalTruthTable(String toParseExpression)
+        public void Simplify_NonSimplifiablTruthTable_ShouldResultInTheOriginalTruthTable(string toParseExpression)
         {
             // Same number of rows
             // These should result in the same sets of rows
@@ -56,7 +56,7 @@ namespace LPPUnitTests
         [Theory]
         [InlineData("|(B, T)")]
         [InlineData("&(B, T)")]
-        public void Simplify_SimplifiableTruthTable_ShouldResultInSimplifiedTruthTable(String toParseExpression)
+        public void Simplify_SimplifiableTruthTable_ShouldResultInSimplifiedTruthTable(string toParseExpression)
         {
             // A simplified truth table has less rows than the original.
             // They are also flagged as simplified and for that reason treated differently
@@ -123,7 +123,7 @@ namespace LPPUnitTests
         [InlineData("A")]
         [InlineData("|(A, B)")]
         [InlineData("|(A, &(B, C))")]
-        public void ToString_MultipleVariablesInTruthTable_NumberOfPiecesShouldBeEquivalentToNumberOfVariablesPlusOneForResultColumn(String toParseExpression)
+        public void ToString_MultipleVariablesInTruthTable_NumberOfPiecesShouldBeEquivalentToNumberOfVariablesPlusOneForResultColumn(string toParseExpression)
         {
             // Arrange
             parser = new Parser(toParseExpression);
@@ -148,7 +148,7 @@ namespace LPPUnitTests
         [InlineData("A", 3)] // # variables ^ 2 + 1 for header
         [InlineData("|(A, B)", 5)]
         [InlineData("|(A, &(B, C))", 9)]
-        public void ToString_ConstantPropositionRootGivenToConstructor_ExpectedTwoRowsPrinted(String toParseExpression, int expectedNumberOfRows)
+        public void ToString_ConstantPropositionRootGivenToConstructor_ExpectedTwoRowsPrinted(string toParseExpression, int expectedNumberOfRows)
         {
             // Arrange
             parser = new Parser(toParseExpression);
@@ -156,8 +156,8 @@ namespace LPPUnitTests
             TruthTable tt = new TruthTable(root);
 
             // Act
-            String tableToString = tt.ToString();
-            String[] rowsAsString = tableToString.Split("\n");
+            string tableToString = tt.ToString();
+            string[] rowsAsString = tableToString.Split("\n");
 
             // Assert
             rowsAsString.Length.Should().Be(expectedNumberOfRows);
@@ -305,6 +305,49 @@ namespace LPPUnitTests
                 propositionStack.Push(binaryConnective.RightSuccessor);
             }
         }
-    }
+    
+        [Theory]
+        [InlineData("|(&(A, &(B, ~(B))), C)", 2)]
+        public void GetSimplifiedExpression_ExpressionWithDoNotCareVariableGiven_ExpectedDoNoCareVariableToBeRemovedFromProposition(string simplifiableExpression, int numberOfDoNotCareVariables)
+        {
+            // Arrange
+            parser = new Parser(simplifiableExpression);
+            Proposition simplifiableProposition = parser.Parse();
 
+            TruthTable truthTable = new TruthTable(simplifiableProposition);
+            TruthTable simplifiedTruthTable = truthTable.Simplify();
+            Proposition afterSimplifying = simplifiedTruthTable.GetSimplifiedExpression();
+
+            // Act
+            int numberOfVariablesInOriginal = simplifiableProposition.GetVariables().Count;
+            int actualNumberOfVariablesInSimplified = afterSimplifying.GetVariables().Count;
+
+            int actualNumberOfDontCareVariables = numberOfVariablesInOriginal - actualNumberOfVariablesInSimplified;
+
+            // Assert
+            actualNumberOfDontCareVariables.Should().Be(numberOfDoNotCareVariables, $"Because the proposition could be simplified and {numberOfDoNotCareVariables} variables should be removed from the original expression that has {numberOfVariablesInOriginal} variables");
+        }
+        
+        [Theory]
+        [InlineData("&(A, &(B, C))")]
+        public void GetSimplifiedExpression_ExpressionWithoutDoNotCareVariableGiven_ExpectedEqualNumberOfVariablesInProposition(string nonSimplifiableExpression)
+        {
+            // Arrange
+            parser = new Parser(nonSimplifiableExpression);
+            Proposition nonSimplifiableProposition = parser.Parse();
+
+            TruthTable truthTable = new TruthTable(nonSimplifiableProposition);
+            TruthTable simplifiedTruthTable = truthTable.Simplify();
+            Proposition afterSimplifying = simplifiedTruthTable.GetSimplifiedExpression();
+
+            // Act
+            int numberOfVariablesInOriginal = nonSimplifiableProposition.GetVariables().Count;
+            int actualNumberOfVariablesInSimplified = afterSimplifying.GetVariables().Count;
+
+            int actualNumberOfDontCareVariables = numberOfVariablesInOriginal - actualNumberOfVariablesInSimplified;
+
+            // Assert
+            actualNumberOfDontCareVariables.Should().Be(0, $"Because the proposition could NOT be simplified thus should have a difference of 0");
+        }
+    }
 }
