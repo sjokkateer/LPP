@@ -65,6 +65,10 @@ namespace LogicAndSetTheoryApplication
             Negation negatedProposition = null;
             Proposition targetLiteral = null;
 
+            // If constant False
+
+            // if negated constant True
+
             if (proposition1 is Negation)
             {
                 negatedProposition = (Negation)proposition1;

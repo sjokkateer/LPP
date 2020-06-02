@@ -79,6 +79,90 @@ namespace LPPUnitTests
         }
 
         [Fact]
+        public void IsClosed_ConstantTrue_ExpectedFalseReturned()
+        {
+            // Arrange
+            Proposition proposition = new True();
+
+            HashSet<Proposition> propositionSet = new HashSet<Proposition>()
+            {
+                proposition
+            };
+
+            SemanticTableauxElement element = new SemanticTableauxElement(propositionSet);
+
+            // Act
+            bool isBranchClosed = element.IsClosed();
+
+            // Assert
+            isBranchClosed.Should().BeFalse("Because the tableaux element has true in its set, which does not contradict.");
+        }
+
+        [Fact]
+        public void IsClosed_ContradictionByNegatedTrue_ExpectedTrueReturned()
+        {
+            // Arrange
+            Negation negatedTrue = new Negation();
+            Proposition proposition = new True();
+            negatedTrue.LeftSuccessor = proposition;
+
+            HashSet<Proposition> propositionSet = new HashSet<Proposition>()
+            {
+                negatedTrue
+            };
+
+            SemanticTableauxElement element = new SemanticTableauxElement(propositionSet);
+
+            // Act
+            bool isBranchClosed = element.IsClosed();
+
+            // Assert
+            isBranchClosed.Should().BeTrue("Because the tableaux element has a negated true in its set, which DOES contradict as it is equivalent to False.");
+        }
+
+        [Fact]
+        public void IsClosed_ContradictionByConstantFalse_ExpectedTrueReturned()
+        {
+            // Arrange
+            Proposition proposition = new False();
+
+            HashSet<Proposition> propositionSet = new HashSet<Proposition>()
+            {
+                proposition
+            };
+
+            SemanticTableauxElement element = new SemanticTableauxElement(propositionSet);
+
+            // Act
+            bool isBranchClosed = element.IsClosed();
+
+            // Assert
+            isBranchClosed.Should().BeTrue("Because the tableaux element has false in its set which is a contradiction.");
+        }
+
+        [Fact]
+        public void IsClosed_NegatedFalse_ExpectedFalseReturned()
+        {
+            // Arrange
+            Negation negatedFalse = new Negation();
+            Proposition proposition = new False();
+            negatedFalse.LeftSuccessor = proposition;
+
+            HashSet<Proposition> propositionSet = new HashSet<Proposition>()
+            {
+                negatedFalse
+            };
+
+            SemanticTableauxElement element = new SemanticTableauxElement(propositionSet);
+
+            // Act
+            bool isBranchClosed = element.IsClosed();
+
+            // Assert
+            isBranchClosed.Should().BeFalse("Because the tableaux element has a negated false (aka true) in its set.");
+        }
+
+        [Fact]
         public void IsClosed_ContradictionByConjunction_AfterCreatingChildElementContainsContradictionClosedShouldReturnTrue()
         {
             // Arrange
@@ -106,6 +190,7 @@ namespace LPPUnitTests
             // Assert
             alphaRuleClosedByChild.Should().BeTrue("Because the child alpha rule element should close the branch by contradiction.");
         }
+
 
         [Fact]
         public void IsClosed_NoContradictionInSetWithConjunctionAsAlphaRuleChild_AfterCreatingChildContainsIsClosedShouldReturnFalse()
