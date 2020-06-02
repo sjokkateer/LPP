@@ -79,11 +79,7 @@ namespace LogicAndSetTheoryApplication
 
             if (negatedProposition != null)
             {
-                // Only variables I presume, else ~1 and 1 will result in contradiction?
                 Proposition negatedSuccessor = negatedProposition.LeftSuccessor;
-
-                 //negatedSuccessor.GetType() == typeof(Proposition) 
-                 //   && targetLiteral.GetType() == typeof(Proposition)
                 return negatedSuccessor.Equals(targetLiteral);
             }
 

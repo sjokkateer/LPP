@@ -78,7 +78,7 @@ namespace LogicAndSetTheoryApplication
                 hashCodes.Add(hashCodeCalculator.HashCode);
 
                 // 3 
-                Nandified = Root.Nandify();
+                Nandified = Root.Copy().Nandify();
                 TruthTable nandifiedTruthTable = new TruthTable(Nandified);
                 TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
 
@@ -102,8 +102,8 @@ namespace LogicAndSetTheoryApplication
                 hashCodeCalculator.GenerateHashCode(simplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
                 hashCodes.Add(hashCodeCalculator.HashCode);
 
-                // 6
-                Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Nandify();
+                // 6 -- Seems to contain some issue why it results in a different hash compared to all others
+                Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Copy().Nandify();
                 TruthTable nandifiedSimplifiedDisjunctiveNormalTruthTable = new TruthTable(nandifiedSimplifiedDisjunctiveNormal);
                 hashCodeCalculator.GenerateHashCode(nandifiedSimplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
                 hashCodes.Add(hashCodeCalculator.HashCode);
