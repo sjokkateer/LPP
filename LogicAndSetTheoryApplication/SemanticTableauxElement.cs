@@ -34,6 +34,15 @@ namespace LogicAndSetTheoryApplication
         {
             List<Proposition> pSet = Propositions.ToList();
 
+            // It can be closed if we have one constant False or one Negated True already.
+            foreach (Proposition p in pSet)
+            {
+                if (ConstantContradiction(p))
+                {
+                    return true;
+                }
+            }
+
             for (int i = 0; i < pSet.Count - 1; i++)
             {
                 for (int j = i + 1; j < pSet.Count; j++)
@@ -60,14 +69,26 @@ namespace LogicAndSetTheoryApplication
             return closed;
         }
 
+        private bool ConstantContradiction(Proposition proposition)
+        {
+            if (proposition.GetType() == typeof(False))
+            {
+                return true;
+            }
+
+            if (proposition.GetType() == typeof(Negation))
+            {
+                Negation negation = (Negation)proposition;
+                return negation.LeftSuccessor.GetType() == typeof(True);
+            }
+
+            return false;
+        }
+
         protected bool IsContradiction(Proposition proposition1, Proposition proposition2)
         {
             Negation negatedProposition = null;
             Proposition targetLiteral = null;
-
-            // If constant False
-
-            // if negated constant True
 
             if (proposition1 is Negation)
             {
