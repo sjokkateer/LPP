@@ -8,7 +8,7 @@ namespace LogicAndSetTheoryApplication
 {
     public class ExistentialQuantifier: Quantifier
     {
-        public static char SYMBOL = '!';
+        public const char SYMBOL = '!';
 
         public ExistentialQuantifier(char boundVariable): base(SYMBOL, boundVariable)
         { }

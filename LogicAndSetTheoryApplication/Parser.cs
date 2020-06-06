@@ -7,6 +7,7 @@ namespace LogicAndSetTheoryApplication
     public class Parser
     {
         public const string CONNECTIVES = "~>=&|%";
+        public const string QUANTIFIERS = "@!";
         private const string VARIABLES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const string CONSTANTS = "01";
 
@@ -16,6 +17,7 @@ namespace LogicAndSetTheoryApplication
         private List<Proposition> alreadyProcessedVariables;
 
         private List<char> connectives;
+        private List<char> quantifierBoundVariables;
         private List<Proposition> symbols;
 
         public Parser()
@@ -24,6 +26,7 @@ namespace LogicAndSetTheoryApplication
         private void Reset()
         {
             connectives = new List<char>();
+            quantifierBoundVariables = new List<char>();
             symbols = new List<Proposition>();
             alreadyProcessedVariables = new List<Proposition>();
         }
@@ -53,21 +56,51 @@ namespace LogicAndSetTheoryApplication
         {
             if (s != string.Empty)
             {
-                if (CONNECTIVES.Contains(s[0]))
+                if (CONNECTIVES.Contains(s[0]) || QUANTIFIERS.Contains(s[0]))
                 {
                     connectives.Add(s[0]);
+
+                    if (s.Length > 0 && Predicate.LOWER_CASE_ALPHABET.Contains(s[1]))
+                    {
+                        quantifierBoundVariables.Add(s[1]);
+                        s = s.Substring(1);
+                    }
                 }
                 else if (VARIABLES.Contains(s[0]))
                 {
-                    Proposition symbol = IsVariableInExpression(s[0]);
+                    // Distinguish between predicate and abstract proposition variable.
+                    Proposition symbol = null;
 
-                    if (symbol == null)
+                    if (s.Length > 1 && s[1] == '(')
                     {
-                        // New abstract variable encountered, create a new symbol.
-                        symbol = new Proposition(s[0]);
-                        // Add the symbol by reference in the list of already processed 
-                        // abstract proposition variables.
-                        alreadyProcessedVariables.Add(symbol);
+                        char predicateSymbol = s[0];
+                        s = s.Substring(1);
+                        List<char> boundVariables = new List<char>();
+
+                        while (s[0] != ')')
+                        {
+                            if (Predicate.LOWER_CASE_ALPHABET.Contains(s[0]))
+                            {
+                                boundVariables.Add(s[0]);
+                            }
+
+                            s = s.Substring(1);
+                        }
+
+                        symbol = new Predicate(predicateSymbol, boundVariables);
+                    }
+                    else
+                    {
+                        symbol = IsVariableInExpression(s[0]);
+
+                        if (symbol == null)
+                        {
+                            // New abstract variable encountered, create a new symbol.
+                            symbol = new Proposition(s[0]);
+                            // Add the symbol by reference in the list of already processed 
+                            // abstract proposition variables.
+                            alreadyProcessedVariables.Add(symbol);
+                        }
                     }
 
                     symbols.Add(symbol);
@@ -139,6 +172,12 @@ namespace LogicAndSetTheoryApplication
                 case Nand.SYMBOL:
                     result = new Nand();
                     break;
+                case UniversalQuantifier.SYMBOL:
+                    result = new UniversalQuantifier(PopBoundVariable());
+                    break;
+                case ExistentialQuantifier.SYMBOL:
+                    result = new ExistentialQuantifier(PopBoundVariable());
+                    break;
             }
 
             // 'CreateExpression'
@@ -159,6 +198,16 @@ namespace LogicAndSetTheoryApplication
             // Now the expression is a symbol in case a nested connective needs to use it
             // as right or left successor.
             symbols.Add(result);
+        }
+
+        private char PopBoundVariable()
+        {
+            int lastIndex = quantifierBoundVariables.Count - 1;
+            char boundVariable = quantifierBoundVariables[lastIndex];
+            
+            quantifierBoundVariables.RemoveAt(lastIndex);
+            
+            return boundVariable;
         }
 
         /// <summary>

@@ -19,6 +19,10 @@ namespace LPPUnitTests
         [InlineData("0", typeof(False))]
         [InlineData("=(1, |(A, U))", typeof(BiImplication))]
         [InlineData(">(X, ~(A))", typeof(Implication))]
+        [InlineData("Z(x, a, y)", typeof(Predicate))]
+        [InlineData("@r.(P(r))", typeof(UniversalQuantifier))]
+        [InlineData("!s.(&(Q(s), P(s)))", typeof(ExistentialQuantifier))]
+
         public void Parse_DifferentValidPrefixPropositions_SuccessfullyParsedPropositionRootReturned(string proposition, Type typeOfRoot)
         {
             // Arrange
