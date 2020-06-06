@@ -62,5 +62,15 @@ namespace LogicAndSetTheoryApplication
             result += LeftSuccessor.NodeLabel();
             return result;
         }
+
+        public override bool Replace(char originalVariable, char newVariable)
+        {
+            if (LeftSuccessor.GetType() != typeof(Proposition))
+            {
+                return LeftSuccessor.Replace(originalVariable, newVariable);
+            }
+
+            return false;
+        }
     }
 }

@@ -89,7 +89,7 @@ namespace LPPUnitTests
 
             // Act
             string actualString = quantifier.ToString();
-            string expectedString = $"{quantifier.GetSymbol()}.{GetBoundVariable()}({predicate})";
+            string expectedString = $"{quantifier.GetSymbol()}{GetBoundVariable()}.({predicate})";
 
             // Assert
             actualString.Should().Be(expectedString, "Because that's the format we expect");
@@ -110,10 +110,30 @@ namespace LPPUnitTests
 
             // Act
             string actualString = quantifier.ToString();
-            string expectedString = $"{quantifier.GetSymbol()}.{GetBoundVariable()}({conjunction})";
+            string expectedString = $"{quantifier.GetSymbol()}{GetBoundVariable()}.({conjunction})";
 
             // Assert
             actualString.Should().Be(expectedString, "Because that's the format we expect");
+        }
+
+        [Fact]
+        public void Replace_ReplaceExistingVariableInPredicateByNewVariable_ExpectedSuccessfullyReplaceVariable()
+        {
+            // Arrange
+            Quantifier quantifier = GetQuantifier();
+            Conjunction conjunction = new Conjunction();
+            Predicate leftPredicate = new Predicate('P', new List<char>() { GetBoundVariable() });
+            Predicate rightPredicate = new Predicate('Q', new List<char>() { GetBoundVariable() });
+
+            quantifier.LeftSuccessor = conjunction;
+            conjunction.LeftSuccessor = leftPredicate;
+            conjunction.RightSuccessor = rightPredicate;
+
+            // Act
+            bool replaced = quantifier.Replace(GetBoundVariable(), 'q');
+
+            // Assert
+            replaced.Should().BeTrue("Because the quantifier should forward replacing a variable on a predicate");
         }
     }
 }

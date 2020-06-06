@@ -42,7 +42,7 @@ namespace LogicAndSetTheoryApplication
             return variables;
         }
 
-        public bool Replace(char originalVariable, char newVariable)
+        public override bool Replace(char originalVariable, char newVariable)
         {
             bool replaced = false;
 

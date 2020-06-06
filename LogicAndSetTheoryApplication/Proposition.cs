@@ -101,5 +101,10 @@ namespace LogicAndSetTheoryApplication
         {
             return new Proposition(Data);
         }
+
+        public virtual bool Replace(char originalVariable, char newVariable)
+        {
+            throw new NotImplementedException("Can not apply to abstract proposition variable");
+        }
     }
 }

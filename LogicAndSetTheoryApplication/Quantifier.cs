@@ -55,7 +55,7 @@ namespace LogicAndSetTheoryApplication
                 throw new NullReferenceException("A predicate is required to be set");
             }
 
-            string result = $"{Data}.{GetBoundVariable()}";
+            string result = $"{Data}{GetBoundVariable()}.";
 
             result += "(";
             result += LeftSuccessor.ToString();
