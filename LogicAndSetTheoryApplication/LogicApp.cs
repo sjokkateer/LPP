@@ -115,6 +115,9 @@ namespace LogicAndSetTheoryApplication
             return Root.GetVariables().Count > 0;
         }
 
+        //public bool PredicateExpressionWasParsed()
+        //{ }
+
         public bool HashCodesMatched()
         {
             return HashCodesMatched(HashCodes, HashCodes.Count - 1);

@@ -50,6 +50,8 @@
     <Compile Include="IDotFile.cs" />
     <Compile Include="LogicApp.cs" />
     <Compile Include="LogicAppBase.cs" />
+    <Compile Include="Predicate.cs" />
+    <Compile Include="Quantifier.cs" />
     <Compile Include="SemanticTableaux.cs" />
     <Compile Include="SemanticTableauxApp.cs" />
     <Compile Include="SemanticTableauxElement.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="TruthTable.cs" />
     <Compile Include="TruthTableRow.cs" />
     <Compile Include="UnaryConnective.cs" />
+    <Compile Include="UniversalQuantifier.cs" />
     <EmbeddedResource Include="LogicForm.resx">
       <DependentUpon>LogicForm.cs</DependentUpon>
     </EmbeddedResource>

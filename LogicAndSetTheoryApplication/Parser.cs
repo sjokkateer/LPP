@@ -60,6 +60,7 @@ namespace LogicAndSetTheoryApplication
                 else if (VARIABLES.Contains(s[0]))
                 {
                     Proposition symbol = IsVariableInExpression(s[0]);
+
                     if (symbol == null)
                     {
                         // New abstract variable encountered, create a new symbol.
@@ -68,6 +69,7 @@ namespace LogicAndSetTheoryApplication
                         // abstract proposition variables.
                         alreadyProcessedVariables.Add(symbol);
                     }
+
                     symbols.Add(symbol);
                 }
                 else if (CONSTANTS.Contains(s[0]))

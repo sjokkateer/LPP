@@ -13,12 +13,13 @@ namespace LPPUnitTests
         [Theory]
         [InlineData("~(A)", typeof(Negation))]
         [InlineData("&(A, B)", typeof(Conjunction))]
+        [InlineData("|(A, B)", typeof(Disjunction))]
         [InlineData("U", typeof(Proposition))]
         [InlineData("1", typeof(True))]
         [InlineData("0", typeof(False))]
         [InlineData("=(1, |(A, U))", typeof(BiImplication))]
         [InlineData(">(X, ~(A))", typeof(Implication))]
-        public void Parse_DifferentValidPrefixPropositions_SuccessfullyParsedPropositionRootReturned(string proposition, object typeOfRoot)
+        public void Parse_DifferentValidPrefixPropositions_SuccessfullyParsedPropositionRootReturned(string proposition, Type typeOfRoot)
         {
             // Arrange
             parser = new Parser(proposition);
