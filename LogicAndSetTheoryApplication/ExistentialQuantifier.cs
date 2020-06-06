@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LogicAndSetTheoryApplication
 {
-    public class UniversalQuantifier: Quantifier
+    public class ExistentialQuantifier: Quantifier
     {
-        public const char SYMBOL = '@';
+        public static char SYMBOL = '!';
 
-        public UniversalQuantifier(char boundVariable): base(SYMBOL, boundVariable)
+        public ExistentialQuantifier(char boundVariable): base(SYMBOL, boundVariable)
         { }
     }
 }

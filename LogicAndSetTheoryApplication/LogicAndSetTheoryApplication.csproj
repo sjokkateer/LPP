@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constant.cs" />
+    <Compile Include="ExistentialQuantifier.cs" />
     <Compile Include="IDotFile.cs" />
     <Compile Include="LogicApp.cs" />
     <Compile Include="LogicAppBase.cs" />
