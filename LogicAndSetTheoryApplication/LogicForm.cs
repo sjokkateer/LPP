@@ -35,35 +35,27 @@ namespace LogicAndSetTheoryApplication
         {
             selectedApp = logicApp;
 
-            ResetHashRelatedItems();
-
+            ResetAllControls();
             Parse();
 
             DisplayProposition();
-            DisplayUniqueVariables();
-            DisplayTruthTableInformation();
-            DisplaySimplifiedTruthTable();
 
-            if (logicApp.NonConstantExpressionWasParsed())
+            if (selectedApp.Root.IsAbstractProposition())
             {
-                DisplaySimplifiedDnfExpression();
-                DisplayDisjunctiveNormalFormInformation();
-                DisplayNandifiedInformation();
+                DisplayUniqueVariables();
+                DisplayTruthTableInformation();
+                DisplaySimplifiedTruthTable();
+
+                if (logicApp.NonConstantExpressionWasParsed())
+                {
+                    DisplaySimplifiedDnfExpression();
+                    DisplayDisjunctiveNormalFormInformation();
+                    DisplayNandifiedInformation();
+                }
+
+                DisplayHashCodes();
+                DisplayIfAllCodesMatched();
             }
-
-            DisplayHashCodes();
-            DisplayIfAllCodesMatched();
-        }
-
-        private void ResetHashRelatedItems()
-        {
-            hashesListBox.Items.Clear();
-            hashesListBox.Items.Add("Hashes:");
-            hashesListBox.Items.Add("");
-
-            hashCodesListbox.Items.Clear();
-            hashCodesListbox.Items.Add("Codes:");
-            hashCodesListbox.Items.Add("");
         }
 
         private void Parse()
@@ -83,9 +75,42 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
+        private void ResetAllControls()
+        {
+            infixTbx.Text = "";
+            uniqueVariablesTbx.Text = "";
+            disjunctiveFormTbx.Text = "";
+            simplifiedDisjunctiveFormTbx.Text = "";
+            nandifiedTbx.Text = "";
+
+            truthTableLbx.Items.Clear();
+            hashesListBox.Items.Clear();
+            hashCodesListbox.Items.Clear();
+            simplifiedTruthTableLbx.Items.Clear();
+
+            ResetHashRelatedItems();
+        }
+
+        private void ResetHashRelatedItems()
+        {
+            hashCodeTbx.Text = "";
+            hashCodeTbx.BackColor = SystemColors.Control;
+
+            hashCodeValidationTbx.Text = "";
+            hashCodeValidationTbx.BackColor = SystemColors.Control;
+
+            hashesListBox.Items.Clear();
+            hashesListBox.Items.Add("Hashes:");
+            hashesListBox.Items.Add("");
+
+            hashCodesListbox.Items.Clear();
+            hashCodesListbox.Items.Add("Codes:");
+            hashCodesListbox.Items.Add("");
+        }
+
         private void DisplayProposition()
         {   
-            infixTbx.Text = logicApp.Root.ToString();
+            infixTbx.Text = selectedApp.Root.ToString();
         }
 
         private void DisplayUniqueVariables()
@@ -181,7 +206,8 @@ namespace LogicAndSetTheoryApplication
             selectedApp = semanticTableauxApp;
             
             Parse();
-            
+            DisplayProposition();
+
             bool isTautology = semanticTableauxApp.IsTautology();
             infixTbx.Text = semanticTableauxApp.Root.ToString();
 
@@ -199,6 +225,7 @@ namespace LogicAndSetTheoryApplication
 
         private void randomPropositionBtn_Click(object sender, EventArgs e)
         {
+            propositionTbx.Text = "";
             generatedProposition = propositionGenerator.GenerateExpression();
             infixTbx.Text = generatedProposition.ToString();
         }

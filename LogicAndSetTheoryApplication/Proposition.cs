@@ -46,6 +46,11 @@ namespace LogicAndSetTheoryApplication
             return $"node{NodeNumber} [ label = \"{Data}\" ]\n";
         }
 
+        public virtual bool IsAbstractProposition()
+        {
+            return true;
+        }
+
         public override int GetHashCode()
         {
             return Data.GetHashCode();

@@ -85,5 +85,10 @@ namespace LogicAndSetTheoryApplication
 
             return replaced;
         }
+
+        public override bool IsAbstractProposition()
+        {
+            return base.IsAbstractProposition() && RightSuccessor.IsAbstractProposition();
+        }
     }
 }

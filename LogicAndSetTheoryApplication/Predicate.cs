@@ -83,5 +83,10 @@ namespace LogicAndSetTheoryApplication
         {
             return variables[key] != default ? variables[key] : key;
         }
+
+        public override bool IsAbstractProposition()
+        {
+            return false;
+        }
     }
 }
