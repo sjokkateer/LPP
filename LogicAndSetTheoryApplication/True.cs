@@ -25,6 +25,11 @@ namespace LogicAndSetTheoryApplication
             return true;
         }
 
+        public override Proposition Copy()
+        {
+            return new True();
+        }
+
         public override Proposition Nandify()
         {
             return this;
