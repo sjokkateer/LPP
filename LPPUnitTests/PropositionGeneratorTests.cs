@@ -155,9 +155,6 @@ namespace LPPUnitTests
         [InlineData(3, typeof(Implication))]
         [InlineData(4, typeof(BiImplication))]
         [InlineData(5, typeof(Nand))]
-        [InlineData(7, typeof(Proposition))]
-        [InlineData(13, typeof(Proposition))]
-        [InlineData(198, typeof(Proposition))]
         public void GeneratePropositionByRandomChoice_PositiveIntegerGiven_ExpectedCorrespondingObjectReturned(int choice, Type type)
         {
             // Arrange 

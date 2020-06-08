@@ -17,13 +17,13 @@ namespace LogicAndSetTheoryApplication
             get { return hashBase; }
             set
             {
-                if (value > 0 && value % 2 == 0)
+                if (value > 1 && (value & (value - 1)) == 0)
                 {
                     hashBase = value;
                 }
                 else
                 {
-                    throw new ArgumentException("The hash base must be a power of 2 and > 0.");
+                    throw new ArgumentException("The hash base must be a power of 2 and > 1.");
                 }
             }
         }
