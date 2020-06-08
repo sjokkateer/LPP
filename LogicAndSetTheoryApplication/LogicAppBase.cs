@@ -12,7 +12,13 @@ namespace LogicAndSetTheoryApplication
     {
         protected Parser parser;
         protected string parsedExpression;
-
+        // ModifiedRoot will be used for all calculations by
+        // both apps.
+        protected Proposition ModifiedRoot { get; set; }
+        
+        // Root will be used for display and is just a copy of the 
+        // originally parsed proposition, otherwise it might
+        // display for ex. the nandified root in the app.
         public Proposition Root { get; protected set; }
 
         public LogicAppBase(Parser parser)
@@ -40,7 +46,9 @@ namespace LogicAndSetTheoryApplication
 
             if (!propositionExpression.Equals(parsedExpression))
             {
-                Root = parser.Parse(propositionExpression);
+
+                ModifiedRoot = parser.Parse(propositionExpression);
+                Root = ModifiedRoot.Copy();
                 ExecuteParsingActivities();
                 parsedExpression = propositionExpression;
             }
@@ -55,7 +63,8 @@ namespace LogicAndSetTheoryApplication
 
             if (!expression.Equals(Root))
             {
-                Root = expression;
+                ModifiedRoot = expression;
+                Root = ModifiedRoot.Copy();
                 ExecuteParsingActivities();
             }
         }

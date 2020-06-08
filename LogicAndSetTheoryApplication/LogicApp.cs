@@ -61,11 +61,8 @@ namespace LogicAndSetTheoryApplication
             {
                 hashCodes = new List<string>();
 
-                Proposition proposition = Root;
-                Root = Root.Copy();
-
                 // 1
-                TruthTable = new TruthTable(proposition);
+                TruthTable = new TruthTable(ModifiedRoot);
                 hashCodeCalculator.GenerateHashCode(TruthTable.GetConvertedResultColumn());
                 hashCodes.Add(hashCodeCalculator.HashCode);
 
@@ -82,7 +79,7 @@ namespace LogicAndSetTheoryApplication
                     hashCodes.Add(hashCodeCalculator.HashCode);
 
                     // 3 
-                    Nandified = proposition.Nandify();
+                    Nandified = ModifiedRoot.Nandify();
                     TruthTable nandifiedTruthTable = new TruthTable(Nandified);
                     TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
 
