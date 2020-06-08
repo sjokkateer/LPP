@@ -36,25 +36,36 @@ namespace LogicAndSetTheoryApplication
             selectedApp = logicApp;
 
             ResetAllControls();
-            Parse();
 
-            DisplayProposition();
-
-            if (selectedApp.Root.IsAbstractProposition())
+            try
             {
-                DisplayUniqueVariables();
-                DisplayTruthTableInformation();
-                DisplaySimplifiedTruthTable();
+                Parse();
+            }
+            catch (Exception)
+            {
 
-                if (logicApp.NonConstantExpressionWasParsed())
+            }
+
+            if (selectedApp.Root != null)
+            {
+                DisplayProposition();
+
+                if (selectedApp.Root.IsAbstractProposition())
                 {
-                    DisplaySimplifiedDnfExpression();
-                    DisplayDisjunctiveNormalFormInformation();
-                    DisplayNandifiedInformation();
-                }
+                    DisplayUniqueVariables();
+                    DisplayTruthTableInformation();
+                    DisplaySimplifiedTruthTable();
 
-                DisplayHashCodes();
-                DisplayIfAllCodesMatched();
+                    if (logicApp.NonConstantExpressionWasParsed())
+                    {
+                        DisplaySimplifiedDnfExpression();
+                        DisplayDisjunctiveNormalFormInformation();
+                        DisplayNandifiedInformation();
+                    }
+
+                    DisplayHashCodes();
+                    DisplayIfAllCodesMatched();
+                }
             }
         }
 

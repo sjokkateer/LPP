@@ -15,7 +15,10 @@ namespace LogicAndSetTheoryApplication
 
         public override bool Calculate()
         {
-            return !(LeftSuccessor.Calculate() && RightSuccessor.Calculate());
+            bool leftResult = LeftSuccessor.Calculate();
+            bool rightResult = RightSuccessor.Calculate();
+
+            return !(leftResult && rightResult);
         }
 
         public override Proposition Copy()

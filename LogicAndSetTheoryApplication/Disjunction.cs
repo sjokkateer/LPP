@@ -23,6 +23,7 @@ namespace LogicAndSetTheoryApplication
             Disjunction copy = new Disjunction();
             copy.LeftSuccessor = LeftSuccessor.Copy();
             copy.RightSuccessor = RightSuccessor.Copy();
+            
             return copy;
         }
 
@@ -37,6 +38,7 @@ namespace LogicAndSetTheoryApplication
             negationOfRightSuccessor.LeftSuccessor = RightSuccessor;
             nand.LeftSuccessor = negationOfLeftSuccessor;
             nand.RightSuccessor = negationOfRightSuccessor;
+            
             return nand.Nandify();
         }
     }

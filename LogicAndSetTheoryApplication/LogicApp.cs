@@ -57,13 +57,15 @@ namespace LogicAndSetTheoryApplication
 
         protected override void ExecuteParsingActivities()
         {
-            // New list of all the required hashcodes.
             if (Root.IsAbstractProposition())
             {
                 hashCodes = new List<string>();
 
+                Proposition proposition = Root;
+                Root = Root.Copy();
+
                 // 1
-                TruthTable = new TruthTable(Root);
+                TruthTable = new TruthTable(proposition);
                 hashCodeCalculator.GenerateHashCode(TruthTable.GetConvertedResultColumn());
                 hashCodes.Add(hashCodeCalculator.HashCode);
 
@@ -80,7 +82,7 @@ namespace LogicAndSetTheoryApplication
                     hashCodes.Add(hashCodeCalculator.HashCode);
 
                     // 3 
-                    Nandified = Root.Copy().Nandify();
+                    Nandified = proposition.Nandify();
                     TruthTable nandifiedTruthTable = new TruthTable(Nandified);
                     TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
 
@@ -91,8 +93,7 @@ namespace LogicAndSetTheoryApplication
                     hashCodeCalculator.GenerateHashCode(nandSimpleDnfTt.GetConvertedResultColumn());
                     hashCodes.Add(hashCodeCalculator.HashCode);
 
-                    // 4 
-                    // DisjunctiveNormalForm = CreateDisjunctiveNormalForm();
+                    // 4
                     DisjunctiveNormalForm = TruthTable.CreateDisjunctiveNormalForm();
                     TruthTable disjunctiveTruthTable = new TruthTable(DisjunctiveNormalForm);
                     hashCodeCalculator.GenerateHashCode(disjunctiveTruthTable.GetConvertedResultColumn());
@@ -104,8 +105,13 @@ namespace LogicAndSetTheoryApplication
                     hashCodeCalculator.GenerateHashCode(simplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
                     hashCodes.Add(hashCodeCalculator.HashCode);
 
-                    // 6 -- Seems to contain some issue why it results in a different hash compared to all others
-                    Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Copy().Nandify();
+                    // 6
+                    // But why does this copy not result in different values then?
+                    // This fails atm on very long ones.
+                    // Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Copy().Nandify();
+
+                    // Remove the copy again, in the hope that all variables in the tree get assigned truth values, which copying could prevent.
+                    Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Nandify();
                     TruthTable nandifiedSimplifiedDisjunctiveNormalTruthTable = new TruthTable(nandifiedSimplifiedDisjunctiveNormal);
                     hashCodeCalculator.GenerateHashCode(nandifiedSimplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
                     hashCodes.Add(hashCodeCalculator.HashCode);
