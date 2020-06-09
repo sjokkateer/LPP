@@ -23,6 +23,7 @@ namespace LogicAndSetTheoryApplication
         {
             Negation copy = new Negation();
             copy.LeftSuccessor = LeftSuccessor.Copy();
+            
             return copy;
         }
 
@@ -31,12 +32,15 @@ namespace LogicAndSetTheoryApplication
             // ~(A) == ~(A & A) == A % A
             Nand nand = new Nand();
             Proposition nandifiedLeft = LeftSuccessor;
+            
             if (LeftSuccessor.GetType() != typeof(Proposition))
             {
                 nandifiedLeft = LeftSuccessor.Nandify();
             }
+            
             nand.LeftSuccessor = nandifiedLeft;
             nand.RightSuccessor = nandifiedLeft;
+            
             return nand;
         }
     }

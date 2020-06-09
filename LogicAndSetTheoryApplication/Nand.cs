@@ -23,11 +23,11 @@ namespace LogicAndSetTheoryApplication
 
         public override Proposition Copy()
         {
-            Nand newBase = new Nand();
-            newBase.LeftSuccessor = LeftSuccessor.Copy();
-            newBase.RightSuccessor = RightSuccessor.Copy();
+            Nand copy = new Nand();
+            copy.LeftSuccessor = LeftSuccessor.Copy();
+            copy.RightSuccessor = RightSuccessor.Copy();
 
-            return newBase;
+            return copy;
         }
 
         public override Proposition Nandify()

@@ -22,6 +22,7 @@ namespace LogicAndSetTheoryApplication
             Conjunction copy = new Conjunction();
             copy.LeftSuccessor = LeftSuccessor.Copy();
             copy.RightSuccessor = RightSuccessor.Copy();
+            
             return copy;
         }
 
@@ -31,11 +32,13 @@ namespace LogicAndSetTheoryApplication
             // Now ~(P & Q) == (P % Q)
             // And finally ~(P % Q) == (P % Q) % (P % Q)
             // Create the double negation equivalent of the conjunction.
-            Negation negation = new Negation();
             Nand nand = new Nand();
             nand.LeftSuccessor = LeftSuccessor;
             nand.RightSuccessor = RightSuccessor;
+
+            Negation negation = new Negation();
             negation.LeftSuccessor = nand;
+
             return negation.Nandify();
         }
     }

@@ -20,6 +20,7 @@ namespace LogicAndSetTheoryApplication
         private SemanticTableauxApp semanticTableauxApp;
 
         private PropositionGenerator propositionGenerator;
+
         private Proposition generatedProposition;
 
         public LogicForm()
@@ -32,6 +33,11 @@ namespace LogicAndSetTheoryApplication
         }
 
         private void parseBtn_Click(object sender, EventArgs e)
+        {
+            ParseAbstractProposition();
+        }
+
+        private void ParseAbstractProposition()
         {
             selectedApp = logicApp;
 
@@ -100,6 +106,9 @@ namespace LogicAndSetTheoryApplication
             simplifiedTruthTableLbx.Items.Clear();
 
             ResetHashRelatedItems();
+
+            semanticTableauxBtn.BackColor = SystemColors.Control;
+            semanticTableauxBtn.ForeColor = Color.Black;
         }
 
         private void ResetHashRelatedItems()
@@ -120,7 +129,7 @@ namespace LogicAndSetTheoryApplication
         }
 
         private void DisplayProposition()
-        {   
+        {
             infixTbx.Text = selectedApp.Root.ToString();
         }
 
@@ -209,35 +218,51 @@ namespace LogicAndSetTheoryApplication
 
         private void viewTreeBtn_Click(object sender, EventArgs e)
         {
-            selectedApp.CreateGraphImage();
+            if (selectedApp != null)
+            {
+                selectedApp.CreateGraphImage();
+            }
         }
 
         private void semanticTableauxBtn_Click(object sender, EventArgs e)
         {
             selectedApp = semanticTableauxApp;
             
-            Parse();
-            DisplayProposition();
-
-            bool isTautology = semanticTableauxApp.IsTautology();
-            infixTbx.Text = semanticTableauxApp.Root.ToString();
-
-            if (isTautology)
+            try
             {
-                semanticTableauxBtn.BackColor = Color.LightGreen;
-                semanticTableauxBtn.ForeColor = Color.Black;
+                Parse();
             }
-            else
+            catch
             {
-                semanticTableauxBtn.BackColor = Color.Red;
-                semanticTableauxBtn.ForeColor = Color.White;
+
+            }
+
+            if (selectedApp.Root != null)
+            {
+                DisplayProposition();
+
+                bool isTautology = semanticTableauxApp.IsTautology();
+
+                if (isTautology)
+                {
+                    semanticTableauxBtn.BackColor = Color.LightGreen;
+                    semanticTableauxBtn.ForeColor = Color.Black;
+                }
+                else
+                {
+                    semanticTableauxBtn.BackColor = Color.Red;
+                    semanticTableauxBtn.ForeColor = Color.White;
+                }
             }
         }
 
         private void randomPropositionBtn_Click(object sender, EventArgs e)
         {
+            ResetAllControls();
+
             propositionTbx.Text = "";
             generatedProposition = propositionGenerator.GenerateExpression();
+
             infixTbx.Text = generatedProposition.ToString();
         }
     }

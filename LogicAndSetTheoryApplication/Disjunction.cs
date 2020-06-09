@@ -32,10 +32,13 @@ namespace LogicAndSetTheoryApplication
             // P | Q == ~(~(P)) | ~(~(Q))
             // == ~(~(P) & ~(Q)) == ~(P) % ~(Q)
             Nand nand = new Nand();
+            
             Negation negationOfLeftSuccessor = new Negation();
             negationOfLeftSuccessor.LeftSuccessor = LeftSuccessor;
+            
             Negation negationOfRightSuccessor = new Negation();
             negationOfRightSuccessor.LeftSuccessor = RightSuccessor;
+
             nand.LeftSuccessor = negationOfLeftSuccessor;
             nand.RightSuccessor = negationOfRightSuccessor;
             

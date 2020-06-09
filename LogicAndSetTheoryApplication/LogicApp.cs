@@ -62,7 +62,7 @@ namespace LogicAndSetTheoryApplication
                 hashCodes = new List<string>();
 
                 // 1
-                TruthTable = new TruthTable(ModifiedRoot);
+                TruthTable = new TruthTable(Root);
                 hashCodeCalculator.GenerateHashCode(TruthTable.GetConvertedResultColumn());
                 hashCodes.Add(hashCodeCalculator.HashCode);
 
@@ -79,7 +79,7 @@ namespace LogicAndSetTheoryApplication
                     hashCodes.Add(hashCodeCalculator.HashCode);
 
                     // 3 
-                    Nandified = ModifiedRoot.Nandify();
+                    Nandified = Root.Nandify();
                     TruthTable nandifiedTruthTable = new TruthTable(Nandified);
                     TruthTable nandifiedSimplified = nandifiedTruthTable.Simplify();
 
@@ -103,11 +103,6 @@ namespace LogicAndSetTheoryApplication
                     hashCodes.Add(hashCodeCalculator.HashCode);
 
                     // 6
-                    // But why does this copy not result in different values then?
-                    // This fails atm on very long ones.
-                    // Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Copy().Nandify();
-
-                    // Remove the copy again, in the hope that all variables in the tree get assigned truth values, which copying could prevent.
                     Proposition nandifiedSimplifiedDisjunctiveNormal = simplifiedDisjunctiveNormal.Nandify();
                     TruthTable nandifiedSimplifiedDisjunctiveNormalTruthTable = new TruthTable(nandifiedSimplifiedDisjunctiveNormal);
                     hashCodeCalculator.GenerateHashCode(nandifiedSimplifiedDisjunctiveNormalTruthTable.GetConvertedResultColumn());
