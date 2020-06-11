@@ -51,14 +51,10 @@ namespace LogicAndSetTheoryApplication
         {
             bool replaced = false;
 
-            // The new variable should not be present, neither as key and also not as value.
-            if (!variables.ContainsKey(newVariable) && !variables.ContainsValue(newVariable))
+            if (variables.ContainsKey(originalVariable) && variables[originalVariable] == default)
             {
-                if (variables.ContainsKey(originalVariable) && variables[originalVariable] == default)
-                {
-                    variables[originalVariable] = newVariable;
-                    replaced = true;
-                }
+                variables[originalVariable] = newVariable;
+                replaced = true;
             }
 
             return replaced;

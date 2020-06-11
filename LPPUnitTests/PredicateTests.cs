@@ -126,7 +126,8 @@ namespace LPPUnitTests
         }
 
         [Fact]
-        public void Replace_ReplacingAVariableWithAVariableThatAlreadyExistsAsKey_ExpectedFalseReturned()
+        // Since we will be using duplicate variables as shown in the examples.
+        public void Replace_ReplacingAVariableWithAVariableThatAlreadyExistsAsKey_ExpectedTrueReturned()
         {
             // Arrange
             List<char> variables = new List<char>()
@@ -142,11 +143,11 @@ namespace LPPUnitTests
             bool wasReplaced = predicate.Replace(variableToBeReplaced, 'z');
 
             // Assert
-            wasReplaced.Should().BeFalse($"Because {variableToBeReplaced} was already present once");
+            wasReplaced.Should().BeTrue("Because the same replacement variable can occur multiple times");
         }
 
         [Fact]
-        public void Replace_ReplacingAVariableWithAValueThathAlreadyExistsAsItemValue_ExpectedFalseReturned()
+        public void Replace_ReplacingAVariableWithAValueThathAlreadyExistsAsItemValue_ExpectedTrueReturned()
         {
             // Arrange
             List<char> variables = new List<char>()
@@ -163,7 +164,7 @@ namespace LPPUnitTests
             bool wasReplaced = predicate.Replace('z', replacementVariable);
 
             // Assert
-            wasReplaced.Should().BeFalse($"Because {replacementVariable} was already present once");
+            wasReplaced.Should().BeTrue($"Because the same replacement variable ({replacementVariable}) can occur multiple times");
         }
 
         [Theory]
