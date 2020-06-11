@@ -31,6 +31,11 @@ namespace LogicAndSetTheoryApplication
             return new List<Proposition>() { this };
         }
 
+        public virtual List<char> GetBoundVariables()
+        {
+            throw new NotImplementedException("Abstract propositions have no bound variables");
+        }
+
         public virtual bool Calculate()
         {
             return TruthValue;

@@ -52,7 +52,7 @@ namespace LPPUnitTests
             Predicate predicate = new Predicate(PREDICATE_SYMBOL, variables);
 
             // Act
-            int actualNumberOfVariables = predicate.GetVariables().Count;
+            int actualNumberOfVariables = predicate.GetBoundVariables().Count;
             int expectedNumberOfVariables = numberOfUniqueVariables;
 
             if (numberOfUniqueVariables > Predicate.LOWER_CASE_ALPHABET.Length)
@@ -237,7 +237,7 @@ namespace LPPUnitTests
                 'q'
             };
 
-            Predicate predicate = new Predicate(PREDICATE_SYMBOL, variables.ToList());
+            Predicate predicate = new Predicate(PREDICATE_SYMBOL, variables);
 
             // Act
             predicate.Replace('w', 'b');
@@ -247,6 +247,68 @@ namespace LPPUnitTests
 
             // Assert
             actualString.Should().Be(expectedString, "Because the replaced variable should now be displayed in the string");
+        }
+
+        [Fact]
+        public void IsReplaced_AfterReplacingExistingBoundVariable_ShouldReturnTrue()
+        {
+            // Arrange
+            List<char> variables = new List<char>()
+            {
+                'p',
+                'x',
+                'j'
+            };
+
+            Predicate predicate = new Predicate(PREDICATE_SYMBOL, variables);
+            predicate.Replace('x', 'a');
+
+            // Act
+            bool isReplaced = predicate.IsReplaced('x');
+
+            // Assert
+            isReplaced.Should().BeTrue("Since the bound variable x should be replaced");
+        }
+
+        [Fact]
+        public void IsReplaced_AfterReplacingNonExistingBoundVariable_ShouldReturnFalse()
+        {
+            // Arrange
+            List<char> variables = new List<char>()
+            {
+                'p',
+                'x',
+                'j'
+            };
+
+            Predicate predicate = new Predicate(PREDICATE_SYMBOL, variables);
+            predicate.Replace('z', 'i');
+
+            // Act
+            bool isReplaced = predicate.IsReplaced('z');
+
+            // Assert
+            isReplaced.Should().BeFalse("Since the bound variable z does not exist and should not be replaced");
+        }
+
+        [Fact]
+        public void IsReplaced_AfterNotReplacingExistingBoundVariable_ShouldReturnFalse()
+        {
+            // Arrange
+            List<char> variables = new List<char>()
+            {
+                'p',
+                'x',
+                'j'
+            };
+
+            Predicate predicate = new Predicate(PREDICATE_SYMBOL, variables);
+
+            // Act
+            bool isReplaced = predicate.IsReplaced('x');
+
+            // Assert
+            isReplaced.Should().BeFalse("Since the bound variable x was not replaced");
         }
     }
 }

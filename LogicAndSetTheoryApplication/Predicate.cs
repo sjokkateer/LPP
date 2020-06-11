@@ -30,7 +30,12 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
-        public new List<char> GetVariables()
+        public override List<Proposition> GetVariables()
+        {
+            throw new NotImplementedException("Is not part of first order logic");
+        }
+
+        public override List<char> GetBoundVariables()
         {
             List<char> variables = new List<char>();
             
@@ -57,6 +62,16 @@ namespace LogicAndSetTheoryApplication
             }
 
             return replaced;
+        }
+
+        public bool IsReplaced(char boundVariable)
+        {
+            if (variables.ContainsKey(boundVariable))
+            {
+                return variables[boundVariable] != default;
+            }
+
+            return false;
         }
 
         // Should override ToString otherwise only the predicate variable

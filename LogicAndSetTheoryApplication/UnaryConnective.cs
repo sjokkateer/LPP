@@ -21,6 +21,11 @@ namespace LogicAndSetTheoryApplication
             return LeftSuccessor.GetVariables().Distinct().ToList();
         }
 
+        public override List<char> GetBoundVariables()
+        {
+            return LeftSuccessor.GetBoundVariables();
+        }
+
         public override bool Equals(object obj)
         {
             // Means our data is the same or the obj reference

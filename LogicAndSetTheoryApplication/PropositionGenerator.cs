@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
 namespace LogicAndSetTheoryApplication
 {
     public class PropositionGenerator
     {
-        private static int MAX_UNIQUE_VARIABLES = 8;
+        private static int MAX_UNIQUE_VARIABLES = 5;
 
         private static int CAPITAL_A = 65;
         private static int CAPITAL_Z = 90;
@@ -14,6 +15,8 @@ namespace LogicAndSetTheoryApplication
         private static Random rng;
 
         private HashSet<Proposition> generatedPropositionVariables;
+
+        private static string boundVariables = "abcdefghijklmnopqrstuvwxyz";
 
         public PropositionGenerator()
         { }
@@ -134,7 +137,7 @@ namespace LogicAndSetTheoryApplication
             }
 
             generatedPropositionVariables = new HashSet<Proposition>();
-            int numberOfVariables = rng.Next(4, MAX_UNIQUE_VARIABLES + 1);
+            int numberOfVariables = rng.Next(1, MAX_UNIQUE_VARIABLES + 1);
 
             while (generatedPropositionVariables.Count < numberOfVariables)
             {
@@ -237,6 +240,49 @@ namespace LogicAndSetTheoryApplication
             }
 
             return result;
+        }
+
+        //public static Proposition CreateQuantifier(char symbol)
+        //{
+        //    Quantifier quantifier = null;
+        //    Predicate predicate = null;
+            
+
+        //    switch (symbol)
+        //    {
+        //        case UniversalQuantifier.SYMBOL:
+        //            predicate = GenerateSinglePredicate();
+        //            boundVariable = predicate.GetVariables()[0];
+        //            quantifier = new UniversalQuantifier(boundVariable);
+        //            break;
+        //        case ExistentialQuantifier.SYMBOL:
+        //            predicate = GenerateSinglePredicate();
+        //            char boundVariable = predicate.GetVariables()[0];
+        //            quantifier = new ExistentialQuantifier(boundVariable);
+        //            break;
+        //        default:
+        //            throw new ArgumentException("Unknown symbol given.");
+        //    }
+
+        //    return quantifier;
+        //}
+
+        //private static Predicate GenerateSinglePredicate()
+        //{
+        //    char predicateSymbol = GetRandomVariableLetter();
+        //    List<char> boundVariables = new List<char>() { GenerateBoundVariable() };
+
+        //    return new Predicate(predicateSymbol, boundVariables);
+        //}
+
+        public static char GenerateBoundVariable()
+        {
+            int lastIndex = boundVariables.Length - 1;
+            char boundVariable = boundVariables[lastIndex];
+
+            boundVariables = boundVariables.Substring(0, lastIndex);
+
+            return boundVariable;
         }
     }
 }

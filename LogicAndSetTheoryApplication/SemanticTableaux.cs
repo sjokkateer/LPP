@@ -28,6 +28,10 @@ namespace LogicAndSetTheoryApplication
                 negation
             };
 
+            // Then the type of semantic tableaux element could be
+            // set by the semantic tableaux by perhaps setting
+            // an enum on the semantic tableaux element
+            // which calls a create method 
             Head = new SemanticTableauxElement(propositions);
         }
 

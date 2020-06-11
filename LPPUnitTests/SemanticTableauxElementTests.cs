@@ -5,6 +5,7 @@ using LogicAndSetTheoryApplication;
 using Xunit;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+using System.Linq;
 
 namespace LPPUnitTests
 {
@@ -395,11 +396,13 @@ namespace LPPUnitTests
             Negation negatedConjunction = new Negation();
             negatedConjunction.LeftSuccessor = conjunction;
 
+            // Act // Assert
             TestConstructorForNotAndEquivalent(negatedConjunction);
         }
 
         private void TestConstructorForNotAndEquivalent(UnaryConnective connective)
         {
+            // Arrange
             HashSet<Proposition> propositions = new HashSet<Proposition>()
             {
                 connective
@@ -835,9 +838,47 @@ namespace LPPUnitTests
             semanticTableauxElement.IsClosed().Should().BeTrue("Because it should be possible to close branches when there is at least any of the literals in the parent set as well as any negated literal");
         }
 
-        // Finally, most likely I will have to make sure that propositions
-        // are handled properly in sets, since now they might just rely
-        // on the object reference (generic object's) implementation.
-        // And thus we might have duplicates in the set.
+        // Create another construction test that tests if only the left has been set and right is null
+        // after applying a gamma or delta rule.
+        // And test the number of elements in the set.
+
+        // The predicate's variable should be replaced
+        // The tableaux element should have the used variable stored in it's set/list of used variables.
+
+        // Another thing could be that the tableaux element needs to pass a replaced variable down each level.
+        [Fact]
+        public void Constructor_CreateNegatedUniversalQuantifier_DeltaRuleShouldBeAppliedChildShouldBePredicateAndVariableShouldBeIntroduced()
+        {
+            // Arrange
+            char boundVariable = PropositionGenerator.GenerateBoundVariable();
+            
+            List<char> boundVariables = new List<char>() { boundVariable };
+            Predicate predicate = new Predicate(PropositionGenerator.GetRandomVariableLetter(), boundVariables);
+            
+            UniversalQuantifier universalQuantifier = new UniversalQuantifier(boundVariable);
+            universalQuantifier.LeftSuccessor = predicate;
+
+            Negation negatedUniversalQuantifier = new Negation();
+            negatedUniversalQuantifier.LeftSuccessor = universalQuantifier;
+            
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                negatedUniversalQuantifier
+            };
+
+            // Act
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+            List<char> replacementVariables = semanticTableauxElement.ReplcementVariables.ToList();
+
+            int expectedNumberOfReplacementVariables = 1;
+            int actualNumberOfReplacementVariables = replacementVariables.Count;
+            bool isReplaced = predicate.IsReplaced(boundVariable);
+
+            // Assert
+            // Semantic tableaux element should keep track of the variables it applied for replacement.
+            actualNumberOfReplacementVariables.Should().Be(expectedNumberOfReplacementVariables, "Because the only bound variable should be replaced based on the rules");
+            // Check if the bound varaible has been replaced.
+            isReplaced.Should().BeTrue("Because after applying a delta rule, the only bound variable in the predicate should be replaced");
+        }
     }
 }

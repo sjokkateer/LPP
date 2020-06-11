@@ -9,23 +9,31 @@ namespace LogicAndSetTheoryApplication
 {
     public class SemanticTableauxElement: IDotFile
     {
-        public int NodeNumber { get; set; }
+        // Then if this is empty we won't display it
+        public HashSet<char> ReplcementVariables { get; set; }
 
+        public int NodeNumber { get; set; }
         public HashSet<Proposition> Propositions { get; }
         public SemanticTableauxElement LeftChild { get; private set; }
         public SemanticTableauxElement RightChild { get; private set; }
 
-        public SemanticTableauxElement(HashSet<Proposition> propositions)
+        public SemanticTableauxElement(HashSet<Proposition> propositions): this(propositions, new HashSet<char>())
+        { }
+
+        public SemanticTableauxElement(HashSet<Proposition> propositions, HashSet<char> replacementVariables)
         {
             if (propositions == null)
             {
                 throw new NullReferenceException("Unexpected null argument, can not process tableaux element this way.");
             }
 
+            ReplcementVariables = replacementVariables;
             Propositions = propositions;
 
             if (!IsClosed())
             {
+                // Create children could be overriden, even though it is not recommended
+                // to call virtual methods in constructor.
                 CreateChildren();
             }
         }
@@ -35,6 +43,7 @@ namespace LogicAndSetTheoryApplication
             List<Proposition> pSet = Propositions.ToList();
 
             // It can be closed if we have one constant False or one Negated True already.
+            // Constants are only part of abstract propositions
             foreach (Proposition p in pSet)
             {
                 if (ConstantContradiction(p))
@@ -43,6 +52,7 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
+            // We could split it up by taking out this part and put it in a base class.
             for (int i = 0; i < pSet.Count - 1; i++)
             {
                 for (int j = i + 1; j < pSet.Count; j++)
@@ -69,6 +79,7 @@ namespace LogicAndSetTheoryApplication
             return closed;
         }
 
+        // Specific to abstract propositions
         private bool ConstantContradiction(Proposition proposition)
         {
             if (proposition.GetType() == typeof(False))
@@ -85,6 +96,7 @@ namespace LogicAndSetTheoryApplication
             return false;
         }
 
+        // Both
         protected bool IsContradiction(Proposition proposition1, Proposition proposition2)
         {
             Negation negatedProposition = null;
@@ -111,6 +123,8 @@ namespace LogicAndSetTheoryApplication
             return false;
         }
 
+        // Both, just the ordering is different and for predicates we
+        // have two additional rules that should be placed in between.
         protected void CreateChildren()
         {
             bool childCreated = false;
@@ -135,6 +149,8 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
+            // Now check delta.
+            // Then beta
             foreach (Proposition proposition in Propositions)
             {
                 childCreated = TryToCreateBetaRule(proposition);
@@ -144,6 +160,8 @@ namespace LogicAndSetTheoryApplication
                     return;
                 }
             }
+
+            // Now gamma.
         }
 
         private bool TryToCreateDoubleNegation(Proposition proposition)

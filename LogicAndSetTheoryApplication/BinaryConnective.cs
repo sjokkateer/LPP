@@ -41,6 +41,11 @@ namespace LogicAndSetTheoryApplication
                         Union(leftChildVariables.Intersect(rightChildVariables)).ToList(); // { A } Intersection { B }, resulting in a set containing all unique elements (unordered though)
         }
 
+        public override List<char> GetBoundVariables()
+        {
+            throw new NotImplementedException("It is unclear what it means to get bound variables with a binary connective.");
+        }
+
         public override bool Equals(object obj)
         {
             if (!base.Equals(obj)) return false;

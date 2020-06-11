@@ -38,6 +38,11 @@ namespace LogicAndSetTheoryApplication
             throw new NotImplementedException("Is not part of first order logic");
         }
 
+        public override List<char> GetBoundVariables()
+        {
+            return LeftSuccessor.GetBoundVariables();
+        }
+
         public override Proposition Nandify()
         {
             throw new NotImplementedException("Is not part of first order logic");
