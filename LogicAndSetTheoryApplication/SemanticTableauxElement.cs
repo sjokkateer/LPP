@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,8 +10,10 @@ namespace LogicAndSetTheoryApplication
 {
     public class SemanticTableauxElement: IDotFile
     {
+        private static string replacementVariableCharacters = "abcdefghijklmnopqrstuvw";
+
         // Then if this is empty we won't display it
-        public HashSet<char> ReplcementVariables { get; set; }
+        public HashSet<char> ReplacementVariables { get; set; }
 
         public int NodeNumber { get; set; }
         public HashSet<Proposition> Propositions { get; }
@@ -27,13 +30,11 @@ namespace LogicAndSetTheoryApplication
                 throw new NullReferenceException("Unexpected null argument, can not process tableaux element this way.");
             }
 
-            ReplcementVariables = replacementVariables;
+            ReplacementVariables = replacementVariables;
             Propositions = propositions;
 
             if (!IsClosed())
             {
-                // Create children could be overriden, even though it is not recommended
-                // to call virtual methods in constructor.
                 CreateChildren();
             }
         }
@@ -96,7 +97,7 @@ namespace LogicAndSetTheoryApplication
             return false;
         }
 
-        // Both
+        // Both, but equals still needs to be overriden for predicates
         protected bool IsContradiction(Proposition proposition1, Proposition proposition2)
         {
             Negation negatedProposition = null;
@@ -149,8 +150,16 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
-            // Now check delta.
-            // Then beta
+            foreach (Proposition proposition in Propositions)
+            {
+                childCreated = TryToCreateDeltaRule(proposition);
+
+                if (childCreated)
+                {
+                    return;
+                }
+            }
+
             foreach (Proposition proposition in Propositions)
             {
                 childCreated = TryToCreateBetaRule(proposition);
@@ -161,7 +170,24 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
-            // Now gamma.
+            // Check for Gamma Rules to apply
+            // Could be made slightly more efficient by checking up front
+            // for replcement variables
+            // Even though we would then have more places aware of replacement variables in our code.
+            foreach (Proposition proposition in Propositions)
+            {
+                if (IsGammaRule(proposition))
+                {
+                    HashSet<Proposition> childPropositionSet = ApplyGammaRule(proposition);
+                    
+                    if (!Propositions.SetEquals(childPropositionSet))
+                    {
+                        LeftChild = new SemanticTableauxElement(childPropositionSet, ReplacementVariables);
+                        
+                        return;
+                    }
+                }
+            }
         }
 
         private bool TryToCreateDoubleNegation(Proposition proposition)
@@ -221,6 +247,189 @@ namespace LogicAndSetTheoryApplication
             }
 
             LeftChild = new SemanticTableauxElement(propositions);
+        }
+
+        private bool TryToCreateAlphaRule(Proposition proposition)
+        {
+            if (IsAlphaRule(proposition))
+            {
+                ApplyAlphaRule(proposition);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsAlphaRule(Proposition proposition)
+        {
+            if (proposition.GetType() == typeof(Conjunction))
+            {
+                return true;
+            }
+
+            if (proposition.GetType() == typeof(Negation))
+            {
+                Negation n = (Negation)proposition;
+
+                return n.LeftSuccessor.GetType() == typeof(Disjunction)
+                    || n.LeftSuccessor.GetType() == typeof(Implication)
+                    || n.LeftSuccessor.GetType() == typeof(Nand);
+            }
+
+            return false;
+        }
+
+        private void ApplyAlphaRule(Proposition proposition)
+        {
+            HashSet<Proposition> childPropositions = new HashSet<Proposition>();
+
+            foreach (Proposition p in Propositions)
+            {
+                if (!p.Equals(proposition))
+                {
+                    childPropositions.Add(p);
+                }
+            }
+
+            if (proposition.GetType() == typeof(Conjunction))
+            {
+                BinaryConnective connective = (BinaryConnective)proposition;
+
+                childPropositions.Add(connective.LeftSuccessor);
+                childPropositions.Add(connective.RightSuccessor);
+            }
+
+            if (proposition.GetType() == typeof(Negation))
+            {
+                Negation negation = (Negation)proposition;
+                BinaryConnective nestedConnective = (BinaryConnective)negation.LeftSuccessor;
+
+                if (nestedConnective.GetType() != typeof(Nand))
+                {
+                    // Both cases have a negation of the right successor.
+                    Negation negatedRight = new Negation();
+                    negatedRight.LeftSuccessor = nestedConnective.RightSuccessor;
+
+                    // Only disjunction results in a left side negated as well.
+                    if (nestedConnective.GetType() == typeof(Disjunction))
+                    {
+                        Negation negatedLeft = new Negation();
+                        negatedLeft.LeftSuccessor = nestedConnective.LeftSuccessor;
+
+                        childPropositions.Add(negatedLeft);
+                    }
+
+                    // Should not forget to add the implication's left successor
+                    if (nestedConnective.GetType() == typeof(Implication))
+                    {
+                        childPropositions.Add(nestedConnective.LeftSuccessor);
+                    }
+
+                    childPropositions.Add(negatedRight);
+                }
+                else
+                {
+                    // It's a negated Nand and we can add left and right to the set
+                    childPropositions.Add(nestedConnective.LeftSuccessor);
+                    childPropositions.Add(nestedConnective.RightSuccessor);
+                }
+
+            }
+
+            LeftChild = new SemanticTableauxElement(childPropositions);
+        }
+
+        private bool TryToCreateDeltaRule(Proposition proposition)
+        {
+            if (IsDeltaRule(proposition))
+            {
+                ApplyDeltaRule(proposition);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsDeltaRule(Proposition proposition)
+        {
+            if (proposition.GetType() == typeof(ExistentialQuantifier))
+            {
+                return true;
+            }
+         
+            // Negated Universal Quantifier
+            if (proposition.GetType() == typeof(Negation))
+            {
+                Proposition left = ((Negation)proposition).LeftSuccessor;
+
+                return left.GetType() == typeof(UniversalQuantifier);
+            }
+
+            return false;
+        }
+
+        private void ApplyDeltaRule(Proposition proposition)
+        {
+            // COULD BE: GetAllDifferingChildPropositions(proposition)
+            // REFACTOR WORTHY: otherwise needs to be tested for every rule which is all the same
+            HashSet<Proposition> childPropositions = new HashSet<Proposition>();
+
+            foreach (Proposition p in Propositions)
+            {
+                if (!p.Equals(proposition))
+                {
+                    childPropositions.Add(p);
+                }
+            }
+            // REFACTOR WORTHY
+
+            // Current proposition we want to break up again into new pieces.
+            Quantifier quantifier = null;
+            Proposition predicate = null;
+
+            if (proposition.GetType() == typeof(Negation))
+            {
+                Negation negatedUniversalQuantifier = (Negation)proposition;
+                quantifier = (Quantifier)negatedUniversalQuantifier.LeftSuccessor;
+
+                predicate = quantifier.LeftSuccessor;
+                Negation negatedPredicate = new Negation();
+                negatedPredicate.LeftSuccessor = predicate;
+
+                predicate = negatedPredicate;
+            }
+            else
+            {
+                quantifier = (Quantifier)proposition;
+                predicate = quantifier.LeftSuccessor;
+            }
+
+            char boundVariable = quantifier.GetBoundVariable();
+            char replacementCharacter = GenerateReplacementVariable();
+
+            // More formally we should ensure the character is not present
+            // in the predicate as key
+            quantifier.Replace(boundVariable, replacementCharacter);
+            ReplacementVariables.Add(replacementCharacter);
+
+            childPropositions.Add(predicate);
+
+            LeftChild = new SemanticTableauxElement(childPropositions, ReplacementVariables);
+        }
+
+        private char GenerateReplacementVariable()
+        {
+            foreach (char availableCharacter in replacementVariableCharacters)
+            {
+                if (!ReplacementVariables.Contains(availableCharacter))
+                {
+                    return availableCharacter;
+                }
+            }
+
+            throw new Exception("All variables exhausted, now what?");
         }
 
         private bool TryToCreateBetaRule(Proposition proposition)
@@ -373,95 +582,90 @@ namespace LogicAndSetTheoryApplication
             RightChild = new SemanticTableauxElement(rightChildPropositions);
         }
 
-        private bool TryToCreateAlphaRule(Proposition proposition)
+        private bool TryToCreateGammaRule(Proposition proposition)
         {
-            if (IsAlphaRule(proposition))
+            if (IsGammaRule(proposition))
             {
-                ApplyAlphaRule(proposition);
-            
+                ApplyGammaRule(proposition);
+
                 return true;
             }
 
             return false;
         }
 
-        private bool IsAlphaRule(Proposition proposition)
+        private bool IsGammaRule(Proposition proposition)
         {
-            if (proposition.GetType() == typeof(Conjunction))
+            if (proposition.GetType() == typeof(UniversalQuantifier))
             {
                 return true;
             }
 
             if (proposition.GetType() == typeof(Negation))
             {
-                Negation n = (Negation)proposition;
+                Proposition quantifier = ((Negation)proposition).LeftSuccessor;
 
-                return n.LeftSuccessor.GetType() == typeof(Disjunction) 
-                    || n.LeftSuccessor.GetType() == typeof(Implication) 
-                    || n.LeftSuccessor.GetType() == typeof(Nand);
+                return quantifier.GetType() == typeof(ExistentialQuantifier);
             }
 
             return false;
         }
 
-        private void ApplyAlphaRule(Proposition proposition)
+        // Returns a set of propositions normally used for creating 
+        // a new semantic tableaux element.
+        // This set is required for further inspection as gamma rules can
+        // lead to no changes in the set.
+        public HashSet<Proposition> ApplyGammaRule(Proposition proposition)
         {
             HashSet<Proposition> childPropositions = new HashSet<Proposition>();
 
             foreach (Proposition p in Propositions)
             {
-                if (!p.Equals(proposition))
+                // With a gamma rule the original proposition will also be copied over
+                if (p.Equals(proposition))
                 {
                     childPropositions.Add(p);
                 }
             }
 
-            if (proposition.GetType() == typeof(Conjunction))
-            {
-                BinaryConnective connective = (BinaryConnective)proposition;
-
-                childPropositions.Add(connective.LeftSuccessor);
-                childPropositions.Add(connective.RightSuccessor);
-            }
+            Quantifier quantifier = null;
+            Proposition propositionToAdd = null;
 
             if (proposition.GetType() == typeof(Negation))
             {
-                Negation negation = (Negation)proposition;
-                BinaryConnective nestedConnective = (BinaryConnective)negation.LeftSuccessor;
+                Negation negatedExistentialQuantifier = (Negation)proposition;
+                quantifier = (Quantifier)negatedExistentialQuantifier.LeftSuccessor;
 
-                if (nestedConnective.GetType() != typeof(Nand))
-                {
-                    // Both cases have a negation of the right successor.
-                    Negation negatedRight = new Negation();
-                    negatedRight.LeftSuccessor = nestedConnective.RightSuccessor;
+                propositionToAdd = quantifier.LeftSuccessor;
+                Negation negatedPredicate = new Negation();
+                negatedPredicate.LeftSuccessor = propositionToAdd;
 
-                    // Only disjunction results in a left side negated as well.
-                    if (nestedConnective.GetType() == typeof(Disjunction))
-                    {
-                        Negation negatedLeft = new Negation();
-                        negatedLeft.LeftSuccessor = nestedConnective.LeftSuccessor;
-
-                        childPropositions.Add(negatedLeft);
-                    }
-
-                    // Should not forget to add the implication's left successor
-                    if (nestedConnective.GetType() == typeof(Implication))
-                    {
-                        childPropositions.Add(nestedConnective.LeftSuccessor);
-                    }
-
-                    childPropositions.Add(negatedRight);
-                }
-                else
-                {
-                    // It's a negated Nand and we can add left and right to the set
-                    childPropositions.Add(nestedConnective.LeftSuccessor);
-                    childPropositions.Add(nestedConnective.RightSuccessor);
-                }
-
+                propositionToAdd = negatedPredicate;
+            }
+            else
+            {
+                quantifier = (Quantifier)proposition;
+                propositionToAdd = quantifier.LeftSuccessor;
             }
 
-            LeftChild = new SemanticTableauxElement(childPropositions);
+            if (ReplacementVariables.Count > 0)
+            {
+                // But in this case we must most likely add a copy of the predicate
+                // Because otherwise the quantifiers HashMap will be modified by reference.
+                // Replace the variable that matches the bound var of quantifier.
+                // Do this for each available replacement variable in the collection.
+                char boundVariable = quantifier.GetBoundVariable();
+                // For replacement we can just use the proposition class as the runtime binding will take care of replacing
+                // it on the predicate.
+                Predicate predicate = (Predicate)propositionToAdd;
+
+                // Replace the bound variable by every possible replacement variable.
+                // And add that new predicate to the set.
+
+                childPropositions.Add(propositionToAdd);
+            }
+
+            return childPropositions;
         }
 
         [ExcludeFromCodeCoverage]

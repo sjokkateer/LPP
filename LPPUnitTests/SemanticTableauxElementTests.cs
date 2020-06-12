@@ -868,17 +868,100 @@ namespace LPPUnitTests
 
             // Act
             SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
-            List<char> replacementVariables = semanticTableauxElement.ReplcementVariables.ToList();
+            List<char> replacementVariables = semanticTableauxElement.ReplacementVariables.ToList();
 
             int expectedNumberOfReplacementVariables = 1;
             int actualNumberOfReplacementVariables = replacementVariables.Count;
             bool isReplaced = predicate.IsReplaced(boundVariable);
 
             // Assert
-            // Semantic tableaux element should keep track of the variables it applied for replacement.
             actualNumberOfReplacementVariables.Should().Be(expectedNumberOfReplacementVariables, "Because the only bound variable should be replaced based on the rules");
-            // Check if the bound varaible has been replaced.
             isReplaced.Should().BeTrue("Because after applying a delta rule, the only bound variable in the predicate should be replaced");
+        }
+
+        [Fact]
+        public void Constructor_CreateExistentialQuantifier_DeltaRuleShouldBeAppliedChildShouldBePredicateAndVariableShouldBeIntroduced()
+        {
+            // Arrange
+            char boundVariable = PropositionGenerator.GenerateBoundVariable();
+
+            List<char> boundVariables = new List<char>() { boundVariable };
+            Predicate predicate = new Predicate(PropositionGenerator.GetRandomVariableLetter(), boundVariables);
+
+            ExistentialQuantifier existentialQuantifier = new ExistentialQuantifier(boundVariable);
+            existentialQuantifier.LeftSuccessor = predicate;
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                existentialQuantifier
+            };
+
+            // Act
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+            List<char> replacementVariables = semanticTableauxElement.ReplacementVariables.ToList();
+
+            int expectedNumberOfReplacementVariables = 1;
+            int actualNumberOfReplacementVariables = replacementVariables.Count;
+            bool isReplaced = predicate.IsReplaced(boundVariable);
+
+            // Assert
+            actualNumberOfReplacementVariables.Should().Be(expectedNumberOfReplacementVariables, "Because the only bound variable should be replaced based on the rules");
+            isReplaced.Should().BeTrue("Because after applying a delta rule, the only bound variable in the predicate should be replaced");
+        }
+
+        [Fact]
+        public void Constructor_CreateNegatedExistentialQuantifierNoReplacementVariablesPresent_GammaRuleShouldNotBeAppliedNoChildrenGenerated()
+        {
+            // Arrange
+            char boundVariable = PropositionGenerator.GenerateBoundVariable();
+
+            List<char> boundVariables = new List<char>() { boundVariable };
+            Predicate predicate = new Predicate(PropositionGenerator.GetRandomVariableLetter(), boundVariables);
+
+            ExistentialQuantifier existentialQuantifier = new ExistentialQuantifier(boundVariable);
+            existentialQuantifier.LeftSuccessor = predicate;
+
+            Negation negatedExistentialQuantifier = new Negation();
+            negatedExistentialQuantifier.LeftSuccessor = existentialQuantifier;
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                negatedExistentialQuantifier
+            };
+
+            // Act
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+            bool isReplaced = predicate.IsReplaced(boundVariable);
+
+            // Assert
+            isReplaced.Should().BeFalse("Because no replacement variables are available");
+            semanticTableauxElement.LeftChild.Should().BeNull("Because no replacement variables are available and thus no child was created");
+        }
+
+        [Fact]
+        public void Constructor_CreateUniversalQuantifierNoReplacementVariablesPresent_GammaRuleShouldNotBeAppliedNoChildrenGenerated()
+        {
+            // Arrange
+            char boundVariable = PropositionGenerator.GenerateBoundVariable();
+
+            List<char> boundVariables = new List<char>() { boundVariable };
+            Predicate predicate = new Predicate(PropositionGenerator.GetRandomVariableLetter(), boundVariables);
+
+            UniversalQuantifier universalQuantifier = new UniversalQuantifier(boundVariable);
+            universalQuantifier.LeftSuccessor = predicate;
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                universalQuantifier
+            };
+
+            // Act
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+            bool isReplaced = predicate.IsReplaced(boundVariable);
+
+            // Assert
+            isReplaced.Should().BeFalse("Because no replacement variables are available");
+            semanticTableauxElement.LeftChild.Should().BeNull("Because no replacement variables are available and thus no child was created");
         }
     }
 }

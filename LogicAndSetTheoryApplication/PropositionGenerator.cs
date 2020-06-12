@@ -242,39 +242,6 @@ namespace LogicAndSetTheoryApplication
             return result;
         }
 
-        //public static Proposition CreateQuantifier(char symbol)
-        //{
-        //    Quantifier quantifier = null;
-        //    Predicate predicate = null;
-            
-
-        //    switch (symbol)
-        //    {
-        //        case UniversalQuantifier.SYMBOL:
-        //            predicate = GenerateSinglePredicate();
-        //            boundVariable = predicate.GetVariables()[0];
-        //            quantifier = new UniversalQuantifier(boundVariable);
-        //            break;
-        //        case ExistentialQuantifier.SYMBOL:
-        //            predicate = GenerateSinglePredicate();
-        //            char boundVariable = predicate.GetVariables()[0];
-        //            quantifier = new ExistentialQuantifier(boundVariable);
-        //            break;
-        //        default:
-        //            throw new ArgumentException("Unknown symbol given.");
-        //    }
-
-        //    return quantifier;
-        //}
-
-        //private static Predicate GenerateSinglePredicate()
-        //{
-        //    char predicateSymbol = GetRandomVariableLetter();
-        //    List<char> boundVariables = new List<char>() { GenerateBoundVariable() };
-
-        //    return new Predicate(predicateSymbol, boundVariables);
-        //}
-
         public static char GenerateBoundVariable()
         {
             int lastIndex = boundVariables.Length - 1;
