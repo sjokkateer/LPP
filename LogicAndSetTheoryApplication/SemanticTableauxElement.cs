@@ -657,12 +657,20 @@ namespace LogicAndSetTheoryApplication
                 char boundVariable = quantifier.GetBoundVariable();
                 // For replacement we can just use the proposition class as the runtime binding will take care of replacing
                 // it on the predicate.
-                Predicate predicate = (Predicate)propositionToAdd;
 
+                // Thus for anything except when we have a quantifier nested
+                // we want to replace the bound variable for every available replacement
+                // character I believe.
                 // Replace the bound variable by every possible replacement variable.
                 // And add that new predicate to the set.
+                // Only if we are directly looking at a predicate
+                foreach (char replaceMentChar in ReplacementVariables)
+                {
+                    Proposition propositionToAddCopy = propositionToAdd.Copy();
+                    propositionToAddCopy.Replace(boundVariable, replaceMentChar);
 
-                childPropositions.Add(propositionToAdd);
+                    childPropositions.Add(propositionToAddCopy);
+                }
             }
 
             return childPropositions;

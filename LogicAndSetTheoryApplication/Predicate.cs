@@ -30,6 +30,18 @@ namespace LogicAndSetTheoryApplication
             }
         }
 
+        public override Proposition Copy()
+        {
+            List<char> vars = new List<char>();
+
+            foreach(KeyValuePair<char, char> item in variables)
+            {
+                vars.Add(GetVariable(item.Key));
+            }
+
+            return new Predicate(Data, vars);
+        }
+
         public override List<Proposition> GetVariables()
         {
             throw new NotImplementedException("Is not part of first order logic");

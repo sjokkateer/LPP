@@ -963,5 +963,40 @@ namespace LPPUnitTests
             isReplaced.Should().BeFalse("Because no replacement variables are available");
             semanticTableauxElement.LeftChild.Should().BeNull("Because no replacement variables are available and thus no child was created");
         }
+
+        [Fact]
+        public void Constructor_CreateUniversalQuantifierWithReplacementVariablePresent_GammaRuleShouldBeAppliedAndNewChildrenCreated()
+        {
+            // Arrange
+            char boundVariable = PropositionGenerator.GenerateBoundVariable();
+
+            List<char> boundVariables = new List<char>() { boundVariable };
+            Predicate predicate = new Predicate(PropositionGenerator.GetRandomVariableLetter(), boundVariables);
+
+            UniversalQuantifier universalQuantifier = new UniversalQuantifier(boundVariable);
+            universalQuantifier.LeftSuccessor = predicate;
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                universalQuantifier
+            };
+
+            // Act
+            char availableReplacementVariable = 'd';
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions, new HashSet<char>() { availableReplacementVariable }) ;
+
+            // Assert
+            semanticTableauxElement.LeftChild.Should().NotBeNull("Because children should be created now that a replacement variable is present");
+            
+            foreach(Proposition proposition in semanticTableauxElement.LeftChild.Propositions)
+            {
+                if (proposition is Predicate)
+                {
+                    Predicate pred = (Predicate)proposition;
+                    bool isReplaced = pred.IsReplaced(boundVariable);
+                    isReplaced.Should().BeTrue($"Because the replacement variable {availableReplacementVariable} is available");
+                }
+            }
+        }
     }
 }
