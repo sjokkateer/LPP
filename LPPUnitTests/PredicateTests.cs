@@ -311,5 +311,118 @@ namespace LPPUnitTests
             // Assert
             isReplaced.Should().BeFalse("Since the bound variable x was not replaced");
         }
+
+        [Theory]
+        [InlineData(Conjunction.SYMBOL)]
+        [InlineData(Disjunction.SYMBOL)]
+        [InlineData(BiImplication.SYMBOL)]
+        [InlineData(Implication.SYMBOL)]
+        [InlineData(Nand.SYMBOL)]
+        public void IsReplaced_ReplacingExistingBoundVariableInBinaryConnectiveComposedOfPredicates_BothChildrenShouldReturnTrue(char connectiveSymbol)
+        {
+            // Arrange
+            char existingVariable = 'y';
+
+            List<char> variables = new List<char>()
+            {
+                existingVariable
+            };
+
+            Predicate leftPredicate = new Predicate(PREDICATE_SYMBOL, variables);
+            Predicate rightPredicate = new Predicate('Q', variables);
+
+            BinaryConnective binaryConnective = PropositionGenerator.CreateBinaryConnectiveWithRandomSymbols(connectiveSymbol);
+            binaryConnective.LeftSuccessor = leftPredicate;
+            binaryConnective.RightSuccessor = rightPredicate;
+
+            char replacementVariable = 'c';
+
+            // Act
+            binaryConnective.Replace(existingVariable, replacementVariable);
+
+            bool leftIsReplaced = leftPredicate.IsReplaced(existingVariable);
+            bool rightIsReplaced = rightPredicate.IsReplaced(existingVariable);
+
+            // Assert
+            leftIsReplaced.Should().BeTrue($"Since the bound variable {existingVariable} should be repalced replaced by {replacementVariable}");
+            rightIsReplaced.Should().BeTrue($"Since the bound variable {existingVariable} should be repalced replaced by {replacementVariable}");
+        }
+
+        [Theory]
+        [InlineData(Negation.SYMBOL)]
+        public void IsReplaced_ReplacingExistingBoundVariableInUnaryConnectiveComposedOfAPredicate_ChildShouldReturnTrue(char connectiveSymbol)
+        {
+            // Arrange
+            char existingVariable = 'w';
+
+            List<char> variables = new List<char>()
+            {
+                existingVariable
+            };
+
+            Predicate predicate = new Predicate(PREDICATE_SYMBOL, variables);
+
+            UnaryConnective unaryConnective = PropositionGenerator.CreateUnaryConnectiveWithRandomSymbol(connectiveSymbol);
+            unaryConnective.LeftSuccessor = predicate;
+
+            char replacementVariable = 'c';
+
+            // Act
+            unaryConnective.Replace(existingVariable, replacementVariable);
+
+            bool leftIsReplaced = predicate.IsReplaced(existingVariable);
+
+            // Assert
+            leftIsReplaced.Should().BeTrue($"Since the bound variable {existingVariable} should be repalced replaced by {replacementVariable}");
+        }
+
+        [Fact]
+        public void Replace_ReplacingExistingBoundVariableInComplexExpression_ShouldReturnTrueForChildrenContainingReplacedVariable()
+        {
+            // Arrange
+            char variableToBeReplaced = 'w';
+
+            List<char> variablesSetOne = new List<char>()
+            {
+                'u',
+                variableToBeReplaced
+            };
+
+            // Does not contain the replacement variable
+            List<char> variablesSetTwo = new List<char>()
+            {
+                'v',
+                'x'
+            };
+
+            Predicate predicateWithReplacementVariable = new Predicate(PREDICATE_SYMBOL, variablesSetOne);
+            // So we have unique references
+            Predicate predicateWithoutReplacementVariableOne = new Predicate(PREDICATE_SYMBOL, variablesSetTwo);
+            Predicate predicateWithoutReplacementVariableTwo = new Predicate(PREDICATE_SYMBOL, variablesSetTwo);
+
+            BinaryConnective root = new Conjunction();
+            BinaryConnective rootLeft = new BiImplication();
+
+            rootLeft.LeftSuccessor = predicateWithoutReplacementVariableOne;
+            rootLeft.RightSuccessor = predicateWithReplacementVariable;
+
+            root.LeftSuccessor = rootLeft;
+            root.RightSuccessor = predicateWithoutReplacementVariableTwo;
+
+
+            char replacementVariable = 'c';
+
+            // Act
+            root.Replace(variableToBeReplaced, replacementVariable);
+
+            bool isReplacedOnPredicateWithVariable = predicateWithReplacementVariable.IsReplaced(variableToBeReplaced);
+            bool isReplacedOnPredicateWithoutVariableOne = predicateWithoutReplacementVariableOne.IsReplaced(variableToBeReplaced);
+            bool isReplacedOnPredicateWithoutVariableTwo = predicateWithoutReplacementVariableTwo.IsReplaced(variableToBeReplaced);
+
+            // Assert
+            isReplacedOnPredicateWithVariable.Should().BeTrue($"Since the bound variable {variableToBeReplaced} should be repalced replaced by {replacementVariable}");
+            isReplacedOnPredicateWithoutVariableOne.Should().BeFalse($"Since the predicate does NOT contain {variableToBeReplaced}");
+            isReplacedOnPredicateWithoutVariableTwo.Should().BeFalse($"Since the predicate does NOT contain {variableToBeReplaced}");
+        }
     }
 }
