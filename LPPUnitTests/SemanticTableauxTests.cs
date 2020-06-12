@@ -58,6 +58,9 @@ namespace LPPUnitTests
         [InlineData("=(&(P, >(Q, R)), >(>(P, Q), &(P, R)))")]
         [InlineData(">(|(P, Q), |(P, &(~(P), Q)))")]
         [InlineData(">(>(P, Q), |(Q, >(P, R)))")]
+        [InlineData(">(!x.(@y.(P(x, y))), @q.(!p.(P(p, q))))")]
+        [InlineData(">(@x.(&(P(x), R(x))), @y.(P(y)))")]
+        [InlineData(">(@x.(>(P(x), Q(x))), >(@y.(P(y)), @z.(Q(z))))")]
         public void IsClosed_TautologyGiven_ShouldResultInTrue(string tautologyExpression)
         {
             // Arrange
@@ -102,7 +105,6 @@ namespace LPPUnitTests
         [InlineData("~(A)")]
         [InlineData("%(A, B)")]
         [InlineData(">(>(P, Q), |(P, >(Q, R)))")]
-
         public void IsClosed_ContingentPropositionGiven_ShouldResultInFalse(string contingencyExpression)
         {
             // Arrange
@@ -116,6 +118,24 @@ namespace LPPUnitTests
 
             // Assert
             closed.Should().BeFalse("Because the given proposition is a contingency and therefore the tableaux could have some branches closed and some open.");
+        }
+
+        [Theory]
+        [InlineData(">(@q.(!p.(P(p, q))), !x.(@y.(P(x, y))))")]
+        [InlineData("@x.(!y.(P(x, y)))")]
+        public void IsClosed_NonClosablePredicateGiven_ShouldResultInFalse(string nonClosablePredicate)
+        {
+            // Arrange
+            parser = new Parser(nonClosablePredicate);
+
+            Proposition predicate = parser.Parse();
+            SemanticTableaux semanticTableaux = new SemanticTableaux(predicate);
+
+            // Act
+            bool closed = semanticTableaux.IsClosed();
+
+            // Assert
+            closed.Should().BeFalse("Because the given predicate can not be closed.");
         }
     }
 }

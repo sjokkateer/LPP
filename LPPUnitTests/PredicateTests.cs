@@ -424,5 +424,7 @@ namespace LPPUnitTests
             isReplacedOnPredicateWithoutVariableOne.Should().BeFalse($"Since the predicate does NOT contain {variableToBeReplaced}");
             isReplacedOnPredicateWithoutVariableTwo.Should().BeFalse($"Since the predicate does NOT contain {variableToBeReplaced}");
         }
+
+
     }
 }

@@ -11,6 +11,7 @@ namespace LogicAndSetTheoryApplication
     public class SemanticTableauxElement: IDotFile
     {
         private static string replacementVariableCharacters = "abcdefghijklmnopqrstuvw";
+        private HashSet<Proposition> alreadyProcessedGammaRules;
 
         // Then if this is empty we won't display it
         public HashSet<char> ReplacementVariables { get; set; }
@@ -30,6 +31,7 @@ namespace LogicAndSetTheoryApplication
                 throw new NullReferenceException("Unexpected null argument, can not process tableaux element this way.");
             }
 
+            alreadyProcessedGammaRules = new HashSet<Proposition>();
             ReplacementVariables = replacementVariables;
             Propositions = propositions;
 
@@ -174,19 +176,26 @@ namespace LogicAndSetTheoryApplication
             // Could be made slightly more efficient by checking up front
             // for replcement variables
             // Even though we would then have more places aware of replacement variables in our code.
+            HashSet<Proposition> childPropositionSet = new HashSet<Proposition>();
+
             foreach (Proposition proposition in Propositions)
             {
                 if (IsGammaRule(proposition))
                 {
-                    HashSet<Proposition> childPropositionSet = ApplyGammaRule(proposition);
-                    
-                    if (!Propositions.SetEquals(childPropositionSet))
+                    // New tactic: Apply all gamma rules and add each and every subset to eachother.
+                    // if this final set differs in size from Propositions, create new child else we are finished.
+                    foreach (Proposition p in ApplyGammaRule(proposition))
                     {
-                        LeftChild = new SemanticTableauxElement(childPropositionSet, ReplacementVariables);
-                        
-                        return;
+                        childPropositionSet.Add(p);
                     }
                 }
+            }
+
+            if (childPropositionSet.Count > Propositions.Count)
+            {
+                LeftChild = new SemanticTableauxElement(childPropositionSet, ReplacementVariables);
+
+                return;
             }
         }
 
@@ -246,7 +255,7 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
-            LeftChild = new SemanticTableauxElement(propositions);
+            LeftChild = new SemanticTableauxElement(propositions, ReplacementVariables);
         }
 
         private bool TryToCreateAlphaRule(Proposition proposition)
@@ -337,7 +346,7 @@ namespace LogicAndSetTheoryApplication
 
             }
 
-            LeftChild = new SemanticTableauxElement(childPropositions);
+            LeftChild = new SemanticTableauxElement(childPropositions, ReplacementVariables);
         }
 
         private bool TryToCreateDeltaRule(Proposition proposition)
@@ -581,8 +590,8 @@ namespace LogicAndSetTheoryApplication
             leftChildPropositions.Add(leftSetProposition);
             rightChildPropositions.Add(rightSetPropostion);
 
-            LeftChild = new SemanticTableauxElement(leftChildPropositions);
-            RightChild = new SemanticTableauxElement(rightChildPropositions);
+            LeftChild = new SemanticTableauxElement(leftChildPropositions, ReplacementVariables);
+            RightChild = new SemanticTableauxElement(rightChildPropositions, ReplacementVariables);
         }
 
         private bool IsGammaRule(Proposition proposition)
