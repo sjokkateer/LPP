@@ -663,7 +663,6 @@ namespace LogicAndSetTheoryApplication
             return childPropositions;
         }
 
-        [ExcludeFromCodeCoverage]
         public string NodeLabel()
         {
             string label = $"node{NodeNumber}[ label = \"";
@@ -673,7 +672,7 @@ namespace LogicAndSetTheoryApplication
                 label += proposition + "\n";
             }
 
-            label.Trim('\n');
+            label = label.Trim('\n');
             label += "\"";
 
             if (IsClosed() && LeftChild == null && RightChild == null)

@@ -1052,5 +1052,81 @@ namespace LPPUnitTests
                 }
             }
         }
+
+        [Fact]
+        public void NodeLabel_CreateNodeLabelWithoutChildrenAndNotClosed_ExpectedLabelWithOnlyPropositions()
+        {
+            // Arrange
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                new Proposition('P')
+            };
+
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+            semanticTableauxElement.NodeNumber = 1;
+
+            // Act
+            string actualNodeLabel = semanticTableauxElement.NodeLabel();
+            string expectedNodeLabel = $"node{semanticTableauxElement.NodeNumber}[ label = \"P\" ]\n";
+
+            // Assert
+            actualNodeLabel.Should().Be(expectedNodeLabel, "Because that's the format required for graphviz plus our own choice of display");
+        }
+
+        [Fact]
+        public void NodeLabel_CreateNodeLabelWithBothChildrenAndNotClosed_ExpectedLabelWithChildrenIncluded()
+        {
+            // Arrange
+            Disjunction disjunction = new Disjunction();
+            disjunction.LeftSuccessor = new Proposition('B');
+            disjunction.RightSuccessor = new Proposition('R');
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                disjunction
+            };
+
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+
+            semanticTableauxElement.NodeNumber = 1;
+            semanticTableauxElement.LeftChild.NodeNumber = 2;
+            semanticTableauxElement.RightChild.NodeNumber = 3;
+
+            // Act
+            string actualNodeLabel = semanticTableauxElement.NodeLabel();
+            
+            string expectedNodeLabel = $"node{semanticTableauxElement.NodeNumber}[ label = \"(B | R)\" ]\n";
+            expectedNodeLabel += $"node1 -- node2\n";
+            expectedNodeLabel += $"node{semanticTableauxElement.NodeNumber + 1}[ label = \"B\" ]\n";
+            expectedNodeLabel += $"node1 -- node3\n";
+            expectedNodeLabel += $"node{semanticTableauxElement.NodeNumber + 2}[ label = \"R\" ]\n";
+
+            // Assert
+            actualNodeLabel.Should().Be(expectedNodeLabel, "Because that's the format required for graphviz plus our own choice of display");
+        }
+
+        [Fact]
+        public void NodeLabel_CreateNodeLabelWithConstantContradictionToClose_ExpectedLabelWithColorRed()
+        {
+            // Arrange
+            False contradiction = new False();
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                contradiction
+            };
+
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+
+            semanticTableauxElement.NodeNumber = 1;
+
+            // Act
+            string actualNodeLabel = semanticTableauxElement.NodeLabel();
+
+            string expectedNodeLabel = $"node{semanticTableauxElement.NodeNumber}[ label = \"0\", color = red ]\n";
+
+            // Assert
+            actualNodeLabel.Should().Be(expectedNodeLabel, "Because that's the format required for graphviz plus our own choice of display");
+        }
     }
 }
