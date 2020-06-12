@@ -23,6 +23,23 @@ namespace LogicAndSetTheoryApplication
             this.boundVariable = boundVariable;
         }
 
+        public override Proposition Copy()
+        {
+            Quantifier quantifier = null;
+
+            if (Data == UniversalQuantifier.SYMBOL)
+            {
+                quantifier = new UniversalQuantifier(boundVariable);
+            }
+            else
+            {
+                quantifier = new ExistentialQuantifier(boundVariable);
+            }
+
+            quantifier.LeftSuccessor = LeftSuccessor.Copy();
+            return quantifier;
+        }
+
         public char GetSymbol()
         {
             return Data;
