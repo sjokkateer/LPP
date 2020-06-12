@@ -89,6 +89,5 @@ namespace LogicAndSetTheoryApplication
         // Override:
         // - HashCode
         // - Equals
-        // - Copy
     }
 }
