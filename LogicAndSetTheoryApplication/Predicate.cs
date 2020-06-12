@@ -32,14 +32,37 @@ namespace LogicAndSetTheoryApplication
 
         public override Proposition Copy()
         {
-            List<char> vars = new List<char>();
+            return new Predicate(Data, GetCurrentVariables());
+        }
 
-            foreach(KeyValuePair<char, char> item in variables)
+        public override bool Equals(object obj)
+        {
+            bool equal = base.Equals(obj);
+
+            if (equal && obj is Predicate)
             {
-                vars.Add(GetVariable(item.Key));
+                // In here we have the guarantee that objects have equal run time type
+                // and data/symbol.
+                Predicate predicate = (Predicate)obj;
+
+                List<char> otherVariables = predicate.GetCurrentVariables();
+                List<char> variables = GetCurrentVariables();
+
+                if (variables.Count == otherVariables.Count)
+                {
+                    for (int i = 0; i < variables.Count; i++)
+                    {
+                        if (variables[i] != otherVariables[i])
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
             }
 
-            return new Predicate(Data, vars);
+            return false;
         }
 
         public override List<Proposition> GetVariables()
@@ -57,6 +80,18 @@ namespace LogicAndSetTheoryApplication
             }
 
             return variables;
+        }
+
+        public List<char> GetCurrentVariables()
+        {
+            List<char> vars = new List<char>();
+
+            foreach (KeyValuePair<char, char> item in variables)
+            {
+                vars.Add(GetVariable(item.Key));
+            }
+
+            return vars;
         }
 
         public override bool Replace(char originalVariable, char newVariable)
