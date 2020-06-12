@@ -872,11 +872,19 @@ namespace LPPUnitTests
 
             int expectedNumberOfReplacementVariables = 1;
             int actualNumberOfReplacementVariables = replacementVariables.Count;
-            bool isReplaced = predicate.IsReplaced(boundVariable);
 
             // Assert
             actualNumberOfReplacementVariables.Should().Be(expectedNumberOfReplacementVariables, "Because the only bound variable should be replaced based on the rules");
-            isReplaced.Should().BeTrue("Because after applying a delta rule, the only bound variable in the predicate should be replaced");
+
+            foreach(Proposition proposition in semanticTableauxElement.LeftChild.Propositions)
+            {
+                if (proposition is Predicate)
+                {
+                    predicate = (Predicate)proposition;
+                    bool isReplaced = predicate.IsReplaced(boundVariable);
+                    isReplaced.Should().BeTrue("Because after applying a delta rule, the only bound variable in the predicate should be replaced");
+                }
+            }
         }
 
         [Fact]
@@ -902,11 +910,19 @@ namespace LPPUnitTests
 
             int expectedNumberOfReplacementVariables = 1;
             int actualNumberOfReplacementVariables = replacementVariables.Count;
-            bool isReplaced = predicate.IsReplaced(boundVariable);
 
             // Assert
             actualNumberOfReplacementVariables.Should().Be(expectedNumberOfReplacementVariables, "Because the only bound variable should be replaced based on the rules");
-            isReplaced.Should().BeTrue("Because after applying a delta rule, the only bound variable in the predicate should be replaced");
+
+            foreach (Proposition proposition in semanticTableauxElement.LeftChild.Propositions)
+            {
+                if (proposition is Predicate)
+                {
+                    predicate = (Predicate)proposition;
+                    bool isReplaced = predicate.IsReplaced(boundVariable);
+                    isReplaced.Should().BeTrue("Because after applying a delta rule, the only bound variable in the predicate should be replaced");
+                }
+            }
         }
 
         [Fact]
@@ -989,6 +1005,44 @@ namespace LPPUnitTests
             semanticTableauxElement.LeftChild.Should().NotBeNull("Because children should be created now that a replacement variable is present");
             
             foreach(Proposition proposition in semanticTableauxElement.LeftChild.Propositions)
+            {
+                if (proposition is Predicate)
+                {
+                    Predicate pred = (Predicate)proposition;
+                    bool isReplaced = pred.IsReplaced(boundVariable);
+                    isReplaced.Should().BeTrue($"Because the replacement variable {availableReplacementVariable} is available");
+                }
+            }
+        }
+
+        [Fact]
+        public void Constructor_CreateNegatedExistentialQuantifierWithReplacementVariablePresent_GammaRuleShouldBeAppliedAndNewChildrenCreated()
+        {
+            // Arrange
+            char boundVariable = PropositionGenerator.GenerateBoundVariable();
+
+            List<char> boundVariables = new List<char>() { boundVariable };
+            Predicate predicate = new Predicate(PropositionGenerator.GetRandomVariableLetter(), boundVariables);
+
+            ExistentialQuantifier existentialQuantifier = new ExistentialQuantifier(boundVariable);
+            existentialQuantifier.LeftSuccessor = predicate;
+
+            Negation negatedExistentialQuantifier = new Negation();
+            negatedExistentialQuantifier.LeftSuccessor = existentialQuantifier;
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                negatedExistentialQuantifier
+            };
+
+            // Act
+            char availableReplacementVariable = 'd';
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions, new HashSet<char>() { availableReplacementVariable });
+
+            // Assert
+            semanticTableauxElement.LeftChild.Should().NotBeNull("Because children should be created now that a replacement variable is present");
+
+            foreach (Proposition proposition in semanticTableauxElement.LeftChild.Propositions)
             {
                 if (proposition is Predicate)
                 {
