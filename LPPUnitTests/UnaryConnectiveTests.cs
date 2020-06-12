@@ -60,5 +60,32 @@ namespace LPPUnitTests
             // Assert
             act.Should().Throw<NullReferenceException>("Because printing the infix form woudl not make sense without a successor");
         }
+
+        [Fact]
+        public void GetBoundVariables_UnaryConnectiveWithPropositionAsSuccessor_ExpectedNotImplementedExceptionThrown()
+        {
+            // Arrange
+            UnaryConnective negation = PropositionGenerator.CreateUnaryConnectiveWithRandomSymbol(Negation.SYMBOL);
+            Action act = () => negation.GetBoundVariables();
+
+            // Act // Assert
+            act.Should().Throw<NotImplementedException>("Because an abstract proposition does not have bound variables related to it.");
+        }
+
+        [Fact]
+        public void GetBoundVariables_UnaryConnectiveWithPredicateAsSuccessor_NonEmptyListOfVariablesReturned()
+        {
+            // Arrange
+            UnaryConnective negation = PropositionGenerator.CreateUnaryConnectiveWithRandomSymbol(Negation.SYMBOL);
+            negation.LeftSuccessor = new Predicate('T', new List<char>() { 'r', 't' });
+
+            // Act 
+            List<char> boundVariables = negation.GetBoundVariables();
+            int expectedNumberOfBoundVariables = 2;
+            int actualNumberOfBoundVariables = boundVariables.Count;
+
+            // Assert
+            actualNumberOfBoundVariables.Should().Be(expectedNumberOfBoundVariables, $"Because a predicate is assigned as successor with {expectedNumberOfBoundVariables} variables assigned");
+        }
     }
 }

@@ -135,5 +135,22 @@ namespace LPPUnitTests
             // Assert
             replaced.Should().BeTrue("Because the quantifier should forward replacing a variable on a predicate");
         }
+
+        [Fact]
+        public void Copy_CopyQuantifier_ExpectedEqualsToBeTrueButDifferentReferences()
+        {
+            // Arrange
+            Quantifier quantifier = GetQuantifier();
+            quantifier.LeftSuccessor = PropositionGenerator.GetRandomProposition();
+
+            // Act
+            Proposition copy = quantifier.Copy();
+            bool equal = quantifier.Equals(copy);
+            bool sameReference = quantifier == copy;
+
+            // Assert
+            equal.Should().BeTrue("Because the quantifier is copied");
+            sameReference.Should().BeFalse("Since copies should be different references");
+        }
     }
 }

@@ -85,9 +85,5 @@ namespace LogicAndSetTheoryApplication
             
             return result;
         }
-
-        // Override:
-        // - HashCode
-        // - Equals
     }
 }
