@@ -46,5 +46,11 @@ namespace LPPUnitTests
         {
             TestNandify();
         }
+
+        [Fact]
+        public override void GetBoundVariables_CalledOnABinaryConnective_ExpectedNotImplementedExceptionThrown()
+        {
+            base.GetBoundVariables_CalledOnABinaryConnective_ExpectedNotImplementedExceptionThrown();
+        }
     }
 }

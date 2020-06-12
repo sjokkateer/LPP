@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using LogicAndSetTheoryApplication;
 using FluentAssertions;
+using Xunit;
 
 namespace LPPUnitTests
 {
@@ -54,6 +55,16 @@ namespace LPPUnitTests
 
             // Assert
             NandChecker.hasNandStructure(new List<Proposition>() { nandifiedProposition });
+        }
+
+        public virtual void GetBoundVariables_CalledOnABinaryConnective_ExpectedNotImplementedExceptionThrown()
+        {
+            // Arrange
+            BinaryConnective binaryConnective = createBinaryConnective();
+            Action act = () => binaryConnective.GetBoundVariables();
+
+            // Act // Assert
+            act.Should().Throw<NotImplementedException>("Because it is not clear what should happen when calling this on a binary connective");
         }
     }
 }
