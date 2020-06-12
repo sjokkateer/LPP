@@ -317,6 +317,7 @@ namespace LPPUnitTests
         }
 
         [Fact]
+        // By dumb luck this could fail if it generated two identical successors for the disjunction!
         public void Constructor_CreateAlphaRuleFromNegationOfDisjunctionOfLiterals_SetOfLengthTwoReturnedWithTwoNegatedLiterals()
         {
             // Arrange

@@ -172,18 +172,12 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
-            // Check for Gamma Rules to apply
-            // Could be made slightly more efficient by checking up front
-            // for replcement variables
-            // Even though we would then have more places aware of replacement variables in our code.
             HashSet<Proposition> childPropositionSet = new HashSet<Proposition>();
 
             foreach (Proposition proposition in Propositions)
             {
                 if (IsGammaRule(proposition))
                 {
-                    // New tactic: Apply all gamma rules and add each and every subset to eachother.
-                    // if this final set differs in size from Propositions, create new child else we are finished.
                     foreach (Proposition p in ApplyGammaRule(proposition))
                     {
                         childPropositionSet.Add(p);
