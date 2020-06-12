@@ -585,18 +585,6 @@ namespace LogicAndSetTheoryApplication
             RightChild = new SemanticTableauxElement(rightChildPropositions);
         }
 
-        private bool TryToCreateGammaRule(Proposition proposition)
-        {
-            if (IsGammaRule(proposition))
-            {
-                ApplyGammaRule(proposition);
-
-                return true;
-            }
-
-            return false;
-        }
-
         private bool IsGammaRule(Proposition proposition)
         {
             if (proposition.GetType() == typeof(UniversalQuantifier))
