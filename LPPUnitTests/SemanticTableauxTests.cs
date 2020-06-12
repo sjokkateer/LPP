@@ -61,6 +61,13 @@ namespace LPPUnitTests
         [InlineData(">(!x.(@y.(P(x, y))), @q.(!p.(P(p, q))))")]
         [InlineData(">(@x.(&(P(x), R(x))), @y.(P(y)))")]
         [InlineData(">(@x.(>(P(x), Q(x))), >(@y.(P(y)), @z.(Q(z))))")]
+        [InlineData(">(~(!x.(!y.(P(x, y)))), @x.(@y.(~(P(x, y)))))")]
+        [InlineData(">(@x.(Q(x)), >(!x.(P(x)), !x(Q(x))))")]
+        [InlineData(">(!x.(Q(x)), &(!x.(P(x)), !x(Q(x))))")] // ??
+        [InlineData(">(!x.(|(P(x), Q(x))), |(!x.(P(x)), !x(Q(x))))")]
+        [InlineData(">(!y.(@x.(&(P(x), Q(x, y)))), @z.(P(z)))")]
+        [InlineData(">(!x.(@y.(>(P(x), Q(y)))), >(@u.(P(u)), !v.(Q(v))))")]
+        [InlineData(">(!x.(@y.(P(x, y))), @v.(!u.(P(u, v))))")]
         public void IsClosed_TautologyGiven_ShouldResultInTrue(string tautologyExpression)
         {
             // Arrange
