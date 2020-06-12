@@ -409,12 +409,15 @@ namespace LogicAndSetTheoryApplication
             char boundVariable = quantifier.GetBoundVariable();
             char replacementCharacter = GenerateReplacementVariable();
 
-            // More formally we should ensure the character is not present
-            // in the predicate as key
-            quantifier.Replace(boundVariable, replacementCharacter);
+            Proposition predicateCopy = predicate.Copy();
+            predicateCopy.Replace(boundVariable, replacementCharacter);
             ReplacementVariables.Add(replacementCharacter);
 
-            childPropositions.Add(predicate);
+            // More formally we should ensure the character is not present
+            // in the predicate as key
+            // quantifier.Replace(boundVariable, replacementCharacter);
+
+            childPropositions.Add(predicateCopy);
 
             LeftChild = new SemanticTableauxElement(childPropositions, ReplacementVariables);
         }
@@ -621,11 +624,7 @@ namespace LogicAndSetTheoryApplication
 
             foreach (Proposition p in Propositions)
             {
-                // With a gamma rule the original proposition will also be copied over
-                if (p.Equals(proposition))
-                {
-                    childPropositions.Add(p);
-                }
+                childPropositions.Add(p);
             }
 
             Quantifier quantifier = null;
@@ -664,10 +663,10 @@ namespace LogicAndSetTheoryApplication
                 // Replace the bound variable by every possible replacement variable.
                 // And add that new predicate to the set.
                 // Only if we are directly looking at a predicate
-                foreach (char replaceMentChar in ReplacementVariables)
+                foreach (char replacementChar in ReplacementVariables)
                 {
                     Proposition propositionToAddCopy = propositionToAdd.Copy();
-                    propositionToAddCopy.Replace(boundVariable, replaceMentChar);
+                    propositionToAddCopy.Replace(boundVariable, replacementChar);
 
                     childPropositions.Add(propositionToAddCopy);
                 }
