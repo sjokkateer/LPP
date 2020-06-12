@@ -56,5 +56,20 @@ namespace LPPUnitTests
             // Assert
             nandifiedConstant.Should().BeEquivalentTo(constant, "because false nandified is still false");
         }
+
+        [Fact]
+        public void Copy_CallToCopyOnConstant_ExpectedEqualsToReturnTrueAndDifferentReferences()
+        {
+            // Arrange
+            Proposition copy = constant.Copy();
+
+            // Act
+            bool equal = constant.Equals(copy);
+            bool sameReference = constant == copy;
+
+            // Assert
+            equal.Should().BeTrue("Because it is a copy");
+            sameReference.Should().BeFalse("Because it is a copy and thus should not be the same address in memory");
+        }
     }
 }
