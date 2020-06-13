@@ -9,6 +9,7 @@ namespace LogicAndSetTheoryApplication
     public abstract class Quantifier: UnaryConnective
     {
         private char boundVariable;
+        private HashSet<char> alreadyAppliedReplacementCharacters;
 
         // symbol of the quantifier plus a bound variable for all x or there exists a z etc.
         public Quantifier(char symbol, char boundVariable): base(symbol)
@@ -21,6 +22,7 @@ namespace LogicAndSetTheoryApplication
             }
 
             this.boundVariable = boundVariable;
+            alreadyAppliedReplacementCharacters = new HashSet<char>();
         }
 
         public override Proposition Copy()
@@ -34,6 +36,11 @@ namespace LogicAndSetTheoryApplication
             else
             {
                 quantifier = new ExistentialQuantifier(boundVariable);
+            }
+
+            foreach(char appliedVariable in alreadyAppliedReplacementCharacters)
+            {
+                quantifier.AddAppliedReplacementVariable(appliedVariable);
             }
 
             quantifier.LeftSuccessor = LeftSuccessor.Copy();
@@ -84,6 +91,16 @@ namespace LogicAndSetTheoryApplication
             result += ")";
             
             return result;
+        }
+
+        internal bool IsNotYetApplied(char replacementChar)
+        {
+            return !alreadyAppliedReplacementCharacters.Contains(replacementChar);
+        }
+
+        internal void AddAppliedReplacementVariable(char replacementChar)
+        {
+            alreadyAppliedReplacementCharacters.Add(replacementChar);
         }
     }
 }

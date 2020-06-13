@@ -659,10 +659,17 @@ namespace LogicAndSetTheoryApplication
                 // Only if we are directly looking at a predicate
                 foreach (char replacementChar in ReplacementVariables)
                 {
-                    Proposition propositionToAddCopy = propositionToAdd.Copy();
-                    propositionToAddCopy.Replace(boundVariable, replacementChar);
+                    // Only if replacement character was not yet applied to the quantifier.
+                    
+                    if (quantifier.IsNotYetApplied(replacementChar))
+                    {
+                        Proposition propositionToAddCopy = propositionToAdd.Copy();
+                        propositionToAddCopy.Replace(boundVariable, replacementChar);
 
-                    childPropositions.Add(propositionToAddCopy);
+                        childPropositions.Add(propositionToAddCopy);
+
+                        quantifier.AddAppliedReplacementVariable(replacementChar);
+                    }
                 }
             }
 

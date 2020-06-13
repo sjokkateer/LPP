@@ -131,6 +131,10 @@ namespace LPPUnitTests
         [Theory]
         [InlineData(">(@q.(!p.(P(p, q))), !x.(@y.(P(x, y))))")]
         [InlineData("@x.(!y.(P(x, y)))")]
+        [InlineData("=(@x.(|(P(x), Q(x))), !y.(P(y)))")]
+        // Infinite recursion cases because of branching from gamma to beta one after another:
+        [InlineData(">(~(~(@x.(|(P(x), Q(x))))), ~(!y.(P(y))))")]
+        [InlineData("=(~(@x.(|(P(x), Q(x)))), !y.(P(y)))")]
         public void IsClosed_NonClosablePredicateGiven_ShouldResultInFalse(string nonClosablePredicate)
         {
             // Arrange
