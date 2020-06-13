@@ -63,7 +63,6 @@ namespace LPPUnitTests
         [InlineData(">(@x.(>(P(x), Q(x))), >(@y.(P(y)), @z.(Q(z))))")]
         [InlineData(">(~(!x.(!y.(P(x, y)))), @x.(@y.(~(P(x, y)))))")]
         [InlineData(">(@x.(Q(x)), >(!x.(P(x)), !x(Q(x))))")]
-        // [InlineData(">(!x.(Q(x)), &(!x.(P(x)), !x(Q(x))))")] // ?? Check manually if the ones added are correct.
         [InlineData(">(!x.(|(P(x), Q(x))), |(!x.(P(x)), !x(Q(x))))")]
         [InlineData(">(!y.(@x.(&(P(x), Q(x, y)))), @z.(P(z)))")]
         [InlineData(">(!x.(@y.(>(P(x), Q(y)))), >(@u.(P(u)), !v.(Q(v))))")]

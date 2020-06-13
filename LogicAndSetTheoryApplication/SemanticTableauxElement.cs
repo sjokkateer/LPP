@@ -502,8 +502,10 @@ namespace LogicAndSetTheoryApplication
             {
                 if (!p.Equals(proposition))
                 {
-                    leftChildPropositions.Add(p);
-                    rightChildPropositions.Add(p);
+                    // Add copies to the set for all other propositions
+                    // ensuring that each quantifier will at least be unique.
+                    leftChildPropositions.Add(p.Copy());
+                    rightChildPropositions.Add(p.Copy());
                 }
             }
 
@@ -660,7 +662,6 @@ namespace LogicAndSetTheoryApplication
                 foreach (char replacementChar in ReplacementVariables)
                 {
                     // Only if replacement character was not yet applied to the quantifier.
-                    
                     if (quantifier.IsNotYetApplied(replacementChar))
                     {
                         Proposition propositionToAddCopy = propositionToAdd.Copy();
