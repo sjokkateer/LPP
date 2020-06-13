@@ -869,7 +869,7 @@ namespace LPPUnitTests
 
             // Act
             SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
-            List<char> replacementVariables = semanticTableauxElement.ReplacementVariables.ToList();
+            List<char> replacementVariables = semanticTableauxElement.LeftChild.ReplacementVariables.ToList();
 
             int expectedNumberOfReplacementVariables = 1;
             int actualNumberOfReplacementVariables = replacementVariables.Count;
@@ -907,7 +907,7 @@ namespace LPPUnitTests
 
             // Act
             SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
-            List<char> replacementVariables = semanticTableauxElement.ReplacementVariables.ToList();
+            List<char> replacementVariables = semanticTableauxElement.LeftChild.ReplacementVariables.ToList();
 
             int expectedNumberOfReplacementVariables = 1;
             int actualNumberOfReplacementVariables = replacementVariables.Count;
@@ -1125,6 +1125,31 @@ namespace LPPUnitTests
             string actualNodeLabel = semanticTableauxElement.NodeLabel();
 
             string expectedNodeLabel = $"node{semanticTableauxElement.NodeNumber}[ label = \"0\", color = red ]\n";
+
+            // Assert
+            actualNodeLabel.Should().Be(expectedNodeLabel, "Because that's the format required for graphviz plus our own choice of display");
+        }
+
+        [Fact]
+        public void NodeLabel_CreateNodeLabelWithReplacementVariablePResent_ExpectedLabelToIncludeReplacementVariables()
+        {
+            // Arrange
+            Predicate predicate = new Predicate('P', new List<char>() { 'x', 'y' });
+
+            HashSet<Proposition> propositions = new HashSet<Proposition>()
+            {
+                predicate
+            };
+
+            SemanticTableauxElement semanticTableauxElement = new SemanticTableauxElement(propositions);
+            semanticTableauxElement.ReplacementVariables = new HashSet<char>() { 'a', 'b' };
+
+            semanticTableauxElement.NodeNumber = 1;
+
+            // Act
+            string actualNodeLabel = semanticTableauxElement.NodeLabel();
+
+            string expectedNodeLabel = $"node1[ label = \"< a, b >\nP(x, y)\" ]\n";
 
             // Assert
             actualNodeLabel.Should().Be(expectedNodeLabel, "Because that's the format required for graphviz plus our own choice of display");

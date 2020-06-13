@@ -311,7 +311,7 @@ namespace LogicAndSetTheoryApplication
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(818, 638);
+            this.ClientSize = new System.Drawing.Size(741, 638);
             this.Controls.Add(this.prefixBackUpTbx);
             this.Controls.Add(this.prefixBackUpLb);
             this.Controls.Add(this.randomPropositionBtn);

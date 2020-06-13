@@ -249,7 +249,7 @@ namespace LogicAndSetTheoryApplication
                 }
             }
 
-            LeftChild = new SemanticTableauxElement(propositions, ReplacementVariables);
+            LeftChild = new SemanticTableauxElement(propositions, new HashSet<char>(ReplacementVariables));
         }
 
         private bool TryToCreateAlphaRule(Proposition proposition)
@@ -340,7 +340,7 @@ namespace LogicAndSetTheoryApplication
 
             }
 
-            LeftChild = new SemanticTableauxElement(childPropositions, ReplacementVariables);
+            LeftChild = new SemanticTableauxElement(childPropositions, new HashSet<char>(ReplacementVariables));
         }
 
         private bool TryToCreateDeltaRule(Proposition proposition)
@@ -414,15 +414,14 @@ namespace LogicAndSetTheoryApplication
 
             Proposition predicateCopy = predicate.Copy();
             predicateCopy.Replace(boundVariable, replacementCharacter);
-            ReplacementVariables.Add(replacementCharacter);
 
-            // More formally we should ensure the character is not present
-            // in the predicate as key
-            // quantifier.Replace(boundVariable, replacementCharacter);
+            // Get current set locally, add new variable and pass them down.
+            HashSet<char> childReplacementVariables = new HashSet<char>(ReplacementVariables);
+            childReplacementVariables.Add(replacementCharacter);
 
             childPropositions.Add(predicateCopy);
 
-            LeftChild = new SemanticTableauxElement(childPropositions, ReplacementVariables);
+            LeftChild = new SemanticTableauxElement(childPropositions, childReplacementVariables);
         }
 
         private char GenerateReplacementVariable()
@@ -680,6 +679,19 @@ namespace LogicAndSetTheoryApplication
         public string NodeLabel()
         {
             string label = $"node{NodeNumber}[ label = \"";
+
+            if (ReplacementVariables.Count > 0)
+            {
+                label += "< ";
+                
+                foreach (char replacementVariable in ReplacementVariables)
+                {
+                    label += $"{replacementVariable}, ";
+                }
+
+                label = label.Substring(0, label.Length - 2);
+                label += " >\n";
+            }
 
             foreach(Proposition proposition in Propositions)
             {
