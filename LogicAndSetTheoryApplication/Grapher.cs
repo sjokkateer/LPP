@@ -8,16 +8,26 @@ using System.Diagnostics;
 
 namespace LogicAndSetTheoryApplication
 {
-    static class Grapher
+    public static class Grapher
     {
         public static void CreateGraphOfProposition(Proposition propositionRoot, string fileName)
         {
+            if (propositionRoot == null)
+            {
+                throw new ArgumentNullException("Proposition root cannot be null!");
+            }
+
             NumberOperands(propositionRoot);
             CreateGraph(fileName, propositionRoot.NodeLabel());
         }
 
         public static void CreateGraphOfTableaux(SemanticTableaux semanticTableaux, string fileName)
         {
+            if (semanticTableaux == null)
+            {
+                throw new ArgumentNullException("Semantic tableaux cannot be null!");
+            }
+
             NumberElements(semanticTableaux);
             CreateGraph(fileName, semanticTableaux.Head.NodeLabel(), "rectangle");
         }
