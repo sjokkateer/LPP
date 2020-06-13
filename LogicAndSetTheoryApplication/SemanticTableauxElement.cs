@@ -427,15 +427,22 @@ namespace LogicAndSetTheoryApplication
 
         private char GenerateReplacementVariable()
         {
-            foreach (char availableCharacter in replacementVariableCharacters)
+            char replacementVariable;
+
+            for (int i = 0; i < replacementVariableCharacters.Length; i++)
             {
-                if (!ReplacementVariables.Contains(availableCharacter))
-                {
-                    return availableCharacter;
-                }
+                replacementVariable = replacementVariableCharacters[i];
+                replacementVariableCharacters = replacementVariableCharacters.Substring(1);
+                
+                return replacementVariable;
             }
 
             throw new Exception("All variables exhausted, now what?");
+        }
+
+        public static void ResetReplacementVariables()
+        {
+            replacementVariableCharacters = "abcdefghijklmnopqrstuvw";
         }
 
         private bool TryToCreateBetaRule(Proposition proposition)
@@ -584,8 +591,8 @@ namespace LogicAndSetTheoryApplication
             leftChildPropositions.Add(leftSetProposition);
             rightChildPropositions.Add(rightSetPropostion);
 
-            LeftChild = new SemanticTableauxElement(leftChildPropositions, ReplacementVariables);
-            RightChild = new SemanticTableauxElement(rightChildPropositions, ReplacementVariables);
+            LeftChild = new SemanticTableauxElement(leftChildPropositions, new HashSet<char>(ReplacementVariables));
+            RightChild = new SemanticTableauxElement(rightChildPropositions, new HashSet<char>(ReplacementVariables));
         }
 
         private bool IsGammaRule(Proposition proposition)
@@ -605,10 +612,6 @@ namespace LogicAndSetTheoryApplication
             return false;
         }
 
-        // Returns a set of propositions normally used for creating 
-        // a new semantic tableaux element.
-        // This set is required for further inspection as gamma rules can
-        // lead to no changes in the set.
         public HashSet<Proposition> ApplyGammaRule(Proposition proposition)
         {
             HashSet<Proposition> childPropositions = new HashSet<Proposition>();
