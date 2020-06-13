@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,7 @@ namespace LogicAndSetTheoryApplication
             throw new NotImplementedException("Is not part of first order logic");
         }
 
+        [ExcludeFromCodeCoverage]
         public override List<char> GetBoundVariables()
         {
             return LeftSuccessor.GetBoundVariables();

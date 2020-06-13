@@ -59,5 +59,45 @@ namespace LPPUnitTests
             symbol.Should().Be(BINARY_CONNECTIVE.Data.ToString(), "Because between the left and right successor, a connective is placed.");
             closeParenth.Should().Be(")", "Because the expression is ended with a closing parenthesis.");
         }
+
+        [Fact]
+        public void ToPrefixString_BothSuccessorsAssigned_ExpectedPrefixStringReturned()
+        {
+            // Arrange
+            BINARY_CONNECTIVE.LeftSuccessor = SUCCESSOR;
+            BINARY_CONNECTIVE.RightSuccessor = SUCCESSOR;
+
+            // Act
+            string actualToPrefixString = BINARY_CONNECTIVE.ToPrefixString();
+
+            string expectedToPrefixString = $"{BINARY_CONNECTIVE.Data}({SUCCESSOR}, {SUCCESSOR})";
+
+            // Assert
+            actualToPrefixString.Should().Be(expectedToPrefixString, "Because the expression starts with a connective symbol.");
+        }
+
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void ToPrefixString_BothSuccessorsNotAssigned_ExpectedNullReferenceExceptionThrown(bool leftAssigned, bool rightAssigned)
+        {
+            // Arrange
+            if (leftAssigned)
+            {
+                BINARY_CONNECTIVE.LeftSuccessor = SUCCESSOR;
+                BINARY_CONNECTIVE.RightSuccessor = null;
+            }
+
+            if (rightAssigned)
+            {
+                BINARY_CONNECTIVE.RightSuccessor = SUCCESSOR;
+                BINARY_CONNECTIVE.LeftSuccessor = null;
+            }
+
+            Action act = () => BINARY_CONNECTIVE.ToPrefixString();
+
+            // Act // Assert
+            act.Should().Throw<NullReferenceException>("Because both successors have to be assigned for a binary connective");
+        }
     }
 }

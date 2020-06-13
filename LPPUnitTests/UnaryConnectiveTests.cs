@@ -87,5 +87,32 @@ namespace LPPUnitTests
             // Assert
             actualNumberOfBoundVariables.Should().Be(expectedNumberOfBoundVariables, $"Because a predicate is assigned as successor with {expectedNumberOfBoundVariables} variables assigned");
         }
+
+        [Fact]
+        public void ToPrefixString_LeftSuccessorAssigned_ExpectedPrefixStringReturned()
+        {
+            // Arrange
+            Negation negation = new Negation();
+            negation.LeftSuccessor = new Predicate('Q', new List<char>() { 'x', 'y' });
+
+            // Act
+            string actualToPrefixString = negation.ToPrefixString();
+
+            string expectedToPrefixString = "~(Q(x, y))";
+
+            // Assert
+            actualToPrefixString.Should().Be(expectedToPrefixString, "Because that's the prefix format.");
+        }
+
+        [Fact]
+        public void ToPrefixString_LeftSuccessorNotAssigned_ExpectedNullReferenceExceptionThrown()
+        {
+            // Arrange
+            Negation negation = new Negation();
+            Action act = () => negation.ToPrefixString();
+
+            // Act // Assert
+            act.Should().Throw<NullReferenceException>("Because calling this method does not make sense without a successor");
+        }
     }
 }

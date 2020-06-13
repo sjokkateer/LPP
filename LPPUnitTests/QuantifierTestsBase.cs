@@ -152,5 +152,32 @@ namespace LPPUnitTests
             equal.Should().BeTrue("Because the quantifier is copied");
             sameReference.Should().BeFalse("Since copies should be different references");
         }
+
+        [Fact]
+        public void ToPrefixString_SucessorAssigned_ExpectedPrefixStringReturned()
+        {
+            // Arrange
+            Quantifier quantifier = GetQuantifier();
+            quantifier.LeftSuccessor = new Proposition('P');
+
+            // Act
+            string actualToPrefixString = quantifier.ToPrefixString();
+
+            string expectedToPrefixString = $"{quantifier.Data}{quantifier.GetBoundVariable()}.(P)";
+
+            // Assert
+            actualToPrefixString.Should().Be(expectedToPrefixString, "Because that's the prefix format for the quantifier");
+        }
+
+        [Fact]
+        public void ToPrefixString_SucessorNotAssigned_ExpectedNullReferenceException()
+        {
+            // Arrange
+            Quantifier quantifier = GetQuantifier();
+            Action act = () => quantifier.ToPrefixString();
+
+            // Act // Assert
+            act.Should().Throw<NullReferenceException>("Because calling ToPrefixString on a quantifier without successors does not make sense");
+        }
     }
 }
