@@ -85,6 +85,11 @@ namespace LogicAndSetTheoryApplication
             return ownVariable.CompareTo(otherVariable);
         }
 
+        public virtual string ToPrefixString()
+        {
+            return ToString();
+        }
+
         public virtual Proposition Nandify()
         {
             // A == ~(~(A))

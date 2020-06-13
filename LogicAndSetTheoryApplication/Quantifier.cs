@@ -93,6 +93,22 @@ namespace LogicAndSetTheoryApplication
             return result;
         }
 
+        public override string ToPrefixString()
+        {
+            if (LeftSuccessor == null)
+            {
+                throw new NullReferenceException("A predicate is required to be set");
+            }
+
+            string result = $"{Data}{GetBoundVariable()}.";
+
+            result += "(";
+            result += LeftSuccessor.ToPrefixString();
+            result += ")";
+
+            return result;
+        }
+
         internal bool IsNotYetApplied(char replacementChar)
         {
             return !alreadyAppliedReplacementCharacters.Contains(replacementChar);

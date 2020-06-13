@@ -137,6 +137,11 @@ namespace LogicAndSetTheoryApplication
             return result;
         }
 
+        public override string ToPrefixString()
+        {
+            return ToString();
+        }
+
         private char GetVariable(char key)
         {
             return variables[key] != default ? variables[key] : key;

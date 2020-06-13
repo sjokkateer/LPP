@@ -130,6 +130,7 @@ namespace LogicAndSetTheoryApplication
 
         private void DisplayProposition()
         {
+            prefixBackUpTbx.Text = selectedApp.Root.ToPrefixString();
             infixTbx.Text = selectedApp.Root.ToString();
         }
 

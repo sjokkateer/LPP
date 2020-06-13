@@ -59,6 +59,22 @@ namespace LogicAndSetTheoryApplication
             return result;
         }
 
+        public override string ToPrefixString()
+        {
+            if (LeftSuccessor == null)
+            {
+                throw new NullReferenceException("The left successor should not be null!");
+            }
+            
+            string result = Convert.ToString(Data);
+
+            result += "(";
+            result += LeftSuccessor.ToPrefixString();
+            result += ")";
+
+            return result;
+        }
+
         [ExcludeFromCodeCoverage]
         public override string NodeLabel()
         {
